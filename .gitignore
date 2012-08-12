@@ -18,7 +18,8 @@
 *.lot
 *.maf
 *.mtc
-*.mtc*
+*.mtc[0-9]
+*.mtc[0-9][0-9]
 *.out
 *.synctex.gz
 
