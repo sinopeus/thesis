@@ -1,0 +1,25 @@
+1) extract data from XML files
+	a) original text
+	b) emendations
+	c) metadata
+2) import data into MySQL
+	a) import data into tables
+	b) create a script for easy exportation
+3) morphological annotation
+	a) tokenisation
+		i. multiwords
+		ii. merged words
+		iii. compounds
+	b) lemmatisation / morphological analysis
+4) morpho-syntactic annotation
+	a) part-of-speech tagging
+		i. from scratch, using characteristics or rules to find word class
+		ii. accumulate a lexicon, disambiguation of words with more than one tag
+	b) automatic POS tagging
+	c) bigram tagging
+5) syntactic annotation
+	a) treebanking
+	b) chunk parsing
+	c) full parsing
+6) semantic annotation
+	ASSERT, Shalmaneser, Tree Kernels in SVMlight?

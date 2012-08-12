@@ -1,0 +1,28 @@
+I. introduction
+a. why the papyri
+b. digital classics
+c. digital papyrology
+d. corpus linguistics
+e. natural language processing
+
+II. basic structure of tool
+a. morphological tags
+b. syntactic tags
+c. searching by year or location
+
+III. creation and demonstration of tool
+prologue: finding the right tools
+a. creating training files (morph and syntax)
+b. training TreeTagger (morph and syntax)
+c. testing accuracy for each
+d. using TreeTagger on the papyri
+e. evaluating accuracy, adding improvements
+f.unified file in XML, or maybe SQL?
+g. sample site with basic search facilities
+
+IV. applications
+a. classifying in periods
+b. regional differences
+c. repertory of syntax
+d. repertory of divergent forms (diagnosis by exclusion)
+

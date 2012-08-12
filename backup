@@ -1,0 +1,4 @@
+#!/bin/zsh
+source /Users/xaviergoasaguililla/.yadr/zsh/aliases
+tar czvf /Users/xaviergoasaguililla/backup/thesis.tar.gz -C /Users/xaviergoasaguililla/thesis/*
+echo date > ~/txt/backup_time.txt

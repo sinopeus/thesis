@@ -1,0 +1,115 @@
+%************************************************
+\chapter{Creating a corpus}
+\label{chp:corpuscreation}
+\minitoc\mtcskip
+%************************************************
+\section{Finding the right tools}
+Before arriving at the compound approach I used for the treatment and analysis
+of the papyri.info corpus, I attempted several other methods:
+
+A first idea was to integrate the \textsc{xml} files in a PhiloLogic setup.
+PhiloLogic is a tool developed by the \textsc{artfl} project and the Digital
+Library Development center at the University of Chicago and released under the
+\textsc{gnu} General Public License --- making it open source software. Its
+original purpose was to serve as the full-text search, retrieval and analysis
+tool for large databases of French literature.
+
+PhiloLogic has support for \textsc{tei} \textsc{xml} and boasts an impressive
+array of features: it can search through text and deliver \textsc{kwic} results
+filtered by frequency and metadata, as well as collocation tables and word
+order information.  Furthermore, the development web page cites support for
+bibliographic backends in \fullsc{m}y\fullsc{sql} databases, out of the box operation,
+interoperability across \textsc{unix}-based systems, etc.
+
+The tool seemed promising; especially the built-in support for \textsc{xml} and
+Unicode drew my attention, along with the built-in features for linguistic
+analysis. In the end, however, the software did not fit my needs in a few
+respects: \begin{enumerate}
+
+\item PhiloLogic requires Apache, Perl and several \textsc{cpan} modules, gawk,
+  gdbm, and agrep.  Not a huge amount of dependencies, but still less than
+  using Python and the \textsc{nltk}, which does not require to be run on
+  Apache; a big problem is the incompatibility out of the box of the required
+  \textsc{cpan} modules with 64-bit systems. Setting PhiloLogic up was not as
+  easy as advertised; I had to resort to a virtual machine running 32-bit
+  Debian Linux before I was able to discover a method that enabled
+  compatibility with \textsc{os x} 10.7 (my \textsc{os} of choice).
+
+\item \textsc{xml} support includes \textsc{tei} but has issues with EpiDoc;
+  notably, in my experience, headers were treated as text and EpiDoc's
+  complicated tagset was incorrectly rendered; for instance, original readings
+  and corrections appeared next to each other in the text browser, a situation
+  which is evidently undesirable if we wish to have any hand in our choice of
+  corpus.  Developing brand new \textsc{xslt} stylesheets to convert EpiDoc to
+  a simpler form of \textsc{tei} markup would have been a feasible solution;
+  but PhiloLogic seemed to behave erratically and a first attempt at feeding
+  the system raw text (advertised as one of its capabilities) turned out a
+  spathe of errors.
+
+\item PhiloLogic's feature set is extensive, but I soon came to realize that it
+  does not offer much more than papyri.info already does; it is essentially a
+  robust concordancing application through a web interface. I wished not only
+  to have a lemmatised corpus searchable by word proximity, but also by word
+  relations, which would shed more light on the syntax of the Greek of the
+  papyri, as this is arguably the largest gap in scholarship due to the age of
+  Mayser's \emph{Grammatik} and the incomplete state of Gignac's
+  \emph{Grammar}. Furthermore, the tool as available to the public does not
+  integrate the morphological database of Greek developed for Perseus under
+  PhiloLogic --- a regrettable point, really, since it was exactly this
+  capacity I wished to exploit in the first place. Unicode search for Greek
+  also seems to be in need of improvement; the search form still requires
+  transcription. Re-engineering the tool was an option, but very
+  labour-intensive; the inner workings of the tool are programmed in Perl, a
+  language notorious for its messiness.
+
+\end{enumerate}
+
+Thus I discarded PhiloLogic from my options and set out to find or develop a
+simpler system.\footnote{I also considered setting up a mirror of papyri.info
+  on a personal server and modifying the search functionality; this turns out
+  not to be a task for the weak-hearted. The required setup causes substantial
+overhead for our purposes, too much to be a reasonable solution.} After the
+technical struggle with PhiloLogic, I decided to focus my efforts on
+concordancers that could replicate its functions. A quick consultation of
+Stanford's list of resources \citep{stanfordnlpres} for statistical natural
+language processing and corpus-based computational linguistics directed me to
+WordSmith Tools, which is regrettably Windows-only and a commercial, closed
+source program to boot.  I set out on a search for open-source alternatives and
+found a diversity of programs, most of them without the same functionality as
+WordSmith, and invariably clunky or antiquated --- making WordSmith the only
+option, but even that did not seem viable for my ends.
+
+I continued my search and stumbled across a very interesting piece of software
+that is enjoying a good amount of popularity as a didactic tool for
+computational corpus linguistics; the Python \textsc{nltk}, short for Natural
+Language Tool Kit, is not a stand-alone application, but rather a set of ``open
+source Python modules for research and development in natural language
+processing and text analytics bundled with data and documentation''
+\citep{nltkhome}. These modules implement diverse functionalities useful for
+natural language processing and allow their easy integration into Python
+programs. The Python \textsc{nltk} seemed to offer a more than solid amount of
+features: corpus readers, tokenizers, stemmers, taggers, chunkers, parsers,
+classifiers, clusterers, tools for semantic interpretation and metrics were all
+integrated from the get-go and are easily combined and extended. The
+\textsc{nltk} was developed for English, but its extensibility meant it could
+be applied to ancient Greek with relative ease. A further advantage is the fact
+that Python is very well-suited to text manipulation and parsing \textsc{xml},
+which is an advantage when working with the papyri.info corpus; it is also
+cross-platform: Python interpreters are available for all major platforms.
+
+\section{Text selection}
+
+The issue of selecting a corpus was touched upon \emph{supra}; the remaining
+question was how to apply these criteria to the papyri databank.
+
+\section{Formatting}
+
+\section{Tokenisation}
+
+\subsection{Using regular expressions for tokenisation}
+
+\section{Analysis and lemmatisation}
+
+\section{Part-of-speech tagging}
+
+\section{Partial parsing}

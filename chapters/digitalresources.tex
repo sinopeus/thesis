@@ -1,0 +1,151 @@
+%************************************************
+\chapter{Digital resources}
+\label{chp:digitalresources}
+\raggedbottom 
+\minitoc\mtcskip
+%\flussbottom
+%************************************************
+%\section{The digital classics: a brief history}
+%\label{sect:corporaclassics}
+
+\subsection{Format}
+\label{subsect:format}
+Raw information is useless; in order to harness it in a meaningful way, one
+must mold it into a usable shape, or at least create a prototypical shape into
+which the information can be molded. While this is true for any kind of
+information, when computers are involved, it is doubly so. Modern-day computers
+are capable of processing enormous amounts of data at incredible speeds; yet
+they require all data to be provided in a strictly structured and regular
+manner that they can analyse.
+
+ Corpora cannot escape this rule; and the fact
+that they are samples of natural language, a system that is structured but
+diverse and often ambiguous, makes their conversion into a form readable by
+computers a complex task. Different methods have been devised to achieve this;
+over the years, some have been fallen into obsolescence, while others have
+evolved and coalesced into a few standards that are now in general use.
+\subsubsection{Encoding}
+\label{subsubsect:encoding}
+Computers use code to transmit or store information, and thus also transmit or
+store numbers and text; the format of such code is termed encoding. Various
+such encoding systems exist for all kinds of purposes. I have limited myself to
+the most relevant for the encoding of texts in ancient Greek; a few other
+legacy encodings do exist but are rarely used.
+
+ \textsc{Beta Code} was
+developed by David Packard in the late 1970's. It is not strictly an encoding,
+but rather a method of representing polytonic Greek using solely ASCII
+characters. The format was adopted by the TLG in 1980 and has spread in use
+since; its main attraction is its adherence to the ASCII encoding, which allows
+the user to type Greek without switching keyboard layouts or resorting to
+different encodings. Beta Code may easily be converted to other encodings, most
+importantly Unicode.
+
+ \textsc{Unicode} is not solely restricted to Greek, but
+aims to provide an encoding that can represent and treat text in a wide variety
+of writing systems. The great benefit of this encoding is that it effectively
+unites a variety of encodings and thus eliminates incompatibilities. The main
+problem, then, is incompatibility with Unicode itself, but as its success
+grows, the number of systems and applications not supporting Unicode is ever
+decreasing; recently developed or updated software is highly likely to be
+compatible with Unicode. As far as Greek is concerned, Unicode is also carving
+out a place for itself to the detriment of Beta Code; using Unicode ensures
+correct rendering of characters in all possible environments without requiring
+specialised fonts to be installed, and the conversion from Beta Code can be
+omitted. It is for this reason that the IDP project has recently converted all
+of its Greek text from Beta Code to Unicode. Others may yet follow.
+
+
+\subsubsection{Markup}
+\label{subsect:markup}
+\begin{itemize}
+\item introduction
+\item SGML
+\item XML
+\item TEI
+\item EpiDoc
+\end{itemize}
+\subsection{Annotation}
+\label{subsect:annotation}
+\subsubsection{Morphological annotation}
+\subsubsection{Morphosyntactic annotation}
+\subsubsection{Syntactic annotation}
+\subsubsection{Semantic annotation}
+\subsubsection{Discourse annotation}
+\subsection{Distribution}
+\label{subsect:distribution}
+The methods of distribution for corpora have, just like all other information,
+dramatically changed in the course of the last fifty years. Before the advent
+of computing, a scholar wishing to consult a concordance had to have access to
+a library, where he could peruse the hefty tomes; the first computerised
+corpora were to be consulted on mainframes that often were nearly the size of
+the room they occupied. The advent of mobile storage, such as diskettes, CDs
+and DVDs increased portability; yet nothing has improved accessibility to the
+same degree as the Internet has.
+
+ Distributing a corpus via Internet can be
+done in a few ways. A first group are read-only: their databases are only
+accessible through a dedicated interface, usually a website or a special server
+that must be accessed through a specific program or transfer protocol. The
+Library of Latin Texts, for instance, has to be accessed through Brepols'
+dedicated website. 
+
+ A second group allows the downloading of raw data, to be
+used as the user wishes. The Perseus Project allows this; IDP has gone farther
+and has made all its data available on GitHub, a widely-used service for
+hosting software development projects. GitHub allows coordination of
+development and provides a constant stream of updates that can easily be
+downloaded.
+
+ It is this group that is of greater interest, as raw data suits
+itself well to manipulation and subsequent analysis. The GitHub page for the
+IDP project may be found at \url{https://github.com/papyri}. Further
+indications as to how to acquire and use this data are provided in the part on
+methodology.
+\subsection{Extant corpora}
+\label{subsect:extantcorpora}
+\subsubsection{Historical corpora}
+\label{subsubsect:historicalcorpora}
+\subsubsection{Dialectal corpora}
+\label{subsubsect:dialectalcorpora}
+\section{Tools}
+\label{sect:tools}
+\subsection{Lexica}
+\label{subsect:lexica}
+\begin{itemize}
+\item Liddell-Scott-Jones
+\item Intermediate LSJ
+\item Slater's Lexicon to Pindar
+\item Bailly
+\item Autenrieth
+\item New Testament Greek Lexicon
+\item Autenrieth
+\end{itemize}
+\subsection{Grammars}
+\label{subsect:grammars}
+\begin{itemize}
+\item Herbert Weir Smyth
+\item K\"{u}hner - Gerth
+\item Gildersleeve - Syntax
+\item Goodwin - Syntax
+\item De Witt Burton - Syntax of the Moods and Tenses in New Testament Greek
+\item A Grammar of Septuagint Greek
+\end{itemize}
+\subsection{Text browsers}
+\label{subsect:textbrowsers}
+\begin{itemize}
+\item Perseus Java Hopper
+\item Diogenes
+\item Andromeda
+\item PhiloLogic
+\item Musaios
+\item A Grammar of Septuagint Greek
+\end{itemize}
+\subsection{Search tools}
+\label{subsect:searchtools}
+\subsection{Morphological parsers}
+\label{subsect:morphparsers}
+\subsection{Part-of-speech tagging}
+\label{subsect:postagging}
+\section{Bibliography}
+\label{sect:digitalbibliography}

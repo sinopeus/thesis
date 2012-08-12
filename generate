@@ -1,0 +1,7 @@
+rm -f *.{blg,bbl,toc,out,log,aux,pdf,dvi}
+
+pdflatex ./thesis
+bibtex ./thesis
+makeindex ./thesis
+pdflatex ./thesis
+pdflatex ./thesis

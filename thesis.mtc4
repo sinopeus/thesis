@@ -1,0 +1,11 @@
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {2.1}Goals}{\reset@font\mtcSfont 9}{section.2.1}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {2.2}Design}{\reset@font\mtcSfont 10}{section.2.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {2.2.1}Initial inquiries}{\reset@font\mtcSSfont 10}{subsection.2.2.1}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {2.3}Technical}{\reset@font\mtcSfont 12}{section.2.3}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {2.3.1}Requirements}{\reset@font\mtcSSfont 12}{subsection.2.3.1}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {2.3.2}Extracting training data}{\reset@font\mtcSSfont 12}{subsection.2.3.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {2.3.3}Principles of statistical natural language processing}{\reset@font\mtcSSfont 12}{subsection.2.3.3}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Formal languages}{\reset@font\mtcSSSfont 12}{subsection.2.3.3}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Hidden Markov models}{\reset@font\mtcSSSfont 12}{subsection.2.3.3}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Zipf's law}{\reset@font\mtcSSSfont 12}{subsection.2.3.3}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {2.3.4}Accuracy testing}{\reset@font\mtcSSfont 12}{subsection.2.3.4}}

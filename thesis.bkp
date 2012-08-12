@@ -1,0 +1,696 @@
+\documentclass[10pt,a4paper,twoside,openright,titlepage,fleqn,%
+               headinclude,,footinclude,BCOR5mm,%
+               numbers=noenddot,cleardoublepage=empty,%
+               tablecaptionabove]{scrbook}
+\usepackage[dutch,polutonikogreek,british]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[LGRx,T1]{fontenc}
+\usepackage[final]{microtype}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{varioref}
+\usepackage[style=philosophy-modern,hyperref,backref,square,natbib,ibidtracker=false]{biblatex}
+               tablecaptionabove]{scrbook}
+\usepackage[tight,british]{minitoc}
+\usepackage{wrapfig}
+\usepackage{chngpage}
+\usepackage{calc}
+\usepackage{mflogo}
+\usepackage{caption,listings,graphicx,subfig}
+\usepackage{multicol}
+\usepackage{makeidx}
+\usepackage{xspace}
+\usepackage{mparhack}
+\usepackage{fixltx2e}
+\usepackage{relsize}
+\usepackage{lipsum}
+\usepackage[eulerchapternumbers,subfig,beramono,eulermath,pdfspacing,listings]{classicthesis}
+\usepackage{guit}
+\usepackage{arsclassica}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{setspace}
+
+\input{arsclassica-preamble}
+
+\newcommand{\Greek}{\fontencoding{LGR}\selectfont}
+\newcommand{\Latin}{\fontencoding{T1}\selectfont}
+\newcommand\fullsc[1]{\scalebox{1.06}[1.09]{\textsc{#1}}}
+
+\begin{document}
+\pagestyle{plain}
+\dominitoc
+
+%******************************************************************
+% front matter
+%******************************************************************
+\frontmatter
+\input{frontbackmatter/titlepage}
+\input{frontbackmatter/titleback}
+\clearpage
+\input{frontbackmatter/abstract}
+\pagestyle{scrheadings}
+\input{frontbackmatter/preface}
+\input{frontbackmatter/acknowledgements}
+\clearpage
+\input{frontbackmatter/contents}
+\incrementmtc
+\incrementmtc
+\cleardoublepage
+
+%******************************************************************
+% main matter
+%******************************************************************
+\mainmatter
+\pagenumbering{arabic}
+
+%************************************************
+\chapter{Introduction and preliminaries}
+\label{chp:introduction}
+\minitoc\mtcskip
+%************************************************
+The study of the language of the papyri has in the past thirty years
+come to a standstill until the recent appearance of Evans and Obbink's
+\textit{The Language of the Papyri} \citep{lpapyri}, which has placed
+the subject in the spotlight again. Twentieth-century scholarship on the
+topic, though still useful for those interested in the study of the
+papyri for historical purposes, is either antiquated, limited in scope
+or incomplete (see \textit{infra}). Despite this, the papyri are
+useful source material for the history and evolution of the Greek
+language, as they contain not only official texts but private
+documents as well, whose linguistic features and peculiarities have the
+potential to foster new insights into the nature of colloquial Greek. 
+\section{Thesis}
+The following thesis intends to prove that it is possible to generate
+basic linguistic annotation for a large digitalised corpus of papyri in
+ancient Greek using readily available tools and techniques with minimal
+technical overhead. Such a corpus could be  a boon to scholars interested
+in the Greek of the papyri, as it would facilitate, for instance, the
+creation of linguistically sound grammars and lexica.
+
+\section{Prolegomena}
+
+\subsection{Corpus linguistics}
+A\footnote{The following section is based \emph{passim} on
+\citet{okeeffe2010}.} corpus or text corpus is a large, structured collection
+of texts designed for the statistical testing of linguistic hypotheses. The
+core methodological concepts of this mode of analysis may be found in the
+concordance, a tool first created by biblical scholars in the Middle Ages as an
+aid in exegesis. Among literary scholars, the concordance also enjoyed use,
+although to a lesser degree; the eighteenth century saw the creation of a
+concordance to Shakespeare.
+
+ The development of the concordance into the modern corpus was not primarily
+ driven by the methods of biblical and literary scholars; rather, lexicography
+ and pre-Chomskyan structural linguistics played a crucial role.
+
+ Samuel Johnson created his famous comprehensive dictionary of English by means
+ of a manually composed corpus consisting of countless slips of paper detailing
+ contemporary usage. A similar method was used in the 1880s for the Oxford
+ English Dictionary project - a staggering three million slips formed the basis
+ from which the dictionary was compiled.
+
+ 1950s American structuralist linguistics was the other prong of progress; its
+ heralding of linguistic data as a central given in the study of language
+ supported by the ancient method of searching and indexing ensures its
+ proponents may be called the forerunners of corpus linguistics.
+
+Computer-generated concordances make their appearance in the late 1950s,
+initially relying on the clunky tools of the day - punch cards. A notable
+example is the \emph{Index Thomisticus}, a concordance
+to the works of Thomas of Aquino created by the late Roberto Busa S.J. which
+only saw completion after thirty years of hard work; the printed version spans
+56 volumes and is a testament to the diligence and industry of its author. The
+1970s brought strides forward in technology, with the creation of computerised
+systems to replace catalogue indexing cards, a change that greatly benefited
+bibliography and archivistics.
+
+ It is only in the 1980s and 1990s that are marked the arrival of fully
+ developed corpora in the modern sense of the word; for though the basic
+ concepts of corpus linguistics were already widely used, they could not be
+ applied on a large scale without the adequate tools. The rise of the desktop
+ computer and the Internet as well as the seemingly ever-rising pace of
+ technological development ensured the accessibility of digital tools.  The old
+ tools - punch cards, mainframes, tape recorders and the like - were gladly
+ cast aside in favour of the new data carriers.
+
+ The perpetual increase of computing power equally demonstrated the limits of
+ large-scale corpora; while lexicographical projects that had as their purpose
+ to document the greatest number of possible usages could keep increasing the
+ size of their corpora, the size of others went down as they whittled the data
+ down to a specific set of uses of language.
+
+ The possible applications of the techniques of corpus linguistics are diverse
+ and numerous; for they allow for a radical enlargement in scope while
+ remaining empirical, and remove arduous manual labour from the equation.
+ Corpus linguistics can be an end to itself; it can, however, assert an
+ important role in broader research.  \citet[7]{okeeffe2010} mention areas such
+ language teaching and learning, discourse analysis, literary stylistics,
+ forensic linguistics, pragmatics, speech technology, sociolinguistics and
+ health communication, among others.
+
+The term ``corpus'' has a slightly different usage in classical philology: they
+designate a structured collection of texts, but that collection is not
+primarily intended for the testing of linguistic hypotheses. Instead, we have,
+for instance, the ancient corpus Tibullianum, or modern-day collection, for
+  instance the Corpus Papyrorum Judaicarum, etc. We are primarily interested in
+  the digital techniques used to create linguistic corpora; so let us first
+  take a look at the progress of the digital classics.
+
+The efforts began with the aforementioned Index Thomisticus, the first
+computer-based corpus in a classical language; but the first true impetus was
+the foundation of the Thesaurus Linguae Graecae project in 1972.
+
+%************************************************
+\chapter{The language of the papyri}
+\label{chp:printedworks}
+%\minitoc\mtcskip
+% \mtcaddchapter
+%************************************************
+The earliest compendious grammar of the papyri limits itself to the Ptolemaic
+era but explores it at great length. The work consists of a part on phonology
+and morphology, made up of three slimmer volumes, and a part on syntax,
+encompassing three larger volumes. Its composition seems to have been
+exhausting: it took Mayser thirty-six years to finish volumes I.2 through II.3,
+with I.1 only completed in 1970 by Hans Schmoll, at which point the entire
+series was given a second edition.
+
+When casually browsing through some of its chapters (though casual is hardly
+the word one would associate with the \text{Grammatik}) it is remarkable to see
+that Mayser brings an abundance of material to the table for each grammatical
+observation he makes, however small it may be. For instance, the section on
+diminutives essentially consists of pages upon pages of examples categorised by
+their endings.
+
+This is its great strength as a reference work - whenever one is faced with an
+unusual grammatical phenomenon in any papyrus, consulting Mayser is bound to
+clarify the matter; or rather, it was, for the work is now inevitably dated.
+The volumes published during Mayser's lifetime only include papyri up to their
+date of publication; only the first tome by Schmoll includes papyri up to 1968.
+It is still a largely useful resource, but it is in urgent need of refreshment.
+
+After Mayser set the standard for the Ptolemaic papyri, a grammar of the
+post-Ptolemaic papyri was a new \textit{desideratum} in papyrology. The work
+had been embarked on by Salonius, Ljungvik, Kapsomenos, and Palmer, only to be
+interrupted or thwarted by circumstance or lack of resources.
+\citet{salonius1927}, for instance, only managed to write an introduction on
+the sources, though he offered valuable comments on the matter of deciding how
+close to spoken language a piece of writing is. \citet{ljungvik1932} contains
+select studies on some points of syntax.
+
+It is in the 1930's that we see attempts to create a grammar of the papyri that
+would be the equivalent of Mayser for the post-Ptolemaic period.
+\citeauthor{kapsomenos1938} published a series of critical notes
+[\citeyear{kapsomenos1938}, \citeyear{kapsomenos1957}] on the
+subject; though he attempted at a work on the scale of the \textit{Grammatik},
+he found the resources sorely lacking, as the existing editions of papyrus
+texts could not form the basis for a systematic grammatical study. The other
+was \citeauthor{palmer1934}, who had embarked on similar project and had
+already set out a methodology [\citeyear{palmer1934}]; the war interrupted his
+efforts, and he published what he had already completed, a treatise on the
+suffixes in word formation [\citeyear{palmer1945}].
+
+A new work of some magnitude presents itself two decades later with B. G.
+Mandilaras' \textit{The verb in the Greek non-literary papyri}
+[\citeyear{mandilaras1973}]. Though it does not aim to be a grammar of the
+papyri, it does offer a thorough and satisfactory treatment of its namesake.
+Further efforts essentially do not appear until the publication of Gignac's
+grammar. It is essentially treading in the footsteps of Mayser, only with
+further methodological refinement and a more limited, though still sufficiently
+exhaustive, array of examples. The author, for reasons unknown to me, only
+managed to complete two of the three projected volumes, on phonology and on
+morphology. The volume on syntax is thus absent, a gap only partly filled by
+Mandilaras' \textit{The verb in the Greek non-literary papyri}.
+
+\begin{itemize}
+\item focused on a specific area
+\item supersedes Mayser - supplements Gignac in a way
+\end{itemize}
+
+\begin{itemize}
+\item the newest work - a collection
+\item somewhat more of an appetiser
+\item still offers some interesting articles
+\item carves a path for new research
+\end{itemize}
+
+%************************************************
+\chapter{Digital resources}
+\label{chp:digitalresources}
+\raggedbottom 
+\minitoc\mtcskip
+%\flussbottom
+%************************************************
+%\section{The digital classics: a brief history}
+%\label{sect:corporaclassics}
+
+\subsection{Format}
+\label{subsect:format}
+Raw information is useless; in order to harness it in a meaningful way, one
+must mold it into a usable shape, or at least create a prototypical shape into
+which the information can be molded. While this is true for any kind of
+information, when computers are involved, it is doubly so. Modern-day computers
+are capable of processing enormous amounts of data at incredible speeds; yet
+they require all data to be provided in a strictly structured and regular
+manner that they can analyse.
+
+ Corpora cannot escape this rule; and the fact
+that they are samples of natural language, a system that is structured but
+diverse and often ambiguous, makes their conversion into a form readable by
+computers a complex task. Different methods have been devised to achieve this;
+over the years, some have been fallen into obsolescence, while others have
+evolved and coalesced into a few standards that are now in general use.
+\subsubsection{Encoding}
+\label{subsubsect:encoding}
+Computers use code to transmit or store information, and thus also transmit or
+store numbers and text; the format of such code is termed encoding. Various
+such encoding systems exist for all kinds of purposes. I have limited myself to
+the most relevant for the encoding of texts in ancient Greek; a few other
+legacy encodings do exist but are rarely used.
+
+ \textsc{Beta Code} was
+developed by David Packard in the late 1970's. It is not strictly an encoding,
+but rather a method of representing polytonic Greek using solely ASCII
+characters. The format was adopted by the TLG in 1980 and has spread in use
+since; its main attraction is its adherence to the ASCII encoding, which allows
+the user to type Greek without switching keyboard layouts or resorting to
+different encodings. Beta Code may easily be converted to other encodings, most
+importantly Unicode.
+
+ \textsc{Unicode} is not solely restricted to Greek, but
+aims to provide an encoding that can represent and treat text in a wide variety
+of writing systems. The great benefit of this encoding is that it effectively
+unites a variety of encodings and thus eliminates incompatibilities. The main
+problem, then, is incompatibility with Unicode itself, but as its success
+grows, the number of systems and applications not supporting Unicode is ever
+decreasing; recently developed or updated software is highly likely to be
+compatible with Unicode. As far as Greek is concerned, Unicode is also carving
+out a place for itself to the detriment of Beta Code; using Unicode ensures
+correct rendering of characters in all possible environments without requiring
+specialised fonts to be installed, and the conversion from Beta Code can be
+omitted. It is for this reason that the IDP project has recently converted all
+of its Greek text from Beta Code to Unicode. Others may yet follow.
+
+
+\subsubsection{Markup}
+\label{subsect:markup}
+\begin{itemize}
+\item introduction
+\item SGML
+\item XML
+\item TEI
+\item EpiDoc
+\end{itemize}
+\subsection{Annotation}
+\label{subsect:annotation}
+\subsubsection{Morphological annotation}
+\subsubsection{Morphosyntactic annotation}
+\subsubsection{Syntactic annotation}
+\subsubsection{Semantic annotation}
+\subsubsection{Discourse annotation}
+\subsection{Distribution}
+\label{subsect:distribution}
+The methods of distribution for corpora have, just like all other information,
+dramatically changed in the course of the last fifty years. Before the advent
+of computing, a scholar wishing to consult a concordance had to have access to
+a library, where he could peruse the hefty tomes; the first computerised
+corpora were to be consulted on mainframes that often were nearly the size of
+the room they occupied. The advent of mobile storage, such as diskettes, CDs
+and DVDs increased portability; yet nothing has improved accessibility to the
+same degree as the Internet has.
+
+ Distributing a corpus via Internet can be
+done in a few ways. A first group are read-only: their databases are only
+accessible through a dedicated interface, usually a website or a special server
+that must be accessed through a specific program or transfer protocol. The
+Library of Latin Texts, for instance, has to be accessed through Brepols'
+dedicated website. 
+
+ A second group allows the downloading of raw data, to be
+used as the user wishes. The Perseus Project allows this; IDP has gone farther
+and has made all its data available on GitHub, a widely-used service for
+hosting software development projects. GitHub allows coordination of
+development and provides a constant stream of updates that can easily be
+downloaded.
+
+ It is this group that is of greater interest, as raw data suits
+itself well to manipulation and subsequent analysis. The GitHub page for the
+IDP project may be found at \url{https://github.com/papyri}. Further
+indications as to how to acquire and use this data are provided in the part on
+methodology.
+\subsection{Extant corpora}
+\label{subsect:extantcorpora}
+\subsubsection{Historical corpora}
+\label{subsubsect:historicalcorpora}
+\subsubsection{Dialectal corpora}
+\label{subsubsect:dialectalcorpora}
+\section{Tools}
+\label{sect:tools}
+\subsection{Lexica}
+\label{subsect:lexica}
+\begin{itemize}
+\item Liddell-Scott-Jones
+\item Intermediate LSJ
+\item Slater's Lexicon to Pindar
+\item Bailly
+\item Autenrieth
+\item New Testament Greek Lexicon
+\item Autenrieth
+\end{itemize}
+\subsection{Grammars}
+\label{subsect:grammars}
+\begin{itemize}
+\item Herbert Weir Smyth
+\item K\"{u}hner - Gerth
+\item Gildersleeve - Syntax
+\item Goodwin - Syntax
+\item De Witt Burton - Syntax of the Moods and Tenses in New Testament Greek
+\item A Grammar of Septuagint Greek
+\end{itemize}
+\subsection{Text browsers}
+\label{subsect:textbrowsers}
+\begin{itemize}
+\item Perseus Java Hopper
+\item Diogenes
+\item Andromeda
+\item PhiloLogic
+\item Musaios
+\item A Grammar of Septuagint Greek
+\end{itemize}
+\subsection{Search tools}
+\label{subsect:searchtools}
+\subsection{Morphological parsers}
+\label{subsect:morphparsers}
+\subsection{Part-of-speech tagging}
+\label{subsect:postagging}
+\section{Bibliography}
+\label{sect:digitalbibliography}
+
+%************************************************
+\chapter{Corpus linguistics and papyrology}
+\label{chp:corpuspapyrology}
+\minitoc\mtcskip
+%************************************************
+
+\begin{itemize}
+\item empirical
+\item automated
+\item comprehensive
+\end{itemize}
+\begin{quote}
+In isolation each text is an antiquarian curiosity; when the texts are
+collected together, compared and contrasted with each other, in a word subject
+to systematic study, results of scientific value can be obtained, though the
+quantity of material poses a problem for the investigator. \citep[129]{turner1980}
+\end{quote}
+
+%************************************************
+\chapter{Choosing a corpus}
+\label{chp:corpuscreation}
+\minitoc\mtcskip
+%************************************************
+\section{Language variety and representativity}
+\label{sect:variety}
+
+Papyrologists are familiar with the term \emph{corpus} as it is generally used
+in classical philology: a set of associated texts, for example texts from a
+particular archive or found at a particular place. Corpora as used in corpus
+linguistics are different: they are tailored to serve in the study of a
+specific aspect of language or of language in general. Thus, a corpus must be
+structured and representative.
+
+Modern corpora are usually compiled with a very specific size, source or
+purpose in mind; for instance, some corpora serve as a basis for documenting
+specific varieties of language (e.g. Fries' \emph{American English Grammar}
+[\citeyear{fries1940}], which relied on manual methods) or are used to train
+natural language processing tools. The following section presents a set of
+general distinctions that may be used in the selection of a corpus of papyri
+along with some suggestions on potentially interesting corpora.
+
+\subsection{Diachronic variation}
+\label{subsect:diachronic}
+
+The papyri are broadly divided into three periods: the Ptolemaic, the Roman and
+the Byzantine era. This distinction has been in use for a century and a half
+now and is based on historical dates, resp.\ the beginning of Ptolemaic rule,
+the Roman conquest and the separation of the Eastern Empire – a division which
+obviously cannot be perfectly in line with linguistic development. This is a
+first possible point of improvement upon the extant grammars of the papyri: a
+new chronology based on the absence or presence of certain linguistic features.
+
+\subsection{Diatopic variation}
+\label{subsect:diatopic}
+
+\subsection{Diamesic variation}
+\label{subsect:diamesic}
+
+We do not have the means to investigate the koin\^e spoken during the millennium
+of the papyri directly, but we do have access to a wealth of texts that often
+show the influence of speech. It is this influence that is of primordial
+importance in the study of the koin\^e; for while the texts generally adhere to
+fixed forms – both in the case of formal as informal documents - they do lift
+the veil that is so thickly draped over classical literature and allow us to
+have a peek at a variety of evolutions.
+
+This spoken language element has been gratefully used and abused by the
+creators of papyrological grammars; an entire methodology based on the
+colloquiality of the papyri was steadily developed, first by Bible scholars
+such as Deißmann, Crönert and Thumb, then by papyrologists and koin\^e
+scholars such as Kapsomenos and Palmer (cf.\ \emph{supra})..
+\subsection{Diastratic variation}
+\label{subsect:diastratic}
+\begin{itemize}
+
+\item education level
+\item heritage (bilingualism?)
+\item language interaction, e.g.\ with Latin, Coptic
+\end{itemize}
+\subsection{Diaphasic variation}
+\label{subsect:diaphasic}
+\begin{itemize}
+\item non-literary papyri
+\item personal letters
+\item
+\end{itemize}
+\section{Textual issues}
+\label{sect:textualissues}
+\subsection{Scribal errors}
+\label{subsect:scribalerrors}
+
+As these are not emendated in papyrological editions, there is no need to worry
+about their representation in the corpus; nevertheless, they are of primordial
+importance, as errors in orthography and grammar are usually indicative of
+confusion and contamination with other linguistic elements.
+
+Iotacism, for instance, is common in all papyri, which gives us reason to think
+that it was already widespread in Ptolemaic Egypt.
+
+\subsection{Corrupted text}
+\label{subsect:corruptedtext}
+
+Perhaps flying in the face of usual practice, I have chosen to remove most
+critical notation in order to facilitate the processing of the text. Brackets,
+parentheses and the like have all flown out the window; those acquainted with
+the difficulties involved in the critical edition of papyri will very possibly
+be angered and, justly, maintain that all conjectures found in editions of
+papyri are the product of guesswork - very educated guesswork, artfully
+straddling the border between intuition and exactitude, yet guesswork. The
+reasoning, then, would be that one cannot base one's research on this; shaky
+foundations, after all, entail a shaky building.
+
+I will grant this objection, but a retort is certainly in order. We must remind
+ourselves that the intent is not to deduce linguistic facts from unique
+instances which also happen to be conjectures ; rather, the point is to
+corroborate or disprove certain hypotheses using a relative abundance of
+evidence. It is hard to imagine that a single conjecture could convincingly
+contradict dozens of instances that paint a wholly different picture; what's
+more, our interest lies mainly in language, and it is hard to deny that the
+usual apple of discord when discussing conjectures is not their grammaticality,
+but their semantic and historical implications - that is, they are in most
+cases in agreement with linguistic reality. The cases that are not, or are too
+much so, will therefore inevitably be outnumbered by those that are. One might
+add that the vast majority of conjectures usually involve lacunae of no more
+than one or two characters (check?) and are thus sufficiently small to be
+immune to overly zealous coniectores.
+
+When considering this kind of purism, it is not hard to imagine some saying
+that is it would be a good idea to use diplomatic editions in order to convey
+an image of the text which is as authentic as possible.  The problems with such
+an approach are various, but the most important would without a doubt be the
+word divisions. Parsing would be rendered nigh-impossible without the
+development of new and complex algorithms; combine this with the textual
+difficulties already present in modern edited texts, and we are faced with an
+even greater problem. It seemed best to me then, to make do with the easily
+available preprocessed material.
+
+\section{Technical issues}
+\label{subsect:techissues}
+\subsection{Transforming XML}
+\label{subsect:xslt}
+
+The GitHub repository for the IDP does not only contain transcriptions
+of papyri: it offers us the entire skeleton of the website, most
+importantly for us its XSL stylesheets. These stylesheets allow us to
+convert the EpiDoc XML of the raw files into a easily readable format of
+our choosing. The set offered is exhaustive, well-designed and
+customisable.
+
+The files can be found in the directory papyri/navigator/pn-xslt. The
+file global-parameters.xml should first be edited to accomodate one's
+needs: it allows the user to choose between different styles for the
+Leiden notation, metadata, line numbering, apparatus and edition. I have
+included my own parameters file in the GitHub repository.
+
+I have chosen to change a few technical details to fit the necessary
+requirements for an easily taggable corpus: I fixed the stylesheets for
+conversion to plain text, as in their original state they caused errors upon
+compilation; as indicated above, I have adapted certain aspects of the critical
+notation in order to avoid any impediment for automated treatment; and lastly,
+I have removed all line breaks, hyphens and space-filling elements.
+
+The first was done by analysing the error message given by Saxon: the
+error messages refer to missing variables and functions. I have applied
+a quick fix which has been applied to the files in the GitHub repository.\
+
+steps in annotation:
+\begin{itemize}
+	\item tokenization
+	\item lemmatization and morphological analysis
+	\item part-of-speech tagging
+	\item named-entity recognition
+	\item partial parsing
+	\item full syntactic parsing
+	\item semantic and discourse processing
+\end{itemize
+
+%************************************************
+\chapter{Creating a corpus}
+\label{chp:corpuscreation}
+\minitoc\mtcskip
+%************************************************
+\section{Finding the right tools}
+Before arriving at the compound approach I used for the treatment and analysis
+of the papyri.info corpus, I attempted several other methods:
+
+A first idea was to integrate the \textsc{xml} files in a PhiloLogic setup.
+PhiloLogic is a tool developed by the \textsc{artfl} project and the Digital
+Library Development center at the University of Chicago and released under the
+\textsc{gnu} General Public License --- making it open source software. Its
+original purpose was to serve as the full-text search, retrieval and analysis
+tool for large databases of French literature.
+
+PhiloLogic has support for \textsc{tei} \textsc{xml} and boasts an impressive
+array of features: it can search through text and deliver \textsc{kwic} results
+filtered by frequency and metadata, as well as collocation tables and word
+order information.  Furthermore, the development web page cites support for
+bibliographic backends in \fullsc{m}y\fullsc{sql} databases, out of the box operation,
+interoperability across \textsc{unix}-based systems, etc.
+
+The tool seemed promising; especially the built-in support for \textsc{xml} and
+Unicode drew my attention, along with the built-in features for linguistic
+analysis. It essentially would have made my work easier and allowed me to
+invest more time in investigating a few linguistic topics. In the end, however,
+the software did not fit my needs in a few respects.
+
+Firstly, PhiloLogic requires Apache, Perl and several CPAN modules, as well as
+gawk, gdbm, and agrep.  Not a huge amount of dependencies, but still less than
+using Python and the NLTK, which does not require a server or SQL database to
+run; also a big problem is the out-of the box incompatibility of the required
+CPAn  modules with 64-bit systems. Setting PhiloLogic up was not as
+easy as advertised; I had to resort to a virtual machine running 32-bit Debian
+Linux until I was able to discover a method that enabled compatibility with
+Mac OS X 10.7, my OS of choice.
+
+Secondly, XML support includes standard TEI  but has issues with EpiDoc; notably,
+in my experience, headers were treated as text and EpiDoc's complicated tagset
+was incorrectly rendered; for instance, original readings and corrections were
+concatenated in the text browser, an undesirable situation if we wish to have
+any hand in our choice of corpus, and a possible source of statistical errors.
+Developing brand new XSLT stylesheets to convert EpiDoc to a simpler form of
+TEI markup or to raw text could perhaps have been a feasible solution; but
+PhiloLogic seemed to behave erratically in general and a first attempt at
+feeding the system raw text (advertised as one of its capabilities) turned out
+a spathe of errors.
+
+Thirdly, PhiloLogic's feature set is extensive, but I soon came to realize that it
+does not offer much more than papyri.info already does; it is essentially a
+robust concordancing application through a web interface. I wished not only to
+have a lemmatised corpus searchable by word proximity, but also by word
+relations, which would shed more light on the syntax of the Greek of the
+papyri, as this is arguably the largest gap in scholarship due to the age of
+Mayser's \emph{Grammatik} and the incomplete state of Gignac's \emph{Grammar}.
+Furthermore, the tool as available to the public does not integrate the
+morphological database of Greek developed for Perseus under PhiloLogic --- a
+regrettable point, really, since it was exactly this capacity I wished to
+exploit in the first place. Unicode search for Greek also seems to be in need
+of improvement; the search form still requires transcription. Modifying the
+tool would have been unfeasible given the size of the source code.
+
+Thus I discarded PhiloLogic from my options and set out to find or develop a
+simpler system.\footnote{I also considered setting up a mirror of papyri.info
+on a personal server and modifying the search functionality; this turns out not
+to be a task for the weak-hearted. The required setup causes substantial
+overhead for our purposes, too much to be a reasonable solution.} After the
+technical struggle with PhiloLogic, I decided to focus my efforts on
+concordancers that could replicate its functions. A quick consultation of
+Stanford's list of resources \citep{stanfordnlpres} for statistical natural
+language processing and corpus-based computational linguistics directed me to
+WordSmith Tools, which is regrettably Windows-only and a commercial, closed
+source program to boot.  I set out on a search for open-source alternatives and
+found a diversity of programs, most of them without the same functionality as
+WordSmith, and invariably clunky or antiquated --- making WordSmith the only
+option, but even that did not seem viable for my ends.
+
+I continued my search and stumbled across a very interesting piece of software
+that is enjoying a good amount of popularity as a didactic tool for
+computational corpus linguistics; the Python NLTK, short for Natural
+Language Tool Kit, is not a stand-alone application, but rather a set of ``open
+source Python modules for research and development in natural language
+processing and text analytics bundled with data and documentation''
+\citep{nltkhome}. These modules implement diverse functionalities useful for
+natural language processing and allow their easy integration into Python
+programs. The Python NLTK  seemed to offer a more than solid amount of
+features: corpus readers, tokenizers, stemmers, taggers, chunkers, parsers,
+classifiers, clusterers, tools for semantic interpretation and metrics were all
+integrated from the get-go and are easily combined and extended. The
+NLTK was developed for English, but its extensibility meant it could
+be applied to ancient Greek with relative ease. A further advantage is the fact
+that Python is very well-suited to text manipulation and parsing XML,
+which is an advantage when working with the papyri.info corpus; it is also
+cross-platform: Python interpreters are available for all major platforms.
+
+Now that I had a solid tool for interpreting corpora, the only issue remaining
+was to construct a linguistically annotated corpus out of the papyri.info
+corpus. The extent of the corpus makes extensive manual tagging by a single
+person unfeasible; thus I set out to look for an automated tagger which could
+be used, immediately or with some effort,  on ancient Greek. A variety of
+taggers seem to be available, but I settled on TreeTagger, developed by Helmut
+Schmid, for several reasons:
+
+
+\section{Text selection}
+
+The issue of selecting a corpus was touched upon \emph{supra}; the remaining
+question was how to apply these criteria to the papyri databank.
+
+\section{Formatting}
+
+\section{Tokenisation}
+
+\subsection{Using regular expressions for tokenisation}
+
+\section{Analysis and lemmatisation}
+
+\section{Part-of-speech tagging}
+
+\section{Partial parsing}
+% *****************************************************************
+% back matter
+%******************************************************************
+\backmatter
+\clearpage
+\input{frontbackmatter/bibliography}
+\clearpage
+\input{frontbackmatter/index}
+\clearpage
+\input{frontbackmatter/appendix}
+\end{document}

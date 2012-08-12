@@ -1,0 +1,159 @@
+%************************************************
+\chapter{Choosing a corpus}
+\label{chp:corpuscreation}
+\minitoc\mtcskip
+%************************************************
+\section{Language variety and representativity}
+\label{sect:variety}
+
+Papyrologists are familiar with the term \emph{corpus} as it is generally used
+in classical philology: a set of associated texts, for example texts from a
+particular archive or found at a particular place. Corpora as used in corpus
+linguistics are different: they are tailored to serve in the study of a
+specific aspect of language or of language in general. Thus, a corpus must be
+structured and representative.
+
+Modern corpora are usually compiled with a very specific size, source or
+purpose in mind; for instance, some corpora serve as a basis for documenting
+specific varieties of language (e.g. Fries' \emph{American English Grammar}
+[\citeyear{fries1940}], which relied on manual methods) or are used to train
+natural language processing tools. The following section presents a set of
+general distinctions that may be used in the selection of a corpus of papyri
+along with some suggestions on potentially interesting corpora.
+
+\subsection{Diachronic variation}
+\label{subsect:diachronic}
+
+The papyri are broadly divided into three periods: the Ptolemaic, the Roman and
+the Byzantine era. This distinction has been in use for a century and a half
+now and is based on historical dates, resp.\ the beginning of Ptolemaic rule,
+the Roman conquest and the separation of the Eastern Empire – a division which
+obviously cannot be perfectly in line with linguistic development. This is a
+first possible point of improvement upon the extant grammars of the papyri: a
+new chronology based on the absence or presence of certain linguistic features.
+
+\subsection{Diatopic variation}
+\label{subsect:diatopic}
+
+\subsection{Diamesic variation}
+\label{subsect:diamesic}
+
+We do not have the means to investigate the koin\^e spoken during the millennium
+of the papyri directly, but we do have access to a wealth of texts that often
+show the influence of speech. It is this influence that is of primordial
+importance in the study of the koin\^e; for while the texts generally adhere to
+fixed forms – both in the case of formal as informal documents - they do lift
+the veil that is so thickly draped over classical literature and allow us to
+have a peek at a variety of evolutions.
+
+This spoken language element has been gratefully used and abused by the
+creators of papyrological grammars; an entire methodology based on the
+colloquiality of the papyri was steadily developed, first by Bible scholars
+such as Deißmann, Crönert and Thumb, then by papyrologists and koin\^e
+scholars such as Kapsomenos and Palmer (cf.\ \emph{supra})..
+\subsection{Diastratic variation}
+\label{subsect:diastratic}
+\begin{itemize}
+
+\item education level
+\item heritage (bilingualism?)
+\item language interaction, e.g.\ with Latin, Coptic
+\end{itemize}
+\subsection{Diaphasic variation}
+\label{subsect:diaphasic}
+\begin{itemize}
+\item non-literary papyri
+\item personal letters
+\item
+\end{itemize}
+\section{Textual issues}
+\label{sect:textualissues}
+\subsection{Scribal errors}
+\label{subsect:scribalerrors}
+
+As these are not emendated in papyrological editions, there is no need to worry
+about their representation in the corpus; nevertheless, they are of primordial
+importance, as errors in orthography and grammar are usually indicative of
+confusion and contamination with other linguistic elements.
+
+Iotacism, for instance, is common in all papyri, which gives us reason to think
+that it was already widespread in Ptolemaic Egypt.
+
+\subsection{Corrupted text}
+\label{subsect:corruptedtext}
+
+Perhaps flying in the face of usual practice, I have chosen to remove most
+critical notation in order to facilitate the processing of the text. Brackets,
+parentheses and the like have all flown out the window; those acquainted with
+the difficulties involved in the critical edition of papyri will very possibly
+be angered and, justly, maintain that all conjectures found in editions of
+papyri are the product of guesswork - very educated guesswork, artfully
+straddling the border between intuition and exactitude, yet guesswork. The
+reasoning, then, would be that one cannot base one's research on this; shaky
+foundations, after all, entail a shaky building.
+
+I will grant this objection, but a retort is certainly in order. We must remind
+ourselves that the intent is not to deduce linguistic facts from unique
+instances which also happen to be conjectures ; rather, the point is to
+corroborate or disprove certain hypotheses using a relative abundance of
+evidence. It is hard to imagine that a single conjecture could convincingly
+contradict dozens of instances that paint a wholly different picture; what's
+more, our interest lies mainly in language, and it is hard to deny that the
+usual apple of discord when discussing conjectures is not their grammaticality,
+but their semantic and historical implications - that is, they are in most
+cases in agreement with linguistic reality. The cases that are not, or are too
+much so, will therefore inevitably be outnumbered by those that are. One might
+add that the vast majority of conjectures usually involve lacunae of no more
+than one or two characters (check?) and are thus sufficiently small to be
+immune to overly zealous coniectores.
+
+When considering this kind of purism, it is not hard to imagine some saying
+that is it would be a good idea to use diplomatic editions in order to convey
+an image of the text which is as authentic as possible.  The problems with such
+an approach are various, but the most important would without a doubt be the
+word divisions. Parsing would be rendered nigh-impossible without the
+development of new and complex algorithms; combine this with the textual
+difficulties already present in modern edited texts, and we are faced with an
+even greater problem. It seemed best to me then, to make do with the easily
+available preprocessed material.
+
+\section{Technical issues}
+\label{subsect:techissues}
+\subsection{Transforming XML}
+\label{subsect:xslt}
+
+The GitHub repository for the IDP does not only contain transcriptions
+of papyri: it offers us the entire skeleton of the website, most
+importantly for us its XSL stylesheets. These stylesheets allow us to
+convert the EpiDoc XML of the raw files into a easily readable format of
+our choosing. The set offered is exhaustive, well-designed and
+customisable.
+
+The files can be found in the directory papyri/navigator/pn-xslt. The
+file global-parameters.xml should first be edited to accomodate one's
+needs: it allows the user to choose between different styles for the
+Leiden notation, metadata, line numbering, apparatus and edition. I have
+included my own parameters file in the GitHub repository.
+
+I have chosen to change a few technical details to fit the necessary
+requirements for an easily taggable corpus: I fixed the stylesheets for
+conversion to plain text, as in their original state they caused errors upon
+compilation; as indicated above, I have adapted certain aspects of the critical
+notation in order to avoid any impediment for automated treatment; and lastly,
+I have removed all line breaks, hyphens and space-filling elements.
+
+The first was done by analysing the error message given by Saxon: the
+error messages refer to missing variables and functions. I have applied
+a quick fix which has been applied to the files in the GitHub repository.\
+
+steps in annotation:
+\begin{itemize}
+	\item tokenization
+	\item lemmatization and morphological analysis
+	\item part-of-speech tagging
+	\item named-entity recognition
+	\item partial parsing
+	\item full syntactic parsing
+	\item semantic and discourse processing
+\end{itemize}
+
