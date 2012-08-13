@@ -1,3 +1,5 @@
+# LaTeX stuff
+
 *.aux
 *.glo
 *.idx
@@ -23,6 +25,9 @@
 *.out
 *.synctex.gz
 
+# unused chapters etc.
+/chapters/unused/*
+
 # Mac IDE files
 *.swp
 *~
@@ -33,3 +38,5 @@ Backup[ ]of[ ]*.numbers/
 
 # Mac finder files and hidden folders
 .DS_Store
+
+

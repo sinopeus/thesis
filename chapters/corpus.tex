@@ -1,0 +1,191 @@
+%************************************************
+\chapter{The corpus}
+\label{chp:design}
+\minitoc\mtcskip
+%************************************************
+\section{Goals}
+
+Our objectives for the modified corpus is threefold. Firstly, we want to
+morphologically annotate it with reasonable accuracy; secondly, we also want to
+add syntactical annotation; thirdly, we want to ensure the corpus is compatible
+with a broad range of tools.
+
+The former two goals are the central enterprise of this thesis. Morphological
+annotation will pose little theoretical problems, as the morphological features
+of Greek are not subject to discussion; but for syntactical annotation, a
+variety of theoretical frameworks are in existence. The fact of the matter is
+that I have chosen to take the route which is technically easiest: to use the
+tenets of dependency grammar. The reason Leuven : K.U.Leuven. Faculteit Letteren, 2011 is twofold: on one hand, our training
+data, the New Testament annotated by PROIEL, itself is structured using a
+dependency model; on the other hand, dependency trees, in contrast to
+constituent analysis, assigns each word or morph one node, which is easier to
+`digest' for a computer program.
+
+Our third goal is to format the corpus in a way that will ensure broad
+compatibility. This is desirable for several reasons. A first is that a broadly
+used format offers many options for data treatment; for instance,
+comma-separated text files can be read by many programs, from the simplest text
+editor to the most complex software packages, while XML can very easily be
+integrated in a web interface or parsed and transformed by a variety of
+programs. A second is that corpus is to be published on GitHub for
+collaborative editing, or possibly pulled into the main papyri.info repository.
+This depends on our first point: the idea of GitHub is that all projects are
+open source and can be contributed to by others, which is facilitated by using a
+format with wide adoption.
+
+\section{Design}
+\subsection{Initial inquiries}
+
+Before arriving at the approach described above, I attempted several other
+possible methods for automatic analysis. A first idea was to integrate the XML
+files in a PhiloLogic setup.  PhiloLogic is a tool developed by the ARTFL
+project and the Digital Library Development center at the University of Chicago
+and released under the GNU General Public License. Its original purpose was to
+serve as the full-text search, retrieval and analysis tool for large databases
+of French literature.
+
+PhiloLogic has support for TEI XML and boasts an impressive
+array of features: it can search through text and deliver KWIC results
+filtered by frequency and metadata, as well as collocation tables and word
+order information.  Furthermore, the development web page cites support for
+bibliographic backends in MySQL databases, out of the box operation,
+interoperability across Unix-based systems, etc.
+
+The tool seemed promising; especially the built-in support for XML and
+Unicode drew my attention, along with the built-in features for linguistic
+analysis. It essentially would have made my work easier and allowed me to
+invest more time in investigating a few linguistic topics. In the end, however,
+the software did not fit my needs in a few respects.
+
+Firstly, PhiloLogic requires Apache, Perl and several CPAN modules, as well as
+gawk, gdbm, and agrep.  Not a huge amount of dependencies, but still less than
+using Python and the NLTK, which does not require a server or SQL database to
+run; also a big problem is the out-of the box incompatibility of the required
+CPAn  modules with 64-bit systems. Setting PhiloLogic up was not as
+easy as advertised; I had to resort to a virtual machine running 32-bit Debian
+Linux until I was able to discover a method that enabled compatibility with
+Mac OS X 10.7, my OS of choice.
+
+Secondly, XML support includes standard TEI  but has issues with EpiDoc; notably,
+in my experience, headers were treated as text and EpiDoc's complicated tagset
+was incorrectly rendered; for instance, original readings and corrections were
+concatenated in the text browser, an undesirable situation if we wish to have
+any hand in our choice of corpus, and a possible source of statistical errors.
+Developing brand new XSLT stylesheets to convert EpiDoc to a simpler form of
+TEI markup or to raw text could perhaps have been a feasible solution; but
+PhiloLogic seemed to behave erratically in general and a first attempt at
+feeding the system raw text (advertised as one of its capabilities) turned out
+a spathe of errors.
+
+Thirdly, PhiloLogic's feature set is extensive, but I soon came to realize that it
+does not offer much more than papyri.info already does; it is essentially a
+robust concordancing application through a web interface. I wished not only to
+have a lemmatised corpus searchable by word proximity, but also by word
+relations, which would shed more light on the syntax of the Greek of the
+papyri, as this is arguably the largest gap in scholarship due to the age of
+Mayser's \emph{Grammatik} and the incomplete state of Gignac's \emph{Grammar}.
+Furthermore, the tool as available to the public does not integrate the
+morphological database of Greek developed for Perseus under PhiloLogic --- a
+regrettable point, really, since it was exactly this capacity I wished to
+exploit in the first place. Unicode search for Greek also seems to be in need
+of improvement; the search form still requires transcription. Modifying the
+tool would have been unfeasible given the size of the source code.
+
+Thus I discarded PhiloLogic from my options and set out to find or develop a
+simpler system.\footnote{I also considered setting up a mirror of papyri.info
+on a personal server and modifying the search functionality; this turns out not
+to be a task for the weak-hearted. The required setup causes substantial
+overhead for our purposes, too much to be a reasonable solution.} After the
+technical struggle with PhiloLogic, I decided to focus my efforts on
+concordancers that could replicate its functions. A quick consultation of
+Stanford's list of resources \citep{stanfordnlpres} for statistical natural
+language processing and corpus-based computational linguistics directed me to
+WordSmith Tools, which is regrettably Windows-only and a commercial, closed
+source program to boot.  I set out on a search for open-source alternatives and
+found a diversity of programs, most of them without the same functionality as
+WordSmith, and invariably clunky or antiquated --- making WordSmith the only
+option, but even that did not seem viable for my ends.
+
+I continued my search and stumbled across a very interesting piece of software
+that is enjoying a good amount of popularity as a didactic tool for
+computational corpus linguistics; the Python NLTK, short for Natural
+Language Tool Kit, is not a stand-alone application, but rather a set of ``open
+source Python modules for research and development in natural language
+processing and text analytics bundled with data and documentation''
+\citep{nltkhome}. These modules implement diverse functionalities useful for
+natural language processing and allow their easy integration into Python
+programs. The Python NLTK  seemed to offer a more than solid amount of
+features: corpus readers, tokenizers, stemmers, taggers, chunkers, parsers,
+classifiers, clusterers, tools for semantic interpretation and metrics were all
+integrated from the get-go and are easily combined and extended. The
+NLTK was developed for English, but its extensibility meant it could
+be applied to ancient Greek with relative ease. A further advantage is the fact
+that Python is very well-suited to text manipulation and parsing XML,
+which is an advantage when working with the papyri.info corpus; it is also
+cross-platform: Python interpreters are available for all major platforms.
+
+Now that I had a solid tool for interpreting corpora, the only issue remaining
+was to construct a linguistically annotated corpus out of the papyri.info
+corpus. The extent of the corpus makes extensive manual tagging by a single
+person unfeasible; thus I set out to look for an automated tagger which could
+be used, immediately or with some effort,  on ancient Greek. A variety of
+taggers seem to be available, but I settled on TreeTagger, developed by Helmut
+Schmid, for several reasons:
+
+\section{Technical} % (fold)
+\label{sec:corpus-technical}
+
+\subsection{Requirements} % (fold)
+\label{sub:requirements}
+
+To create the annotated corpus as I have, it is necessary to have the following installed (older versions may work but have not been tested):
+
+\begin{itemize}
+  \item a UNIX-like operating system, i.e. Mac OS X, any variety of Linux or BSD (using Windows should also be possible, since all tools used are portable and cross-platform, but the file location hierarchies in some scripts will not work);
+  \item Python 2.7.3, found at \url{http://www.python.org/} (do not use Python 3.x, the NLTK is not compatible with it);
+  \item Perl 5.x \url{http://www.perl.org/};
+  \item Saxon-HE 9.x, found at \url{http://saxon.sourceforge.net/};
+  \item Helmut Schmid's TreeTagger, found at \url{http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/};
+  \item the Python Natural Language Toolkit (NLTK), found at \url{http://nltk.org/};
+  \item SQLite 3, found at \url{http://www.sqlite.org/}.
+\end{itemize}
+
+All the above, excluding Mac OS X, are freely available.
+
+% subsection Requirements (end)
+
+\subsection{Extracting training data} % (fold)
+\label{sub:extract_training_data}
+
+% subsection Extracting training data (end)
+
+\subsection{Principles of statistical natural language processing} % (fold)
+\label{sub:principles-nlp}
+
+This subsection is intended as an overview of some key concepts on which
+natural language processing is based; it is based mainly on 
+\citet{manning1999}.
+
+\subsubsection{Formal languages} % (fold)
+\label{sub:formallang}
+
+% subsection Formal languages (end)
+
+\subsubsection{Hidden Markov models} % (fold)
+\label{ssub:markovchains}
+
+% subsubsection Markov chains (end)
+
+\subsubsection{Zipf's law} % (fold)
+\label{ssub:zipflaw}
+% subsubsection Zipf's law (end)
+
+% subsection Principles of statistical natural language processing (end)
+
+\subsection{Accuracy testing} % (fold)
+\label{sub:accuracy-testing}
+
+% subsection Accuracy testing (end)
+
+% section Technical (end)
+
