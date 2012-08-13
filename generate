@@ -1,5 +1,6 @@
 rm -f *.{blg,bbl,toc,out,log,aux,pdf,dvi}
 
+echo "Deze masterpaper bevat \\\textbf{`texcount -total -inc -char thesis.tex | ack 'in text' | awk '{print $4}'`} tekens." > wordcount.tex
 pdflatex ./thesis
 bibtex ./thesis
 makeindex ./thesis
