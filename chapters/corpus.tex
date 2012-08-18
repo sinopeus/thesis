@@ -319,14 +319,38 @@ Bayesian stochastics here, so let us first direct our attention to Bayes'
 theorem, which is as follows in its basic form:
 
 \begin{equation}
- \\P(H|E)=\frac{\\P(E,H)}{\\P(E)}.
+  \\P(H|E)=\frac{\\P(E \cap H)}{\\P(E)}.
 \end{equation}
 
-In the context of Bayesian reasoning, P(H|E) denotes the probability of a
-hypothesis H given evidence E. A classic demonstration of Bayes' rule can be
-given by the solution to the famous Monty Hall problem, a probabilistic puzzle
-named after the host of the 1970's American talk show \textit{Let's Make a
-Deal}, which I shall use as an illustration. The problem is set up as follows.
+Where P(H|E) denotes the probability of a hypothesis H given evidence E.
+\textbf{Conditional probability}, the probability of a given event given some
+knowledge, is an important notion here. Two kinds of conditional probability
+exist: \textit{a priori} and \textit{a posteriori} probability, the former
+denoting the probability before considering additional information, the latter
+denoting the probability after considering it. The conditional probability of
+an event A given an event B which has occurred is as follows:
+
+\begin{equation}
+\\P(A|B) = \frac{\\P(A \cap B)}{\\P(B)},
+\end{equation}
+
+from which we can derive (using the fact that set intersection is symmetric,
+\textit{ergo} A $\cap$ B = B $\cap$ A) that
+
+\begin{equation}
+\\P(A \cap B) = \\P(B)\\P(A|B) = \\P(A)\\P(B|A).
+\end{equation}
+
+We can now make a substituion, by which we obtain that
+
+\begin{equation}
+\\P(H|E) = \frac{\\P(E|H)\\P(H)}{\\P(E)}.
+\end{equation}
+
+A classic demonstration of Bayes' rule can be given by the solution to the
+famous Monty Hall problem, a probabilistic puzzle named after the host of the
+1970's American talk show \textit{Let's Make a Deal}, which I shall use as an
+illustration. The problem is set up as follows.
 
 A man is on a quiz program and given a choice between three doors to open, of
 which one will reveal a car and the others nothing; the man gets to take home
@@ -396,9 +420,16 @@ which by exclusion gives us the probability of winning when switching:
   \\P(B|HI) = \frac{2}{3}.
 \end{equation}
 
-This surprising puzzle sheds some light on how Bayes' theorem works; but our
-primary interest is in its use for natural language processing. To expound upon
-this, we first need to introduce the notion of Bayesian belief networks. A good definition is given in \citet[80]{bod2004}:
+This surprising puzzle sheds some light on how Bayes' theorem works; the effect
+of applying it is essentially that the order of dependence between events is
+swapped. It lets us calculate the probability of P(A|HI) in terms of P(H|AI),
+or to put it more informally, to use the probability of the host opening door C
+when we have picked A to calculate the probability of the car being behind door
+A given the host has opened door C.
+
+Our primary interest is in its use for natural language processing. To
+expound upon this, we first need to introduce the notion of Bayesian belief
+networks. A good definition is given in \citet[80]{bod2004}:
 
 \begin{quote}
 Bayesian belief networks are data structures that represent probability
@@ -410,13 +441,55 @@ variables.
 
 We are particularly interested in one specific type of Bayesian belief network
 -- the hidden Markov model. A Markov model is a stochastic process which has
-the Markov property, \ie its behaviour does not depend on previous process
-states. Markov models are classified according to two binary axes: autonomous
-versus controlled and fully versus partially observable. The hidden Markov
-model is autonomous and partially observable; this makes it an excellent model
-for analysing natural language, as it shares both these properties.\
+the Markov property; that is to say, its behaviour does not depend on previous
+process states, only on the current state. Markov models are classified
+according to two binary axes: autonomous versus controlled and fully versus
+partially observable. The hidden Markov model is autonomous and partially
+observable; this makes it an excellent model for analysing natural language, as
+it shares both these properties. A hidden Markov model is in itself a
+stochastic finite state automaton, with each state generating an observation
+and the states themselves being hidden (an important fact; it is here where
+Bayes' rule comes into play). Using our observations, we can make probabilistic
+inferences about the next transition that will happen in the process, thus
+allowing us up to build up a collection of parameters for state transitions
+that can be used to predict our next observation.
 
-TO BE COMPLETED
+An additional important factor is that of the order of the model; the order of
+the model denotes the items the model has in memory. For instance, a
+first-order model will contain exactly one item in its memory, a second order
+two, etc\ldots A natural language expression mapped to a model of order 0 will
+simply give the frequencies for each item in the expression, whereas elevating
+the order allows the establishment of probabilistic relations between sets of
+items, bigrams (two items) for first-order models, trigrams (three items) for
+second-order models and so on. Given sufficient training material, a program
+analysing such models will be able to reproduce similar language (it has to be
+said, often with little regard for making sense but with perfect
+grammaticality) and be able to analyse new sentences as well based upon the
+behaviour of previously stored models.
+
+Now, there is one problem in the picture, and that is that such programs
+require \textbf{sufficient} training material, and if not enough material is
+given, inaccuracies will quickly arise. Such a problem easily poses itself in
+the case of high morphological complexity, where tokens have much smaller
+frequencies than in morphologically simple languages such as English; since
+ancient Greek is of considerable morphological complexity, most taggers working
+with this method will give inaccurate results. On the other hand, TreeTagger
+implements an extra technique, that of binary decision trees, which allow it to
+store infrequent analyses in its memory and use them when appropriate.
+
+Our other tool, the Stanford Parser, also relies upon hidden Markov models; its
+function is to analyse the dependency structure of sentences using
+unlexicalized probabilistic context-free grammars, the term `unlexicalized'
+implying that the use of class words to label words is reduced to only the
+syntactically most important word classes; i.e.\ nouns are often not
+classified.  This increases its speed and still retains a high degree of
+accuracy; it is also widely known, well-supported and very extensible thanks to
+the fact that it is written in Java, which opens its up to be connected with a
+variety of other programs and libraries for various purposes, e.g.\ data
+visualisation tools, statistical libraries, most other programming languages,
+\ldots
+
+I will now give an overview of how I extracted the training data.
 
 \subsection{Extracting training data} % (fold)
 \label{sub:extract_training_data}
@@ -435,6 +508,20 @@ To train TreeTagger and the Stanford Parser, we need annotated data that can be 
 \end{itemize}
 % subsection Extracting training data (end)
 \end{enumerate}
+
+There are a great many obstacles to unifying and formatting these different
+resources; for instance, the PROIEL project and the Perseus project use
+different formats; the former has published its data in three different XML
+formats, while the latter has made its databases available in SQL dump format.
+The PROIEL project has all its Greek text stored in Unicode, while the entire
+Perseus framework still relies on beta code, which created a few obstacles
+along the road. Furthermore, the annotation schemes for both databases are
+different; PROIEL uses ten-characters morphological abbreviations derived from
+the Perseus system, with the difference that the Perseus system only use nine
+characters and orders them slightly differently. Most of the conversion work
+has been automatised by a series of Python scripts, but here and there some manual input is still required. 
+
+A first step is the formatting of the PROIEL morphological database and treebank; this is done using XSL transformations which output the text 
 
 \subsection{Accuracy testing} % (fold)
 \label{sub:accuracy-testing}
