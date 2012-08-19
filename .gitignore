@@ -27,6 +27,7 @@
 
 # unused chapters etc.
 /chapters/unused/*
+/toledo_files/*
 
 # Mac IDE files
 *.swp

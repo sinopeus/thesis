@@ -6,3 +6,4 @@ bibtex ./thesis
 makeindex ./thesis
 pdflatex ./thesis
 pdflatex ./thesis
+cp thesis.pdf toledo_files/masterpaper.pdf
