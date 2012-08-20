@@ -20,6 +20,7 @@
 \usepackage{xspace}
 \usepackage{mparhack}
 \usepackage{fixltx2e}
+\usepackage{glossary}
 \usepackage{relsize}
 \usepackage{lipsum}
 \usepackage[eulerchapternumbers,subfig,beramono,eulermath,pdfspacing,listings]{classicthesis}
@@ -37,7 +38,9 @@
 \newcommand{\Greek}{\fontencoding{LGR}\selectfont}
 \newcommand{\Latin}{\fontencoding{T1}\selectfont}
 \newcommand\fullsc[1]{\scalebox{1.06}[1.09]{\textsc{#1}}}
-
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
+\newcommand{\thickhline}{\noalign{\hrule height 0.8pt}}
 \begin{document}
 \pagestyle{plain}
 \dominitoc

@@ -273,10 +273,10 @@ transition to a new state itself, and the replacement of the top of the stack
 by any symbol (it is even possible for the current symbol to remain in place).
 
 Natural language fits within this paradigm. Given an alphabet $\Sigma$ = \{a,
-b, c, d, ...\} or even, in the case of Greek, \{$\alpha$, $\beta$, $\gamma$,
-$\delta$, ...\} the initial state and top of the stack will give rise to a
+b, c, d, \ldots\} or even, in the case of Greek, \{$\alpha$, $\beta$, $\gamma$,
+$\delta$, \ldots\} the initial state and top of the stack will give rise to a
 sequence of characters or strings formed from the alphabet, which may be a
-word, a sentence, an paragraph, ... In other words, context-free grammar
+word, a sentence, an paragraph, \ldots In other words, context-free grammar
 provides a simple yet precise method for mathematically describing and studying
 the rules which govern the construction of natural language from smaller
 blocks; one can parse generated strings (in themselves context-free languages)
@@ -509,7 +509,7 @@ To train TreeTagger and the Stanford Parser, we need annotated data that can be 
 % subsection Extracting training data (end)
 \end{enumerate}
 
-There are a great many obstacles to unifying and formatting these different
+There are a few obstacles to unifying and formatting these different
 resources; for instance, the PROIEL project and the Perseus project use
 different formats; the former has published its data in three different XML
 formats, while the latter has made its databases available in SQL dump format.
@@ -519,9 +519,137 @@ along the road. Furthermore, the annotation schemes for both databases are
 different; PROIEL uses ten-characters morphological abbreviations derived from
 the Perseus system, with the difference that the Perseus system only use nine
 characters and orders them slightly differently. Most of the conversion work
-has been automatised by a series of Python scripts, but here and there some manual input is still required. 
+has been automatised by a series of Python scripts, but here and there some
+manual input is still required. 
 
-A first step is the formatting of the PROIEL morphological database and treebank; this is done using XSL transformations which output the text 
+
+\subsubsection{Morphological data} % (fold)
+\label{ssub:morphdata}
+
+% subsubsection Morphological data (end)
+% subsection subsection name (end)
+A first step is the formatting of the PROIEL morphological database and
+treebank. This is done with an XSL transformation stylesheet which outputs the
+data in a two raw text files, one to be used as a training corpus, another to
+serve as a supplement to the Perseus-based lexicon; a Python script is then run
+which sorts the lexicon file and removes duplicate forms. It then converts the
+parses in both files to the format used in the Perseus project's databases,
+this in order to attain a unified training file with minimum complexity (see:
+tables 1, 2 and 3).
+
+A second step is the extraction of the Perseus morphological data, which is a
+bit less straightforward. They have published their data in SQL dump format,
+that is, raw text file which reflect the structure of the relational database
+in a programmatic way so that it can be inserted into a new database. I wrote a
+script which created a separate text file for each important relation: lemmata
+and their ID's, parses and their ID's, and finally a combined file with every
+inflected form followed by the ID of its parse and lemma. I then converted all
+Greek text from beta code to Unicode using the Java beta code conversion
+utility provided by the EpiDoc consortium (the utility may be found at
+\url{http://sourceforge.net/projects/epidoc/files/transcoder/}). Once
+everything has been converted to Unicode, a Python script creates a SQLite
+database from the data for later use; using its relational functionality, we
+then output a final lexicon file formatted for use with TreeTagger and with all
+Greek text in Unicode.
+
+The third step is unification and final formatting; we merge both lexica into a
+single text file, sort the contents and remove all duplicates, after which
+another script is run which aligns all possible parses on one line, in this
+way:
+
+\lstset{numbers=left,
+  escapebegin=\Greek,
+  escapeend=\Latin,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt
+}
+
+\begin{lstlisting}[firstnumber=1, escapeinside='']
+'ἀγαπᾶτε'	2ppia----i	'ἀγαπάω',V-
+'ἀγαπᾶτε'	2ppma----i	'ἀγαπάω',V-
+'ἀγαπᾶτε'	2ppsa----i	'ἀγαπάω',V-
+\end{lstlisting}
+
+which is transformed in:
+
+\begin{lstlisting}[firstnumber=1, escapeinside='']
+'ἀγαπᾶτε'	2ppia----i 'ἀγαπάω',V-	2ppma----i 'ἀγαπάω',V-	2ppsa----i 'ἀγαπάω',V-
+\end{lstlisting}
+
+\begin{table}
+  \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{field}            & \textbf{category} & \textbf{possible values} \\ \thickhline
+            first field  & lemma type & \specialcell{a - adjective\\c - conjunction\\d - adverb\\e - exclamation\\g - particle\\l - article\\m - numerals\\n - noun\\p - pronoun\\r - preposition\\t - participle\\v - verb\\x - miscellanea} \\ \hline
+            second field & person & \specialcell{1 - first person\\2 - second person\\3 - third person} \\ \hline
+            third field  & number & \specialcell{d - dual\\p - plural\\s - singular} \\ \hline
+            fourth field & tense & \specialcell{g - gerund \\ p - participle \\ a - aorist\\f - future\\i - imperfect\\l - pluperfect\\p - present\\r - perfect\\t - future perfect} \\ \hline
+             fifth field & mood & \specialcell{i - indicative\\m - imperative\\n - infinitive\\o - optative\\s - subjunctive} \\ \hline
+             sixth field & diathesis & \specialcell{a - active\\e - energetic\\m - medial\\p - passive} \\ \hline
+           seventh field & gender & \specialcell{f - feminine\\m - masculine\\n - neuter\\ o, p and q - unclear} \\ \hline
+            eighth field & case & \specialcell{a - accusative\\d - dative\\g - genitive\\n - nominative\\v - vocative} \\ \hline
+             ninth field & degree of comparison & \specialcell{c - comparative\\s - superlative} \\ \hline
+        \hline
+    \end{tabular}
+\caption{The Perseus ennealiteral morphological abbreviation system.} \label{table:perseusmorph}
+\end{table}
+
+\begin{table}
+  \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{field}            & \textbf{category} & \textbf{possible values} \\ \thickhline
+            first field & person & \specialcell{1 - first person\\2 - second person\\3 - third person} \\ \hline
+            second field  & number & \specialcell{d - dual\\p - plural\\s - singular} \\ \hline
+            third field & tense & \specialcell{a - aorist\\f - future\\i - imperfect\\l - pluperfect\\p - present\\r - perfect\\t - future perfect} \\ \hline
+             fourth field & mood & \specialcell{i - indicative\\m - imperative\\n - infinitive\\o - optative\\s - subjunctive} \\ \hline
+             fifth field & diathesis & \specialcell{a - active\\e - energetic\\m - medial\\p - passive} \\ \hline
+           sixth field & gender & \specialcell{f - feminine\\m - masculine\\n - neuter} \\ \hline
+            seventh field & case & \specialcell{a - accusative\\d - dative\\g - genitive\\n - nominative\\v - vocative} \\ \hline
+             eighth field & degree of comparison & \specialcell{c - comparative\\s - superlative} \\ \hline
+             ninth field & placeholder column & \specialcell{-} \\ \hline
+             tenth field & inflectibility & \specialcell{i - inflected\\n - not inflected} \\ \hline
+        \hline
+    \end{tabular}
+\caption{The PROIEL decaliteral morphological abbreviation system.} \label{table:proielmorph}
+\end{table}
+
+\begin{table}
+  \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{field}            & \textbf{value} & \textbf{Perseus first field equivalent} \\ \thickhline
+                                A- & adjective & $\rightarrow$ a \\ \hline
+                                C- & paratactic conjunctions & $\rightarrow$ c \\ \hline
+                                Df & adverbs & $\rightarrow$ d \\
+                                Dq & adverbial response particles (where, how, etc.) & $\rightarrow$ g \\
+                                Du & adverbial question particles (where, how, etc.)  & $\rightarrow$ g \\ \hline
+                                F- & Hebrew loan words & $\rightarrow$ x \\ \hline
+                                G- & hypotactic conjunctions & $\rightarrow$ c \\ \hline
+                                I- & illocutive particles & $\rightarrow$ g \\ \hline
+                                Ma & cardinal numerals & $\rightarrow$ m \\
+                                Mo & ordinal numerals & $\rightarrow$ m \\ \hline
+                                Nb & nouns (in general) & $\rightarrow$ n \\
+                                Ne & nouns (proper names) & $\rightarrow$ n \\ \hline
+                                Pc & pronouns (reciprocative) & $\rightarrow$ p \\
+                                Pd & pronouns (demonstrative) & $\rightarrow$ p \\
+                                Pi & pronouns (interrogative) & $\rightarrow$ p \\
+                                Pk & pronouns (reflexive) & $\rightarrow$ p \\
+                                Pp & pronouns (personal) & $\rightarrow$ p \\
+                                Pr & pronouns (relative) & $\rightarrow$ p \\
+                                Ps & pronouns (possessive) & $\rightarrow$ p \\
+                                Px & pronouns (quantitative, i.e.\ some, all, none, same, other) & $\rightarrow$ x \\ \hline
+                                R- & prepositions & $\rightarrow$ r \\ \hline
+                                S- & article & $\rightarrow$ l \\ \hline
+                                V- & verb & $\rightarrow$ v \\ \hline
+        \hline
+    \end{tabular}
+\caption{The PROIEL biliteral lemmatic abbreviation system.} \label{table:proiellemmata}
+\end{table}
+
+\subsubsection{Dependency data} % (fold)
+\label{ssub:depdata}
+
+% subsubsection Dependency data (end)
 
 \subsection{Accuracy testing} % (fold)
 \label{sub:accuracy-testing}
