@@ -5,10 +5,32 @@
 %\minitoc\mtcskip
 %************************************************
 
-\section{Scope of the problem}
+\section{Objectives}
+The tasks we aim to perform are the following: 
 
+\begin{itemize}
+\item \textbf{tokenization}, that is, the splitting of individual
+  words into separate 'tokens' which can be considered to form a single
+  linguistic unit;
+\item \textbf{stemming}, the splitting up of words into their morphemic
+  constituents for purposes of lemmatisation or reduction of the
+  complexity of assigning part-of-speech tags;
+\item \textbf{part-of-speech tagging} involves labeling each
+  individual word with relevant information indicating its syntactic
+  role;
+\item \textbf{chunk parsing} or \textbf{shallow parsing} (as opposed to deep parsing)
+  aims to label shallow syntactic constituents, such as individual
+  phrases and clauses.
+\end{itemize}
+
+The performance of any system on these tasks is determined by the
+quality of its underlying \textbf{language model}, which assigns
+probabilities to word sequences; thus, this is our primary task, and
+will provide the necessary data for the four tasks denoted above.
+
+\section{Scope of the problem}
 This is the place to quantify the dimensions and complexity of the
-problem at hand, as this clarifies choices we must make later on in
+problem at hand, as this will clarify choices we must make later on in
 the design and implementation of our program. We summarise the major
 component problems of our task facing us.
 
@@ -26,9 +48,5 @@ lost a great deal of morphological complexity in its evolution towards
 its current state, the Greek of Hellenistic, Roman and Byzantine times
 still possesses much more of it than does, say, English, which is the
 target language for most research in natural language processing.
-
-\section{Objectives}
-
-
 
 \section{Methodology}
