@@ -1,0 +1,612 @@
+
+%************************************************
+\chapter{Background}
+\label{chp:background}
+%\minitoc\mtcskip
+%************************************************
+
+\section{Historical background}
+\subsection{The language of the papyri}
+
+The papyri began to be studied linguistically not by papyrologists and
+historians, but rather by Bible scholars and grammarians interested in their
+relevance in the development began to koin\^{e} Greek, particularly that of the
+New Testament. G. N.  Hatzidakis, W. Cr\"onert, K. Dieterich, A. Deissmann, and
+A.  Thumb pioneered the field in the late nineteenth and early twentieth
+century, spurring a resurgence of scholarship on the topic; an excellent
+overview of pre-1970s research may be found in \citet{mandilaras1973} and
+\citeauthor{gignac1976} [\citeyear{gignac1976} and \citeyear{gignac1981}].
+
+During this period, Mayser begon work on the earliest compendious grammar of
+the papyri; it limits itself to the Ptolemaic era but explores it at length and
+in great detail.  The work consists of a part on phonology and morphology, made
+up of three slimmer volumes, and a part on syntax, encompassing three larger
+volumes. Its composition seems to have been exhausting: it took Mayser
+thirty-six years to finish volumes I.2 through II.3, with I.1 only completed in
+1970 by Hans Schmoll, at which point the entire series was given a second
+edition.
+
+When casually browsing through some of its chapters (though casual is hardly
+the word one would associate with the \textit{Grammatik}) it is remarkable to see
+that Mayser brings an abundance of material to the table for each grammatical
+observation he makes, however small it may be. For instance, the section on
+diminutives essentially consists of pages upon pages of examples categorised by
+their endings.
+
+This is its great strength as a reference work - whenever one is faced with an
+unusual grammatical phenomenon in any papyrus, consulting Mayser is bound to
+clarify the matter; or rather, it was, for the work is now inevitably dated.
+The volumes published during Mayser's lifetime only include papyri up to their
+date of publication; only the first tome by Schmoll includes papyri up to 1968.
+It is still a largely useful resource, but it is in urgent need of refreshment.
+
+After Mayser set the standard for the Ptolemaic papyri, a grammar of the
+post-Ptolemaic papyri was the new \textit{desideratum} in papyrology. The work
+had been embarked on by Salonius, Ljungvik, Kapsomenos, and Palmer, only to be
+interrupted or thwarted by circumstance or lack of resources.
+\citet{salonius1927}, for instance, only managed to write an introduction on
+the sources, though he offered valuable comments on the matter of deciding how
+close to spoken language a piece of writing is. \citet{ljungvik1932} contains
+select studies on some points of syntax.
+
+It is in the 1930's that we see attempts to create a grammar of the papyri that
+would be the equivalent of Mayser for the post-Ptolemaic period.
+\citeauthor{kapsomenos1938} published a series of critical notes
+[\citeyear{kapsomenos1938}, \citeyear{kapsomenos1957}] on the
+subject; though he attempted at a work on the scale of the \textit{Grammatik},
+he found the resources sorely lacking, as the existing editions of papyrus
+texts could not form the basis for a systematic grammatical study. The other
+was \citeauthor{palmer1934}, who had embarked on similar project and had
+already set out a methodology [\citeyear{palmer1934}]; the war interrupted his
+efforts, and he published what he had already completed, a treatise on the
+suffixes in word formation [\citeyear{palmer1945}].
+
+A new work of some magnitude presents itself two decades later with B. G.
+Mandilaras' \textit{The verb in the Greek non-literary papyri}
+[\citeyear{mandilaras1973}]. Though it does not aim to be a grammar of the
+papyri, it does offer a thorough and satisfactory treatment of the verbal
+system as manifest in the papyri.  Further efforts essentially do not appear
+until the publication of Gignac's grammar. It is essentially treading in the
+footsteps of Mayser, only with further methodological refinement and a more
+limited, though still sufficiently exhaustive, array of examples. The author,
+for reasons unknown to me, only managed to complete two of the three projected
+volumes, on phonology and on morphology. The volume on syntax is thus absent, a
+gap only partly filled by Mandilaras' \textit{The verb in the Greek
+non-literary papyri}.
+
+Finally, there is the aforementioned \textit{The Language of the Papyri}
+\citep{lpapyri}, which does not aim to be a work on the same scale as the
+aforementioned. It is a collection of articles on various topics, the whole of
+which is meant to illuminate new avenues for future research. A particularly
+relevant chapter for this thesis is the last one by Porter and O'Donnell
+\citep{porter2010}, who set out to create a linguistic corpus for a selection
+of papyri; their tagging approach, however, is manual, and their target corpus
+limited. The authors also are the creators of \url{http://www.opentext.org/}, a
+project aiming for the development of annotated Greek corpora and tools to
+analyse them; sadly, no progress seems to have been made since 2005.
+
+\subsection{Corpus linguistics}
+A\footnote{The following section is based \emph{passim} on
+\citet{okeeffe2010}.} corpus or text corpus is a large, structured collection
+of texts designed for the statistical testing of linguistic hypotheses. The
+core methodological concepts of this mode of analysis may be found in the
+concordance, a tool first created by biblical scholars in the Middle Ages as an
+aid in exegesis. Among literary scholars, the concordance also enjoyed use,
+although to a lesser degree; the eighteenth century saw the creation of a
+concordance to Shakespeare.
+
+ The development of the concordance into the modern corpus was not primarily
+ driven by the methods of biblical and literary scholars; rather, lexicography
+ and pre-Chomskyan structural linguistics played a crucial role.
+
+ Samuel Johnson created his famous comprehensive dictionary of English by means
+ of a manually composed corpus consisting of countless slips of paper detailing
+ contemporary usage. A similar method was used in the 1880s for the Oxford
+ English Dictionary project - a staggering three million slips formed the basis
+ from which the dictionary was compiled.
+
+ 1950s American structuralist linguistics was the other prong of progress; its
+ heralding of linguistic data as a central given in the study of language
+ supported by the ancient method of searching and indexing ensures its
+ proponents may be called the forerunners of corpus linguistics.
+
+Computer-generated concordances make their appearance in the late 1950s,
+initially relying on the clunky tools of the day - punch cards. A notable
+example is the \emph{Index Thomisticus}, a concordance
+to the works of Thomas of Aquino created by the late Roberto Busa S.J. which
+only saw completion after thirty years of hard work; the printed version spans
+56 volumes and is a testament to the diligence and industry of its author. The
+1970s brought strides forward in technology, with the creation of computerised
+systems to replace catalogue indexing cards, a change that greatly benefited
+bibliography and archivistics.
+
+ It is only in the 1980s and 1990s that are marked the arrival of fully
+ developed corpora in the modern sense of the word; for though the basic
+ concepts of corpus linguistics were already widely used, they could not be
+ applied on a large scale without the adequate tools. The rise of the desktop
+ computer and the Internet as well as the seemingly ever-rising pace of
+ technological development ensured the accessibility of digital tools.  The old
+ tools - punch cards, mainframes, tape recorders and the like - were gladly
+ cast aside in favour of the new data carriers.
+
+ The perpetual increase of computing power equally demonstrated the limits of
+ large-scale corpora; while lexicographical projects that had as their purpose
+ to document the greatest number of possible usages could keep increasing the
+ size of their corpora, the size of others went down as they whittled the data
+ down to a specific set of uses of language.
+
+ The possible applications of the techniques of corpus linguistics are diverse
+ and numerous; for they allow for a radical enlargement in scope while
+ remaining empirical, and remove arduous manual labour from the equation.
+ Corpus linguistics can be an end to itself; it can, however, assert an
+ important role in broader research.  \citet[7]{okeeffe2010} mention areas such
+ language teaching and learning, discourse analysis, literary stylistics,
+ forensic linguistics, pragmatics, speech technology, sociolinguistics and
+ health communication, among others.
+
+The term `corpus' has a slightly different usage in classical philology: they
+designate a structured collection of texts, but that collection is not
+primarily intended for the testing of linguistic hypotheses. Instead, we have,
+for instance, the ancient corpus Tibullianum, or modern-day collection, for
+  instance the Corpus Papyrorum Judaicarum, etc. We are primarily interested in
+  the digital techniques used to create linguistic corpora; so let us first
+  take a look at the progress of the digital classics.
+
+
+\subsection{The digital classics} 
+
+Classical philology, despite its status as one of the oldest and most
+conservative scientific disciplines still in existence today, has in the last
+fifty years found itself at the front lines of the digital humanities movement.
+Incipient efforts in the fifties and sixties, mainly stylometric and lexical
+studies and  the development of concordances, demonstrated the relevance of
+informatics in the classics, an evolution that was at first met with some
+skepticism, but later fully embraced.
+
+The efforts began with the aforementioned Index Thomisticus, the first
+computer-based corpus in a classical language; but the first true impetus was
+the foundation of the Thesaurus Linguae Graecae project in 1972, a monumental
+project with as its goal the stocking of all Greek texts from the Homeric epics
+to the fall of Constantinople. Over the years, many functions have been added
+to this ever more powerful tool; and even in the beginning stages of its
+development, the TLG garnered praise.
+
+The usefulness of the tool in its current form cannot be overstated: not only
+does it contain a well-formatted and easily accessible gigantic collection of
+text editions whose scope and dimensions exceed those of nearly any university
+library; it also offers all of these texts in a format that allows for lexical,
+morphological and proximity searches, as well as including a full version of
+the Liddell \& Scott and Lewis \& Short dictionaries. The TLG has become a
+staple of the digital classics.
+
+Despite this, the TLG is becoming more and more dated as technology progresses.
+While recent years have seen the rise of Unicode as the standard for encoding
+ancient Greek, the TLG still uses beta code, a transliteration system designed
+to only use the ASCII character set, and the texts are stored using an obsolete
+text-streaming format from 1974, which divides the text in blocks of eight
+kilobytes and marks the division between segments.
+
+A digitised version of the Liddell-Scott-Jones lexicon has been added to the
+TLG's web interface, but the texts themselves have not undergone extensive
+tagging, only lemmatisation.  Searching through the database can be done by
+searching for specific forms of a lemma, or by searching for all forms of a
+lemma, but this is essentially the limit of the search tool's power; it is not
+possible to perform a query for all possible lemmata associated with a
+particular form, i.e.\ we cannot find all forms which are, for example, an
+active perfect indicative.
+
+In the wake of the TLG, several notable projects have emerged: Brepols' Library
+of Latin Texts is trying hard to be for Latin texts what the TLG is for Greek
+texts; the Packard Humanities Institute has released CD's containing a
+selection of classical Latin works. In more recent times, the Perseus Project
+has enjoyed great popularity because of the attractive combination of an
+excellent selection of classical texts with translations, good accessibility
+and a set of interesting textual tools, the entire package carrying a very
+interesting price tag for the average user — it is free to use, and for the
+greatest part, open source as well.
+
+The databases I have mentioned are quite general in scope; but within the
+domain of classical philology, other specialised projects exist. Within the
+field of papyrology, for instance, the digital revolution has taken a firm
+foothold. Starting with several separate databases, the field has experienced a
+tendency towards convergence and integration of the available resources, as
+exemplarised by the papyri.info website, maintained by Columbia University,
+that integrates the main papyrological databases into a single database.
+
+A great feature of this database is the shell in which all data is wrapped;
+they are compliant with the EpiDoc standard, a subset of XML based on the TEI
+standard and developed specifically for epigraphical and papyrological texts.
+One may access the database’s resources through the Papyrological Navigator and
+suggest corrections and readings through the Papyrological Editor. What’s more,
+all data is freely accessible under the Creative Commons License,
+crowd-sourced, regularly updated, and can be downloaded for easier searching
+and tweaking.
+
+In other words, papyri.info has brought the open-source mentality from the
+computer world into the classics. For our purposes, this open setup is
+desirable, as the database is not fit for them as it is, but can with some
+effort be molded into a useful tool.
+
+\subsection{Natural language processing} 
+
+Natural language processing (henceforth NLP) is a subdiscipline in computer
+science concerned with the interaction between natural human language and
+computers. Its history well and truly starts in the fifties, with a basic
+concept which has played a great role in natural language processing, and
+computer science in general, the Turing test. This test, put forth by Alan
+Turing in his seminal paper \textit{Computing Machinery and Intelligence}
+\citep{turing1950}, evaluates whether a machine is intelligent or not by
+placing a human in conversation with another human and a machine; if the first
+human cannot tell the other human and the machine apart, the machine passes the test.
+
+Machine translation systems entered development, though progress soon stalled
+because of technical limitations and because of methodological obstacles: such
+systems were dependent on complex rulesets written by programmers that allowed
+for very little flexibility. Because of the slow return on investments made,
+funding for artificial intelligence in general and machine translation
+specifically was drastically reduced throughout the late sixties and the seventies.
+
+A resurgence followed: thanks to advances in computational power and the
+decline of Chomskyan linguistics in natural language processing, which had been
+the dominant theoretical vantage point in the preceding thirty years, the
+eighties were marked by the introduction of statistical machine translation,
+which is fundamentally based on the tenets of corpus linguistics. Modern
+natural language processing is therefore situated on the crossroads between
+various fields: artificial intelligence, computer science, statistics, and
+corpus and computational linguistics. It looks to be an exciting field for the
+coming years as its techniques are under constant improvement and ever more
+present in our daily lives.
+
+Most NLP software is designed explicitly with living languages in mind;
+English, being a world language and the international \textit{lingua franca},
+has enjoyed most of the attention, but other major languages have enjoyed some
+attention, too. Ancient languages, however, are neglected, presumably due to
+their often high complexity and the extensive study and analysis to which they
+have been submitted by skilled scholars. Yet most texts have not been
+integrated in annotated corpora; and though databases such as the Perseus
+project contain large swathes of morphologically and sometimes syntactically
+annotated text, the process has been driven largely by manual labour; to give
+an exhaustive list is not appropriate here, but another such example which is
+relevant is the PROIEL project \citep{proiel}, which is also a treebank, i.e.\ a database of
+syntactically annotated sentences. It contains data for Herodotus and the New Testament.
+
+There is also a corpus which has been tagged using NLP techniques, whose
+relevancy for this thesis is high and that I have thus described in the next
+section on methodology, namely the Perseus corpus under the PhiloLogic
+interface, run by the University of Chicago.
+
+
+\section{Technical background}
+
+\subsection{Formal grammar}
+\label{sec:formalgrammar}
+
+\subsection{Parsing}
+\label{sec:parsing}
+
+\subsection{Bayesian probability}
+\label{sec:bayes}
+
+\subsection{N-grams}
+\label{sec:ngrams}
+
+\subsection{Hidden Markov Models and Maximum Entropy Models}
+\label{sec:hmm-maxent}
+
+\subsection{Neural networks}
+\label{sec:neuralnetworks}
+
+\subsection{Deep learning}
+\label{sec:neuralnetworks}
+
+\subsection{Principles of statistical natural language processing} 
+\label{sub:principles-nlp}
+
+The crux of the proposed method is the use of the aforementioned TreeTagger,
+developed by Helmut Schmid, which can lemmatize and tag at the same time,
+followed by another iteration using the Stanford Parser to analyse sentence
+dependencies. TreeTagger can be trained for any language, and its efficiency
+for highly inflected languages such as ancient Greek is due to its combination
+of two tagging methods, namely n-gram tagging and binary decision tree tagging,
+the combination of which makes TreeTagger the fastest part-of-speech tagger
+around. The Stanford Parser is the state of the art in sentence parsing.
+
+The following section, therefore, is intended to provide some theoretical
+background on statistical natural language processing. I have based myself upon
+Manning and Schütze's \textit{Foundations of Statistical Natural Language
+Processing} \citep{manning1999}, the current standard reference work, as well
+as \citet{koshy2004} and \citet{hopcroft2001} for concepts relating to automata
+theory, as well as on \citet{bod2004} for the paragraphs on statistics.
+Furthermore, to illuminate some aspects of TreeTagger's workings, I have also
+integrated Schmid's articles on tagging methodology as he applied it in
+TreeTagger [\citeyear{schmid1994} and \citeyear{schmid1995}]. 
+
+\subsubsection{Context-free grammar and pushdown automata} % (fold)
+\label{sub:formallang}
+
+The basis of all statistical natural language processing is the
+conceptualisation of natural language within the Chomsky hierarchy as a formal
+language generated by a \textbf{stochastic context-free grammar}, that is to say, a
+context-free grammar whose production rules are augmented by a probability. In
+computer science, such a language is termed a context-free language and defined
+as any language that can be recognized by a \textbf{nondeterministic pushdown
+automaton}. A nondeterministic pushdown automaton is understood to be a
+nondeterministic finite state automaton with access to an infinite stack, a
+finite state automaton being an automaton which is in a state that can
+transition into another state when triggered by input. Put more simply, a
+nondeterministic pushdown automaton possesses the following:
+
+\begin{itemize} 
+  
+  \item a \textbf{stack}, that is, a string of symbols which functions as the
+    automaton's memory. The automaton only has access to the leftmost symbol in
+    this string, a symbol which is dubbed the top of the stack; the top of the
+    stack can be used to determine which transition the automaton will make
+    next;
+    
+  \item an \textbf{input tape} whose symbols are scanned one by one just like a
+    finite-state automaton; 
+    
+    \item a \textbf{finite state control unit}, which controls the state of the
+      automaton. Normally this is done in response to input, but it is possible
+      in some types of automata to transition into a new state without any
+      input, as is the case for pushdown automata; this type of transition is
+      termed $\epsilon$-transition or $\lambda$-transition.
+    
+\end{itemize}
+
+A simple example of finite state automaton is a coin-operated turnstile: it has
+two possible states, locked and unlocked, and two possible inputs, the
+insertion of a coin or a push. Depending on the state the machine is currently
+in, each of these inputs will trigger either a change or leave the machine in
+its current state. For instance, if the turnstile is unlocked, a push will make
+it turn and lock again; inserting a coin will do nothing.  Conversely, when it
+is locked, a coin will unlock it, while a push will still leave it locked. This
+type of automaton is deterministic, that is, there is only one next possible
+state to transition to. A nondeterministic finite state automaton would for
+example be a vending machine, which functions in a similar way but allows for
+transitions to various states depending on input; different combinations of
+coins and button presses will unlock different mechanisms in the machine and
+let a specific item fall into the bottom compartment.
+
+\begin{figure}
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto] 
+  \node[text width=2cm, text centered, state] (locked)   {$locked$}; 
+   \node[text width=2cm, text centered, state](unlocked) [right=of locked] {$unlocked$};
+   \node[text centered, node distance=2cm] (coin) [above left=of locked] {$coin$};
+    \path[->] 
+    (coin) edge [] node {} (locked)
+    (locked) edge  [loop left] node {push} ()
+          edge  [bend left=20] node {coin} (unlocked)
+    (unlocked) edge  [bend left=20] node {push} (locked)
+          edge [loop right] node {coin} ();
+\end{tikzpicture}
+\caption{Transition diagram for a deterministic finite state automaton modeling a turnstile. Adapted from \citet[762]{koshy2004}.} \label{fig:turnstile}
+\end{figure}
+
+When a stack is added to this setup, the automaton is essentially provided with
+an infinite memory. Transitions will now be based upon the current state, the
+input symbol and the symbol at the top of the stack. An $\epsilon$-transition
+is possible as well, with $\epsilon$ replacing the input symbol. Thus, any
+transition now consists of the following: the consumption of input, the
+transition to a new state itself, and the replacement of the top of the stack
+by any symbol (it is even possible for the current symbol to remain in place).
+
+Natural language fits within this paradigm. Given an alphabet $\Sigma$ = \{a,
+b, c, d, \ldots\} or even, in the case of Greek, \{$\alpha$, $\beta$, $\gamma$,
+$\delta$, \ldots\} the initial state and top of the stack will give rise to a
+sequence of characters or strings formed from the alphabet, which may be a
+word, a sentence, an paragraph, \ldots In other words, context-free grammar
+provides a simple yet precise method for mathematically describing and studying
+the rules which govern the construction of natural language from smaller
+blocks; one can parse generated strings (in themselves context-free languages)
+and by induction assemble a grammar. It is also possible to feed a string as
+input to a pushdown automaton applying a context-free grammar; this will show
+whether the string is acceptable by the rules of the grammar or not.
+
+\begin{figure}
+  \begin{center}
+\begin{tikzpicture}[shorten >=1pt,node distance=3cm,on grid,auto, label distance=0.4cm] 
+  \node[text centered] (input)   {$input$}; 
+  \node[text centered, align=center, state, rectangle, minimum size=2cm] (fscontrol) [right=of input] {finite\\state\\control};
+   \node[text centered] (acceptreject) [right=of fscontrol] {$accept/reject$};
+   \node[text centered,rectangle split, rectangle split parts=3, draw, label=0:$stack$, minimum size=1.2cm] (stack) [below=of fscontrol] {$top$};
+    \path[->] 
+    (input) edge [] node {} (fscontrol)
+    (fscontrol) edge  [] node {} (acceptreject)
+                edge  [bend left=20] node {} (stack)
+    (stack) edge  [bend left=20] node {} (fscontrol);
+\end{tikzpicture}
+\end{center}
+\caption{General structure of a pushdown automaton. Adapted from \citet[220]{hopcroft2001}.} \label{fig:pushdownautomaton}
+\end{figure}
+
+\subsubsection{Stochastics and statistics} % (fold)
+\label{ssub:stochastics}
+
+As mentioned above, statistical language processing adds a stochastic element
+to this model of language; not only are the possible transitions analysed,
+probabilities are also assigned to each of them. Within probabilistics, two
+interpretations exist: the more widely-known one is \textbf{frequentism}, also
+known as \textbf{objectivism}. It is the classical brand of statistics;
+objectivism views probabilities as realities that can be measured by relative
+frequencies obtained in experiments. The opposing interpretation is termed
+\textbf{subjectivist} or \textbf{Bayesian} (after Thomas Bayes, discoverer of
+its founding theorem), and views probabilities as degrees of belief or
+uncertainty. In other words, while frequentism relies on experiment and trial,
+Bayesianism relies on the observer's judgement. The main interest here lies in
+Bayesian stochastics, so let's first direct our attention to Bayes' theorem,
+which is as follows in its basic form:
+
+\begin{equation}
+  \\P(H|E)=\frac{\\P(E \cap H)}{\\P(E)}.
+\end{equation}
+
+Where P(H|E) denotes the probability of a hypothesis H given evidence E.
+\textbf{Conditional probability}, the probability of a given event given some
+knowledge, is an important notion here. Two kinds of conditional probability
+exist: \textit{a priori} and \textit{a posteriori} probability, the former
+denoting the probability before considering additional information, the latter
+denoting the probability after considering it. The conditional probability of
+an event A given an event B which has occurred is as follows:
+
+\begin{equation}
+\\P(A|B) = \frac{\\P(A \cap B)}{\\P(B)},
+\end{equation}
+
+from which can be derived (using the fact that set intersection is symmetric,
+\textit{ergo} A $\cap$ B = B $\cap$ A) that
+
+\begin{equation}
+\\P(A \cap B) = \\P(B)\\P(A|B) = \\P(A)\\P(B|A).
+\end{equation}
+
+We can now make a substitution, by which we obtain that
+
+\begin{equation}
+\\P(H|E) = \frac{\\P(E|H)\\P(H)}{\\P(E)}.
+\end{equation}
+
+A classic demonstration of Bayes' rule can be given by the solution to the
+famous Monty Hall problem, a probabilistic puzzle named after the host of the
+1970's American talk show \textit{Let's Make a Deal}, which I shall use as an
+illustration. The problem is set up as follows.
+
+A man is on a quiz program and given a choice between three doors to open, of
+which one will reveal a car and the others nothing; the man gets to take home
+whatever is behind the door he picks. The man picks a door; then the host opens
+another door, always the one without a car behind it, and asks the man whether
+he'd like to change doors. The question now is the following: should he switch?
+
+Most people would not switch due to the erroneous belief that the probability
+of picking any door has not changed from 0.33 for each door, or that the
+probability has now become 0.5 for each remaining door. But the fact is, he
+should switch! By eliminating the third door, the host has effectively joined
+all probabilities beside the one for the car being behind the door the player
+has originally picked, that is, switching doors at this point will double the
+probability of winning the car to 0.66.
+
+Bayes' rule is at play here. Given A, B and C, the respective probabilities of
+the car being behind each door (which are all equal to 0.33), and given I, the
+initial information, we now have:
+
+\begin{equation}
+ \\P(A|I) = \\P(A|I) = \\P(A|I) = \frac{1}{3}.
+\end{equation}
+
+Now add a factor H, which indicates the opening of the third door C by the
+host. By Bayes' theorem the following can be stated:
+
+\begin{equation}
+  \\P(A|HI) = \frac{\\P(A|I) \\P(H|AI)}{\\P(H|I)}.
+\end{equation}
+
+Given the fact that P(A|I) = 0.33, we will focus on P(H|AI) and P(H|I), the
+probabilities of respectively the host opening door C with the car at A and the
+host opening door C given only I. The former is simple: if the car is behind
+door A, then we must admit that the host can only open two doors, B or C, with
+the probability being 0.5 for both events; \textit{ergo}, 
+\begin{equation}
+\\P(H|AI) = \frac{1}{2}.
+\end{equation}
+
+The remaining probability, that of the host opening door C given only info I, is the following:
+
+\begin{equation}
+\\P(H|I) = \\P(H|AI)\\P(A|I) + \\P(H|BI)\\P(B|I) + \\P(H|CI)\\P(C|I),
+\end{equation}
+
+which is due to the fact that A, B and C are mutually exclusive and exhaust all
+possibilities. For P(H|BI), the probability of the host opening C when the car
+is behind B and we've picked A, we know that if the car is behind door B and we
+have picked door A, the host has no choice but to open C, making P(H|BI) = 1.
+P(H|CI), the probability of the host opening door C when the car is behind it
+and we have picked A, is obviously 0 due to the rules of the game.  Filling in
+the known probabilities gives us the following:
+
+\begin{equation}
+  \\P(H|I) = \frac{1}{2} \cdot \frac{1}{3} + 1 \cdot \frac{1}{3} = \frac{1}{2}.
+\end{equation}
+
+We now have all requisite probabilities to calculate the final probability of winning when we don't switch.
+
+\begin{equation}
+  \\P(A|HI) = \frac{\frac{1}{3} \cdot \frac{1}{2}}{\frac{1}{2}} = \frac{1}{3},
+\end{equation}
+
+which by exclusion gives us the probability of winning when switching:
+
+\begin{equation}
+  \\P(B|HI) = \frac{2}{3}.
+\end{equation}
+
+This surprising puzzle sheds some light on how Bayes' theorem works; the effect
+of applying it is essentially that the order of dependence between events is
+swapped. It lets us calculate the probability of P(A|HI) in terms of P(H|AI),
+or to put it more informally, to use the probability of the host opening door C
+when we have picked A to calculate the probability of the car being behind door
+A given the host has opened door C.
+
+Our primary interest is in its use for natural language processing. To
+expound upon this, we first need to introduce the notion of Bayesian belief
+networks. A good definition is given in \citet[80]{bod2004}:
+
+\begin{quote}
+Bayesian belief networks are data structures that represent probability
+distributions over a collection of random variables. A network consists of a
+directed acyclic graph, in which nodes represent random variables (unknown
+quantities) and the edges between nodes represent causal influences between the
+variables.
+\end{quote}
+
+We are particularly interested in one specific type of Bayesian belief network
+-- the hidden Markov model. A Markov model is a stochastic process which has
+the Markov property; that is to say, its behaviour does not depend on previous
+process states, only on the current state. Markov models are classified
+according to two binary axes: autonomous versus controlled and fully versus
+partially observable. The hidden Markov model is autonomous and partially
+observable; this makes it an excellent model for analysing natural language, as
+it shares both these properties. A hidden Markov model is in itself a
+stochastic finite state automaton, with each state generating an observation
+and the states themselves being hidden (an important fact; it is here where
+Bayes' rule comes into play). Using our observations, we can make probabilistic
+inferences about the next transition that will happen in the process, thus
+allowing us up to build up a collection of parameters for state transitions
+that can be used to predict our next observation.
+
+An additional important factor is that of the order of the model; the order of
+the model denotes the items the model has in memory. For instance, a
+first-order model will contain exactly one item in its memory, a second order
+two, etc\ldots A natural language expression mapped to a model of order 0 will
+simply give the frequencies for each item in the expression, whereas elevating
+the order allows the establishment of probabilistic relations between sets of
+items, bigrams (two items) for first-order models, trigrams (three items) for
+second-order models and so on. Given sufficient training material, a program
+analysing such models will be able to reproduce similar language (it has to be
+said, often with little regard for making sense but with perfect
+grammaticality) and be able to analyse new sentences as well based upon the
+behaviour of previously stored models.
+
+Now, there is one problem in the picture, and that is that such programs
+require \textbf{sufficient} training material, and if not enough material is
+given, inaccuracies will quickly arise. Such a problem easily poses itself in
+the case of high morphological complexity, where tokens have much smaller
+frequencies than in morphologically simple languages such as English; since
+ancient Greek is of considerable morphological complexity, most taggers working
+with this method will give inaccurate results. On the other hand, TreeTagger
+implements an extra technique, that of binary decision trees, which allow it to
+store infrequent analyses in its memory and use them when appropriate.
+
+Our other tool, the Stanford Parser, also relies upon hidden Markov models; its
+function is to analyse the dependency structure of sentences using
+unlexicalized probabilistic context-free grammars, the term `unlexicalized'
+implying that the use of class words to label words is reduced to only the
+syntactically most important word classes; i.e.\ nouns are often not
+classified.  This increases its speed and still retains a high degree of
+accuracy; it is also widely known, well-supported and very extensible thanks to
+the fact that it is written in Java, which opens its up to be connected with a
+variety of other programs and libraries for various purposes, e.g.\ data
+visualisation tools, statistical libraries, most other programming languages,
+\ldots
+
+\section{Related work}
