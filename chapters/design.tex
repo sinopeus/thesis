@@ -1,52 +1,617 @@
-
-%************************************************
+% ************************************************
 \chapter{Design}
-\label{chp:design}
-%\minitoc\mtcskip
-%************************************************
+\label{chp:design} % \minitoc\mtcskip %
+% ************************************************
 
-\section{Selecting training data}
-\label{sec:trainingdata}
+\section{Inspiration}
+\label{sec:inspiration}
+
+The idea of designing a system to automatically process ancient Greek
+was originally inspired by the work of R. Whaling and H. Dik, who used
+a purely supervised method for tagging a corpus of classical
+Greek. They trained H. Schmid's TreeTagger using a relatively small
+corpus of annotated Greek and proceeded to tag their corpus with it,
+offsetting the relatively large error rate with manual work done by
+graduate students at the University of Chicago. Whaling and Dik's
+method enabled them to annotate the corpus in much less time than
+would have been necessary would the annotation process have been
+executed manually.
+
+An early prototype of this thesis attempted to use similar supervised
+methods to annotate the corpus of the papyri. Despite high
+expectations, experience showed that the lack of extensive annotated
+corpora is a severe hindrance, as the main way to improve the accuracy
+of any NLP system is to offer it more training data. Feeding 400.000
+words as training data to the Stanford POS Tagger resulted in a measly
+60\% accuracy on a validation set held out from the training corpus.
+
+Recent literature in the field revealed that state-of-the-art results
+were being achieved using a combination of unsupervised and supervised
+learning techniques, dubbed semi-supervised approaches. Unsupervised
+approaches can make use of unannotated data as a preparation for
+supervised training, and work by trying to divide the raw data into
+clusters on the basis of various criteria. Notably, R. Collobert and
+others developed a versatile architecture which achieved high accuracy
+on several NLP tasks and required a relatively low amount of
+optimisation. See \citet{collobert2008}, \citet{collobert-2011}. Accuracy
+for POS tagging reached up to 97.20\%, while for chunking, scores of
+up to 93.63\% were achieved; similarly high results were achieved for
+named entity recognition and semantic role labeling. this is an
+impressive performance given the fact that most of the architecture is
+shared among all tasks and the majority of the parameters of the
+system are inferred through unsupervised methods. 
+
+Given that far larger amounts of raw textual material are available
+for ancient Greek, it seems that this kind of technique is suited to
+the problem at hand. The 400.000 word training corpus used in the
+experiment with the Stanford POS Tagger is much smaller and limited
+than corpora like that offered by the Perseus project (about 7M words)
+and the TLG (about 109M words at last count, though these are not
+freely available). Making use of this untapped resource is
+desirable. This chapter is dedicated to an overview of the
+architecture; the approach followed in \citet{collobert-2011} and
+\citet{turian2010word} is respected with amendments and
+simplifications where needed in order to accommodate for some
+characteristics of Greek (in particular the very high complexity of
+its morphology requires a subtler approach). The exact implementation
+of the system is left for the next chapter.
+
 
 \section{Creating a language model}
 \label{sec:training-nn}
 
+Neural networks as a technique are anything but new; the general
+concepts underlying them date from more than half a century ago, and
+thousands of applications have been found that make use of them. A
+single-layer neural network is a compact structure that can perform
+complex tasks efficiently; and even with the hardware which was in use
+a decade ago and before, training a neural network was a feasible
+task. Training a deep neural network, which contains several hidden
+layers (hence the term \textit{deep}), is another matter; doing this
+requires the backpropagation algorithm, which until the mid-2000's
+was simply too slow for use on the hardware of the day. 
+
+At this point, G. Hinton, who had been one of the first proponents of
+the use of deep networks in the 1980's as a professor at Carnegie
+Mellon University, blew new life into the field he helped create with
+his paper ``Learning multiple layers of representation''
+\citep{hinton2007learning}. He demonstrated that it was possible to
+perform very complex learning tasks relatively efficiently and to
+great effect using this type of network. The way this is done is by
+stepping down from the traditional approach where neural networks are
+given a certain amount of classified examples and training them to
+classify observations based on these; rather, the goal is now to train
+\textbf{generative networks}, i. e., networks that can randomly
+generate possible observations. Examples given to the network do not
+need to be classified in advance; instead, given an observation, the
+network's parameters are adjusted to maximise the likelihood of data
+of its kind being generated.
+
+A classic task for this type of network is handwritten digit
+recognition; a network is trained by feeding it a large amount of
+examples of handwritten digits. For each example, the parameters are
+adjusted; after a sufficiently large amount of examples, the network
+is capable of generating handwritten digits itself, in a vast number
+of variations.
+
+Applying the method to natural language processing requires the
+development of a structured internal representation for each word (or
+each letter, but we will consider words).  If we choose to designate
+each word by a fixed-length vector with $n$ components, these vectors
+define how the word is embedded within an $n$-dimensional vector
+space; hence, these vectors are termed
+\textbf{embeddings}.\footnote{To avoid confusion: note that the
+components of this feature vector do not necessarily show a one-on-one
+correspondence with linguistic features!} 
+
+The unified architecture proposed by Collobert et al. uses these
+embeddings, which are tailored during training using a huge amount of
+natural language data, to initialise networks which will be trained in
+a supervised manner. These networks operate in the same manner and
+make use of the same embeddings, with the difference that they are
+task-specific and trained on classified examples. Performance
+improvements are due to the fact that at this stage, most of the
+general learning is actually already done and we are applying
+classification to certain clusters in the vector space, which allows
+the model to make more accurate inferences when classifying rare words
+or phrases.
+
 \subsection{Network structure}
 \label{sec:networkstructure}
+
+Deep networks contain multiple layers which are sequentially trained;
+the input of a layer is weighted and passed on to the following layer,
+which may be either an output layer or a hidden layer. Several layers
+are stacked in this manner.
+
+\subsubsection{Hyperparameters}
+
+Before constructing a network, we need to decide on a set of
+hyperparameters that will influence the parameters of the neural
+network and its training process. These are:
+
+\begin{itemize}
+\item the \textbf{embedding dimensions}, written $d_{wrd}$: the number of
+  components in a word feature vector;
+\item the \textbf{dictionary size}, written $D$: how many words we want to consider
+  when training;
+\item the \textbf{window size}, written $wsz$: the number of words we want to
+  consider per example;
+\item the \textbf{learning rate}, written $\lambda$: when using gradient descent,
+  how much we want to adjust the network parameters at each gradient
+  step;
+\item the \textbf{embedding learning rate}, written $\lambda_{e}$: the same as
+  $\lambda$, but for the purpose of learning embeddings;
+\item the \textbf{input, output and hidden size}, written $n^l_{in}$, $n^l_{out}$, and $n^l_{hu}$, respectively: the number of neurons
+  contained in a layer $l$.
+\end{itemize}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{nnstructure}
+\caption{The basic network structure, using a window approach. Figure from \citet[2499]{collobert-2011}.} \label{fig:nnstructure}
+\end{figure}
+
+\subsubsection{Lookup table layer}
+The lookup table itself is a matrix with $d_{wrd}$ rows and $D$
+columns. Its initial construction is as follows: given a frequency
+table, the $D$ most common words are chosen and placed in order. Each
+word is now assigned an index according to its ranking in the
+frequency table. The most common word gets index 1, the second most
+common index 2 etc., up to the word in the $D^{th}$ place in the
+table, which is assigned index $D$. For each index, a new embedding of
+size $d_{wrd}$ with small random values is created and assigned to
+that index. The lookup table matrix itself is constructed by
+concatenating these $D$ vectors as columns.  In this way, a lookup
+operation for an index $i$ is actually nothing more than the selection
+of the $i^{th}$ column from this matrix.
+
+The lookup table layer itself consists of $wsz$ input neurons; given a
+text window, each word is converted to its corresponding index, which
+is then fed to the neuron corresponding to its position in the window,
+which retrieves the embedding of that word from the lookup table. The
+output of all neurons is then concatenated into a single matrix, whose
+columns are now the embeddings for the input window. 
+
+Formally, given a word index vector $w \in N^{wsz}$ and a lookup table
+$L \in R^{d_{wrd} \times D}$, we can express this as as a function
+$LT$:
+\begin{equation}
+  LT(L, w) = \left( \begin{array}{cccc}
+L_{1,w_1} & L_{1,w_2} & \ldots & L_{1,w_{wsz}} \\
+L_{2,w_1} & L_{2,w_2} & \ldots & L_{2,w_{wsz}} \\
+\ldots   & \ldots  & \ldots & \ldots \\
+L_{d_{wrd},w_1} & L_{d_{wrd},w_2} & \ldots & L_{d_{wrd},w_{wsz}} \end{array} \right)
+\end{equation}
+\subsubsection{Linear layer}
+
+A linear layer takes a fixed size vector and performs a linear
+operation on it: the dot product of this vector with a set of
+parameters $W$ is computed and a bias added. Formally, given the
+output vector $f^{l-1}_\theta$ of layer $l-1$, the following
+computation is performed in layer $l$:
+\begin{equation}
+  f^l_\theta = W^l \cdot f^{l-1}_\theta + b^l
+\end{equation}
+Where $\theta$ indicates the existing parameters of the network and
+$W^l \in R^{n^l_{hu} \times n^{l-1}_{hu}} $ and $b^l \in R^{n^l_{hu}} $
+are the parameters of the layer to be trained, with $n^l_{hu}$
+representing the amount of hidden units in layer $l$. Linear layers
+transform their input and several such layers can be stacked, similar
+to how linear functions can be composed.
+
+\subsubsection{Hard hyperbolic tangent layer}
+
+If we intend for our network to be able to model a highly nonlinear
+system such as language, we need to introduce nonlinearity
+somewhere. A good function for this is the hyperbolic tangent, which
+is differentiable everywhere and approximates a linear threshold
+function very nicely. A layer $l$ using the hyperbolic tangent as an
+activation function contains $n^l_{hu}$ neurons taking $n^{l-1}_{hu}$
+inputs. In this case, the activation function $g(x)$ for a scalar x
+is:
+\begin{equation}
+g(x) = tanh(x) = \frac{e^{2x} - 1}{e^{2x} + 1}
+\end{equation}
+For an input vector generated by a layer $l - 1$, the function $g$ represented by a hyperbolic tangent layer can be defined as:
+\begin{equation}
+f^l_{\theta} = g(f^{l-1}_{\theta})
+= \left[ \begin{array}{c}
+g(f^l_{\theta1}) \\
+g(f^l_{\theta2}) \\
+\ldots \\
+g(f^l_{\theta n^{l-1}_{hu}})\\ \end{array} \right]
+\end{equation}
+We approximate this function using the hard hyperbolic tangent, defined for a scalar as:
+\begin{equation}
+hardtanh(x) = = \begin{cases} 1, & \mbox{if } x > 1 \\ -1, & \mbox{if } x < -1 \\ x & \mbox{otherwise.}\end{cases}
+\end{equation}
+We can define this function for vector inputs in the same manner
+as for the hyperbolic tangent function.
+
+\subsubsection{Scoring layer}
+
+The final layer. This is actually simply a linear layer which is
+designed to output a vector containing as many elements as there are
+possible tags for the task at hand. Each output element is a score
+which reflects the probability of the corresponding tag for the
+central word in the input window.
 
 \subsection{Unsupervised learning}
 \label{sec:unsupervised}
 
-\subsubsection{Genetic model generation}
-\label{sec:geneticmodels}
+The first phase of learning is unsupervised; large amounts of raw
+language data are fed to the network. Instead of training using a
+classical squared-loss function, a pairwise ranking function is
+introduced. The network is constructed as described in the previous
+section; we want a single score $f_{\theta}(x)$ to be output for a
+given window of text $x$.  The window is first corrupted using a word
+$w$ from the dictionary by replacing the central word in $x$ by
+$w$. We express this corrupted window as $x^{(w)}$. The pairwise
+ranking of any two such pairs $x$ and $w$ is defined as $r(\theta, x, w) = max\left\{0,
+1 - f_{\theta}(x) + f_{\theta}(x^{(w)})\right\}$. 
+In effect, we want the non-corrupted window to achieve a higher score
+than the corrupted window. We can achieve this by adjusting the
+parameters $\theta$ such that the pairwise ranking of $x$ and $w$ is
+minimal, since this implies that $f_{\theta}(x)$ must yield a higher
+score than $f_{\theta}(x^{(w)})$. Summing this operation over all
+possible pairs $(x, w)$ and defining a mapping from the parameters
+$\theta$ to this sum, we obtain a general cost function:
+\begin{equation}
+\theta \mapsto \sum\limits_{x \in X} \sum\limits_{w \in D} r(\theta, x, w)
+\end{equation}
+Where $X$ is the set of possible windows of size $wsz$ and $D$ the chosen
+dictionary. Minimizing this function with respect to $\theta$ will
+ensure the relevant parameters (the embeddings and the first two
+layers) are tuned so that our ranking function $f_{\theta}$ yields
+accurate scores. Using this simple criterion, we have a method for
+crafting a set of parameters that contains a consistent structured
+internal representation of the training data. Despite the relatively
+simplicity of the criterion, the huge amounts of parameters results in
+a very taxing and lengthy computation. Furthermore, there is no
+guarantee that the cost function has a single minimum with respect to
+$\theta$; a full grid search would be necessary, which necessitates
+vast amounts of computing time. 
 
-\subsubsection{Increasing dictionary sizes}
-\label{sec:curricula}
+% \subsubsection{Curriculum learning}
+% \label{sec:curricula}
+Instead, the process is sped up using \textbf{curriculum learning};
+the basic idea of this technique is analogous to the learning process
+children are put through in school: instead of starting their
+education with university-level quantities of difficult material
+immediately, a restricted set of elementary concepts is introduced on
+which they concentrate. Successive phases of learning are performed by
+gradually expanding the set of concepts which is to be learned, making
+use of earlier concepts to facilitate the understanding of more
+complex concepts.
+ 
+The same method, for reasons not yet fully understood, can be applied
+to unsupervised learning.\footnote{Among the scholarship of note on
+this subject we find \citet{bengio2009curriculum} and
+\citet{erhan2010}.} First, the training material is restricted to the
+most frequent observations of the process we want to model. Training
+over this restricted set creates a simplified model which, due to the
+abundance of examples, should be accurate. Subsequently, new
+iterations of the learning algorithm are run over successively larger
+sets; at each iteration, the model becomes more detailed and describes
+more classes of observations more accurately.
 
+This is applied to the problem at hand by choosing
+successively larger dictionary sizes. During the calculation of the
+minimum of the cost function, windows which are not centered around a
+word which is in the dictionary are ignored. This initially entails a
+significant reduction of our sets $X$ and $D$, which makes the process
+a bit less computationally demanding. Subsequent iterations are
+computationally more expensive, but are initialised with the
+parameters found by previous iterations; observations previously used
+in learning will already return excellent scores and will only
+necessitate minor adjustments to the parameters, while new
+observations can be fit into the general picture more easily.
 
+% \subsubsection{Genetic model generation}
+% \label{sec:geneticmodels}
+
+% The second is genetic model generation by using \textbf{model breeding}. 
+% \begin{itemize}
+% \item model `breeding'
+% \item at each iteration of increasing dictionary sizes, search for
+%   optimal parameters
+% \item use a validation set: a selection of sentences held out from a
+%   corpus
+% \item optimise by trying different parameters and then evaluating the
+%   accuracy of the network's output for the validation sentences
+% \item at each step, pick the best model, then expand on this
+%   (`breeding lines')
+% \end{itemize}
 
 \subsection{Supervised learning}
 \label{sec:supervised}
 
+The supervised training phase involves the creation of task-specific
+networks which are initialised with the embeddings created during the
+unsupervised phase; these form a shared first part of all networks. A
+given network is then tailored to have an adapted output as necessary
+for the task of interest. Training proceeds in the classical fashion,
+by providing correctly formatted examples and adjusting all parameters
+(including the shared ones) to minimize the squared error.
+
+The output of a network of this type is a vector; each specific
+feature is encoded in on component of this vector by setting this
+component to one and all others to zero. This is called a one-hot
+vector. All tasks are jointly trained, that is to say, the networks
+share parameters, are trained simultaneously and are allowed to modify
+shared parameters. Individual (non-shared) network parameters are
+modified only during training for a specific task. This technique
+allows us to generalise the training benefit from each example.
+
+Composing such a one-hot vector is not simple for Greek morphology:
+any given word will belong to multiple morphological categories. For
+instance, a verbal form has a tense, a mood, a number, a person, and
+sometimes even a case and gender. Gathering all possible features into a
+single one-hot vector is therefore not feasible.
+
+We could approach this problem in different ways. An instinctive test
+is to simply feed the system raw parses and assign one component of
+the output vector to each possible parse. This is needlessly
+complicated; if we look at the list of morphological parses from the
+Perseus database, we find more than 2000 distinct morphological
+analyses! An output vector of this size is simply too unwieldy.
+
+A more dynamic approach would be to create one-hot vectors for each of
+the following categories, with the number of options assigned to each
+category corresponding to the number of components in the
+corresponding output vector:
+
+\begin{itemize}
+\item major part of speech: verb, noun, adjective, pronoun, particle
+  , adverb, numeral, preposition, conjunction, interjection;
+\item minor part of speech: article / determinative, personal,
+  demonstrative, indefinite, interrogative, relative, possessive,
+  reflexive, reciprocal, proper;
+\item person: first, second, third;
+\item number: singular, plural, dual;
+\item tense: present, imperfect, aorist, perfect, pluperfect,
+  future, future perfect;
+\item mood: indicative, subjunctive, optative, imperative,
+  infinitive, participle, gerundive, gerund, supine;
+\item voice: active, middle, passive, middle-passive;
+\item gender: masculine, feminine, neuter, common;
+\item case: nominative, genitive, dative, accusative, ablative,
+  vocative;
+\item degree: comparative, superlative.
+\end{itemize}
+
+\begin{table}
+  \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{field}            & \textbf{category} & \textbf{possible values} \\ \thickhline
+            first field  & lemma type & \specialcell{a - adjective\\c - conjunction\\d - adverb\\e - exclamation\\g - particle\\l - article\\m - numerals\\n - noun\\p - pronoun\\r - preposition\\t - participle\\v - verb\\x - miscellanea} \\ \hline
+            second field & person & \specialcell{1 - first person\\2 - second person\\3 - third person} \\ \hline
+            third field  & number & \specialcell{d - dual\\p - plural\\s - singular} \\ \hline
+            fourth field & tense & \specialcell{g - gerund \\ p - participle \\ a - aorist\\f - future\\i - imperfect\\l - pluperfect\\p - present\\r - perfect\\t - future perfect} \\ \hline
+             fifth field & mood & \specialcell{i - indicative\\m - imperative\\n - infinitive\\o - optative\\s - subjunctive} \\ \hline
+             sixth field & diathesis & \specialcell{a - active\\e - energetic\\m - medial\\p - passive} \\ \hline
+           seventh field & gender & \specialcell{f - feminine\\m - masculine\\n - neuter\\ o, p and q - unclear} \\ \hline
+            eighth field & case & \specialcell{a - accusative\\d - dative\\g - genitive\\n - nominative\\v - vocative} \\ \hline
+             ninth field & degree of comparison & \specialcell{c - comparative\\s - superlative} \\ \hline
+        \hline
+    \end{tabular}
+\caption{The Perseus ennealiteral morphological abbreviation system.} \label{table:perseusmorph}
+\end{table}
+
+\begin{table}
+  \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{field}            & \textbf{category} & \textbf{possible values} \\ \thickhline
+            first field & person & \specialcell{1 - first person\\2 - second person\\3 - third person} \\ \hline
+            second field  & number & \specialcell{d - dual\\p - plural\\s - singular} \\ \hline
+            third field & tense & \specialcell{a - aorist\\f - future\\i - imperfect\\l - pluperfect\\p - present\\r - perfect\\t - future perfect} \\ \hline
+             fourth field & mood & \specialcell{i - indicative\\m - imperative\\n - infinitive\\o - optative\\s - subjunctive} \\ \hline
+             fifth field & diathesis & \specialcell{a - active\\e - energetic\\m - medial\\p - passive} \\ \hline
+           sixth field & gender & \specialcell{f - feminine\\m - masculine\\n - neuter} \\ \hline
+            seventh field & case & \specialcell{a - accusative\\d - dative\\g - genitive\\n - nominative\\v - vocative} \\ \hline
+             eighth field & degree of comparison & \specialcell{c - comparative\\s - superlative} \\ \hline
+             ninth field & placeholder column & \specialcell{-} \\ \hline
+             tenth field & inflectibility & \specialcell{i - inflected\\n - not inflected} \\ \hline
+        \hline
+    \end{tabular}
+\caption{The PROIEL decaliteral morphological abbreviation system.} \label{table:proielmorph}
+\end{table}
+
+\begin{table}
+  \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{field}            & \textbf{value} & \textbf{Perseus first field equivalent} \\ \thickhline
+                                A- & adjective & $\rightarrow$ a \\ \hline
+                                C- & paratactic conjunctions & $\rightarrow$ c \\ \hline
+                                Df & adverbs & $\rightarrow$ d \\
+                                Dq & adverbial response particles (where, how, etc.) & $\rightarrow$ g \\
+                                Du & adverbial question particles (where, how, etc.)  & $\rightarrow$ g \\ \hline
+                                F- & Hebrew loan words & $\rightarrow$ x \\ \hline
+                                G- & hypotactic conjunctions & $\rightarrow$ c \\ \hline
+                                I- & illocutive particles & $\rightarrow$ g \\ \hline
+                                Ma & cardinal numerals & $\rightarrow$ m \\
+                                Mo & ordinal numerals & $\rightarrow$ m \\ \hline
+                                Nb & nouns (in general) & $\rightarrow$ n \\
+                                Ne & nouns (proper names) & $\rightarrow$ n \\ \hline
+                                Pc & pronouns (reciprocative) & $\rightarrow$ p \\
+                                Pd & pronouns (demonstrative) & $\rightarrow$ p \\
+                                Pi & pronouns (interrogative) & $\rightarrow$ p \\
+                                Pk & pronouns (reflexive) & $\rightarrow$ p \\
+                                Pp & pronouns (personal) & $\rightarrow$ p \\
+                                Pr & pronouns (relative) & $\rightarrow$ p \\
+                                Ps & pronouns (possessive) & $\rightarrow$ p \\
+                                Px & pronouns (quantitative, i.e.\ some, all, none, same, other) & $\rightarrow$ x \\ \hline
+                                R- & prepositions & $\rightarrow$ r \\ \hline
+                                S- & article & $\rightarrow$ l \\ \hline
+                                V- & verb & $\rightarrow$ v \\ \hline
+        \hline
+    \end{tabular}
+\caption{The PROIEL biliteral lemmatic abbreviation system.} \label{table:proiellemmata}
+\end{table}
+
+\begin{table}
+  \begin{tabular}{|l|l|}
+        \hline
+        \textbf{The Perseus system} & \textbf{The PROIEL system} \\ \thickhline
+        \begin{minipage}{2.5in}
+          \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+          \item adv: adverbial;
+          \item apos: apposing element;
+          \item atr: attributive;
+          \item atv/atvv: complement;
+          \item auxc: conjunction;
+          \item auxg: bracketing punctuation;
+          \item auxk: terminal punctuation;
+          \item auxp: preposition;
+          \item auxv: auxiliary verb;
+          \item auxx: commas;
+          \item auxy: sentence adverbials;
+          \item auxz: emphasizing particles;
+          \item coord: coordinator;
+          \item exd: ellipsis;
+          \item obj: object;
+          \item ocomp object complement;
+          \item pnom: predicate nominal;
+          \item pred: predicate;
+          \item sbj: subject.
+          \end{itemize}
+        \end{minipage} &
+        \begin{minipage}{2.5in}
+          \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+          \item adnom: adnominal;
+          \item adv: adverbial;
+          \item ag: agens;
+          \item apos: apposition;
+          \item arg: argument (object or oblique);
+          \item atr: attribute;
+          \item aux: auxiliary;
+          \item comp: complement;
+          \item expl: expletive;
+          \item narg: adnominal argument;
+          \item nonsub: non-subject (object, oblique or adverbial);
+          \item obj: object;
+          \item obl: oblique;
+          \item parpred: parenthetical predication;
+          \item part: partitive;
+          \item per: peripheral (oblique or adverbial);
+          \item pid: Predicate identity;
+          \item pred: predicate;
+          \item rel: apposition or attribute;
+          \item sub: subject;
+          \item voc: vocative;
+          \item xadv: open adverbial complement;
+          \item xobj: open objective complement;
+          \item xsub: external subject.
+          \end{itemize}
+        \end{minipage} \\ \hline
+    \end{tabular}
+\caption{The Perseus and PROIEL syntactic annotation systems.} \label{table:proielmorph}
+\end{table}
+
+This approach has its downside: we now have to train distinct networks
+for each network. The upside, though, is that each of these networks
+is much, much smaller than a single network mapping all possible
+parses and will be easier to train; an example of the
+divide-and-conquer technique. We could possibly be confronted with
+impossible parses, such as an 'imperfect optative', but this is highly
+unlikely due to the total absence of examples for this form.
+
+The task of preprocessing the corpus, which is discussed
+\textit{infra}, is also simplified due to this approach: the two main
+corpora from which the training material is gathered use similar but
+slightly different annotation schemes. The PROIEL system is a bit more
+complex, but essentially gives the same information as the Perseus
+system. Tables 1 and 2 offer a detailed overview of both systems;
+table 3 contains conversion guidelines. For simplicity's sake, we pick
+the Perseus system, since this limits the amount of networks we'd have
+to train to nine. Instead of having to convert from one type of
+annotation to another, we can simply split the annotations into their
+constituent parts, store them in different files and resolve any
+annotational differences afterwards with minimal headaches.
+
+The process of dependency annotation only requires one network, but is
+a bit more complex. The source corpora for the training data once
+again use similar annotation schemes but with different emphases. We
+enumerate the tags for the Perseus and the PROIEL annotation system,
+respectively.
+
+We see in table 4 that they respectively use nineteen and twenty-four different
+features. The Perseus system is less detailed than the PROIEL system,
+but by virtue of this fact also less complex. A possible approach is
+to map overlaps in both systems and find the simplest possible tag set
+which can be derived from that. We can immediately make a one-hot
+vector from this, since all annotated words are equipped with a single
+syntactig tag.
+
+\section{Selecting and processing training data}
+\label{sec:trainingdata}
+
+For the unsupervised learning phase, we need a maximally large
+corpus. I chose the TLG CD-ROM E, which contains about 9.3M words, and
+the Perseus texts, which contain about 7.7M words. Since both corpora
+shared material, duplicated sentences were scrapped. The final corpus
+contains about 16.9M words. For training the model, this corpus is
+split sentence-wise into a training corpus, from which representations
+are learned, and a validation corpus, to check the accuracy of the
+generated representations. The file is split 90-10.
+
+The supervised learning phase makes use of the Perseus treebank and
+the PROIEL annotated texts of Herodotus and the New Testament. These
+respectively contain approx. 350K and 195K words, making for a total
+of about 545K words. Again, a validation set is withheld, in a
+slightly lower proportion than in the unsupervised phase due to the
+restricted size of the corpus.
+
+All texts are preprocessed by converting all words to lowercase and
+placing exactly one sentence on every line. Only Greek punctuation is
+left; critical notation etc. is pruned.
+
 \subsection{Possible improvements}
 \label{sec:supervised}
 
-\begin{itemize}
-  \item affix features
-  \item gazetteers
-  \item cascading features
-  \item ensemble voting
-  \item parsing
-  \item word representations
-  \item general engineering
-\end{itemize}
+% \begin{itemize}
+% \item affix features
+% \item gazetteers
+% \item cascading features
+% \item ensemble voting
+% \item parsing
+% \item word representations
+% \item software optimisation
+% \end{itemize}
 
 
 \section{Annotating the corpus}
 \label{sec:annotating}
 
-\subsection{Using the embeddings}
-\label{sec:usingembeddings}
+After the architecture (model and networks) is built, it is
+serialised; that is to say, the internal state of the architecture
+during training time is stored to disk. Serialisation allows us to
+immediately load the model into memory during the execution of our
+tagging program. When tagging, we use the architecture in a read-only
+manner, i.e. we only predict and do not adjust parameters any more.
 
-\subsection{Viterbi decoding}
-\label{sec:viterbidecoding}
+Tagging is essentially a process of probabilistic prediction; text
+windows are passed through each of the networks, which return a
+prediction of the expected features of the central words in these
+windows in the form of an output vector. For tagging a sentence with
+$n$ words, we create $n$ text windows and use these as input. Each
+window generates an output vector; we pick the component with the
+maximum score and attribute the corresponding tag to the central word
+in the original text window. This process is iterated over every
+sentence in the target text. 
+
+% In order to find the most likely sequence of tags, we can use the
+% Viterbi algorithm. Suppose we have a matrix $A \in R^{m \cross n}$. We
+% can convert this matrix to a graph G by associating every component of
+% the matrix to an edge and a node and adding $m$ nodes which correspond
+% to a start state $q_0$. 
+% \begin{itemize}
+% \item find the most likely sequence using Viterbi decoding
+% \item when viewing the matrix as a graph, we can trace a path through
+%   this matrix
+% \item edge weights are probabilities of any tag following another
+%   given a word following another
+% \item nodes are states, that is, word-tag correspondences
+% \item the path with the largest product of edge weights corresponds to
+%   the most likely tag sequence
+% \end{itemize}

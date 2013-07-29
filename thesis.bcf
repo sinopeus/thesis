@@ -1952,27 +1952,47 @@
     <bcf:datasource type="file" datatype="bibtex">Bibliography.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">lpapyri</bcf:citekey>
-    <bcf:citekey order="2">mandilaras1973</bcf:citekey>
-    <bcf:citekey order="3">gignac1976</bcf:citekey>
+    <bcf:citekey order="2">lpapyri</bcf:citekey>
+    <bcf:citekey order="3">mandilaras1973</bcf:citekey>
     <bcf:citekey order="4">gignac1976</bcf:citekey>
-    <bcf:citekey order="5">gignac1981</bcf:citekey>
-    <bcf:citekey order="6">salonius1927</bcf:citekey>
-    <bcf:citekey order="7">ljungvik1932</bcf:citekey>
-    <bcf:citekey order="8">kapsomenos1938</bcf:citekey>
+    <bcf:citekey order="5">gignac1976</bcf:citekey>
+    <bcf:citekey order="6">gignac1981</bcf:citekey>
+    <bcf:citekey order="7">salonius1927</bcf:citekey>
+    <bcf:citekey order="8">ljungvik1932</bcf:citekey>
     <bcf:citekey order="9">kapsomenos1938</bcf:citekey>
-    <bcf:citekey order="10">kapsomenos1957</bcf:citekey>
-    <bcf:citekey order="11">palmer1934</bcf:citekey>
+    <bcf:citekey order="10">kapsomenos1938</bcf:citekey>
+    <bcf:citekey order="11">kapsomenos1957</bcf:citekey>
     <bcf:citekey order="12">palmer1934</bcf:citekey>
-    <bcf:citekey order="13">palmer1945</bcf:citekey>
-    <bcf:citekey order="14">mandilaras1973</bcf:citekey>
-    <bcf:citekey order="15">lpapyri</bcf:citekey>
-    <bcf:citekey order="16">porter2010</bcf:citekey>
-    <bcf:citekey order="17">okeeffe2010</bcf:citekey>
+    <bcf:citekey order="13">palmer1934</bcf:citekey>
+    <bcf:citekey order="14">palmer1945</bcf:citekey>
+    <bcf:citekey order="15">mandilaras1973</bcf:citekey>
+    <bcf:citekey order="16">lpapyri</bcf:citekey>
+    <bcf:citekey order="17">porter2010</bcf:citekey>
     <bcf:citekey order="18">okeeffe2010</bcf:citekey>
-    <bcf:citekey order="19">turing1950</bcf:citekey>
-    <bcf:citekey order="20">proiel</bcf:citekey>
-    <bcf:citekey order="21">mimno2009</bcf:citekey>
+    <bcf:citekey order="19">okeeffe2010</bcf:citekey>
+    <bcf:citekey order="20">turing1950</bcf:citekey>
+    <bcf:citekey order="21">proiel</bcf:citekey>
+    <bcf:citekey order="22">dik2008</bcf:citekey>
+    <bcf:citekey order="22">dik2009</bcf:citekey>
+    <bcf:citekey order="23">schmid1994</bcf:citekey>
+    <bcf:citekey order="23">schmid1995</bcf:citekey>
+    <bcf:citekey order="24">lee2008nearest</bcf:citekey>
+    <bcf:citekey order="24">conf/lrec/LeeH10</bcf:citekey>
+    <bcf:citekey order="25">bammanpbml2008</bcf:citekey>
+    <bcf:citekey order="25">bammantlt8</bcf:citekey>
+    <bcf:citekey order="25">Bamman:2008:BDL:1378889.1378892</bcf:citekey>
+    <bcf:citekey order="25">bammandhq2009</bcf:citekey>
+    <bcf:citekey order="25">springerlink:10.1007/978-3-642-20227-8_5</bcf:citekey>
+    <bcf:citekey order="26">collobert2008</bcf:citekey>
+    <bcf:citekey order="27">collobert-2011</bcf:citekey>
+    <bcf:citekey order="28">collobert-2011</bcf:citekey>
+    <bcf:citekey order="29">turian2010word</bcf:citekey>
+    <bcf:citekey order="30">hinton2007learning</bcf:citekey>
+    <bcf:citekey order="31">collobert-2011</bcf:citekey>
+    <bcf:citekey order="32">collobert-2011</bcf:citekey>
+    <bcf:citekey order="33">bengio2009curriculum</bcf:citekey>
+    <bcf:citekey order="34">erhan2010</bcf:citekey>
+    <bcf:citekey order="35">mimno2009</bcf:citekey>
   </bcf:section>
   <bcf:sortlist section="0" type="entry" label="nyt">
   <bcf:sorting>

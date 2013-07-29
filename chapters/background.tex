@@ -343,11 +343,12 @@ set containing all ordered pairs of elements from $A$ and $B$.
 \subsubsection{Probability}
 \label{sec:probability}
 
-A probability is a measure for the likelihood of an event for an
+A \textbf{probability} is a measure for the likelihood of an event for an
 experiment, which we intuitively understand to be an action whose
 outcome we want to observe. Such events are then elements of a set
 containing all possible outcomes of an experiment; an event can be a
-point or subset of that set. We call this set the sample space, denoted S. We denote the probability of an event E as P(E).
+point or subset of that set. We call this set the \textbf{sample space},
+denoted S. We denote the probability of an event E as P(E).
 
 Axiomatically, we can define probability as follows:
 
@@ -387,28 +388,43 @@ solution for disjoint events; events may also overlap, and in this
 case, we need a more sophisticated formula. For the union of any $n$
 events $A_i$, the following holds:
 \begin{equation}
-  h_w(x) = w_1x + w_0
+P(\bigcup_{i=1}^n A_i) = \sum\limits_{i=1}^n P(A_i)
 \end{equation}
 
+For the intersection of these $n$ events $A_i$, it can be proven that:
+\begin{equation}
+P(\bigcap_{i=1}^n A_i) = \lim_{n \to \infty} P(A_i)
+\end{equation}
+Knowing both these rules is important when considering
+\textbf{conditional probability}; for two events $A$ and $B$, suppose
+we know $B$ has occurred and we want to know what the probability of
+$A$ occurring is given this information. We call this the conditional
+probability of $A$ given $B$ and write it $P(A|B)$. If $P(B) > 0$,
+then we define it as:
 
-\begin{itemize}
-  \item Axioms
-  \item Probabilities and sets
-  \item Bayes' rule
-\end{itemize}
+\begin{equation}
+  P(A|B) = \frac{P(A \cap B)}{P(B)}
+\end{equation}
 
-\subsubsection{Calculus}
+Using this formula, we can directly derive \textbf{Bayes' theorem} as follows:
+
+\begin{equation}
+\begin{aligned}
+  P(A|B) &= \frac{P(A \cap B)}{P(B)} \\
+  P(A|B) P(B) &= P(A \cap B)\\
+  P(A|B) P(B) &= P(B \cap A)\\
+  P(A|B) P(B) &= P(B|A) P(A)\\
+  P(B|A) &= \frac{P(A|B) P(B)}{P(A)}
+\end{aligned}
+\end{equation}
+
+\subsubsection{Calculus and linear algebra}
 \label{sec:calculus}
 \begin{itemize}
-  \item Derivatives
-  \item Numerical methods
-\end{itemize}
-
-\subsubsection{Linear algebra}
-\label{sec:linearalgebra}
-\begin{itemize}
-  \item Vector spaces
+  \item Derivatives and computing extrema
   \item Jacobian matrices
+  \item Numerical methods
+  \item Vector spaces
 \end{itemize}
 
 \subsubsection{Statistics}
@@ -527,10 +543,10 @@ events $A_i$, the following holds:
     If we use this function, we are performing \textbf{linear
       classification with logistic regression}.
 
-    LOGISTIC REGRESSION AND THE CHAIN RULE
   }
 
-  \item Clustering
+\item logistic regression and the chain rule
+\item clustering
 \end{itemize}
 
 
@@ -549,8 +565,11 @@ events $A_i$, the following holds:
 \subsubsection{N-grams}
 \label{sec:ngrams}
 
-\subsubsection{Hidden Markov Models and Maximum Entropy Models}
+\subsubsection{Hidden Markov Models}
 \label{sec:hmm-maxent}
+
+\subsubsection{Viterbi decoding}
+\label{sec:viterbi}
 
 \subsection{Artificial intelligence and machine learning}
 \label{sec:aiml}
@@ -682,11 +701,11 @@ taking partial derivatives of this function, we can consider the
 empirical loss on each output separately, like so:
 
 \begin{equation}
-  \begin{align} 
+  \begin{aligned} 
     \frac{\partial}{\partial w} E(w) &= \frac{\partial}{\partial w} \lvert y - h_w(x) \rvert^2 \\
     &= \frac{\partial}{\partial w} \sum (y_k - a_k(x))^2 \\
     &=  \sum \frac{\partial}{\partial w} (y_k - a_k(x))^2
-  \end{align} 
+  \end{aligned} 
 \end{equation}
 
 If the output function is to have $m$ outputs, instead of handling one
@@ -696,6 +715,9 @@ due to the fact that nothing is really known about the hidden layers
 if we only look at the output layer, a new approach is necessary. This
 is called backpropagation, a shorthand term for backward error
 propagation.
+\begin{itemize}
+\item backpropagation
+\end{itemize}
 
 \subsubsection{Deep learning}
 \label{sec:neuralnetworks}
@@ -822,201 +844,60 @@ propagation.
 % \caption{General structure of a pushdown automaton. Adapted from \citet[220]{hopcroft2001}.} \label{fig:pushdownautomaton}
 % \end{figure}
 
-% \subsubsection{Stochastics and statistics} % (fold)
-% \label{ssub:stochastics}
-
-% As mentioned above, statistical language processing adds a stochastic element
-% to this model of language; not only are the possible transitions analysed,
-% probabilities are also assigned to each of them. Within probabilistics, two
-% interpretations exist: the more widely-known one is \textbf{frequentism}, also
-% known as \textbf{objectivism}. It is the classical brand of statistics;
-% objectivism views probabilities as realities that can be measured by relative
-% frequencies obtained in experiments. The opposing interpretation is termed
-% \textbf{subjectivist} or \textbf{Bayesian} (after Thomas Bayes, discoverer of
-% its founding theorem), and views probabilities as degrees of belief or
-% uncertainty. In other words, while frequentism relies on experiment and trial,
-% Bayesianism relies on the observer's judgement. The main interest here lies in
-% Bayesian stochastics, so let's first direct our attention to Bayes' theorem,
-% which is as follows in its basic form:
-
-% \begin{equation}
-%   \\P(H|E)=\frac{\\P(E \cap H)}{\\P(E)}.
-% \end{equation}
-
-% Where P(H|E) denotes the probability of a hypothesis H given evidence E.
-% \textbf{Conditional probability}, the probability of a given event given some
-% knowledge, is an important notion here. Two kinds of conditional probability
-% exist: \textit{a priori} and \textit{a posteriori} probability, the former
-% denoting the probability before considering additional information, the latter
-% denoting the probability after considering it. The conditional probability of
-% an event A given an event B which has occurred is as follows:
-
-% \begin{equation}
-% \\P(A|B) = \frac{\\P(A \cap B)}{\\P(B)},
-% \end{equation}
-
-% from which can be derived (using the fact that set intersection is symmetric,
-% \textit{ergo} A $\cap$ B = B $\cap$ A) that
-
-% \begin{equation}
-% \\P(A \cap B) = \\P(B)\\P(A|B) = \\P(A)\\P(B|A).
-% \end{equation}
-
-% We can now make a substitution, by which we obtain that
-
-% \begin{equation}
-% \\P(H|E) = \frac{\\P(E|H)\\P(H)}{\\P(E)}.
-% \end{equation}
-
-% A classic demonstration of Bayes' rule can be given by the solution to the
-% famous Monty Hall problem, a probabilistic puzzle named after the host of the
-% 1970's American talk show \textit{Let's Make a Deal}, which I shall use as an
-% illustration. The problem is set up as follows.
-
-% A man is on a quiz program and given a choice between three doors to open, of
-% which one will reveal a car and the others nothing; the man gets to take home
-% whatever is behind the door he picks. The man picks a door; then the host opens
-% another door, always the one without a car behind it, and asks the man whether
-% he'd like to change doors. The question now is the following: should he switch?
-
-% Most people would not switch due to the erroneous belief that the probability
-% of picking any door has not changed from 0.33 for each door, or that the
-% probability has now become 0.5 for each remaining door. But the fact is, he
-% should switch! By eliminating the third door, the host has effectively joined
-% all probabilities beside the one for the car being behind the door the player
-% has originally picked, that is, switching doors at this point will double the
-% probability of winning the car to 0.66.
-
-% Bayes' rule is at play here. Given A, B and C, the respective probabilities of
-% the car being behind each door (which are all equal to 0.33), and given I, the
-% initial information, we now have:
-
-% \begin{equation}
-%  \\P(A|I) = \\P(A|I) = \\P(A|I) = \frac{1}{3}.
-% \end{equation}
-
-% Now add a factor H, which indicates the opening of the third door C by the
-% host. By Bayes' theorem the following can be stated:
-
-% \begin{equation}
-%   \\P(A|HI) = \frac{\\P(A|I) \\P(H|AI)}{\\P(H|I)}.
-% \end{equation}
-
-% Given the fact that P(A|I) = 0.33, we will focus on P(H|AI) and P(H|I), the
-% probabilities of respectively the host opening door C with the car at A and the
-% host opening door C given only I. The former is simple: if the car is behind
-% door A, then we must admit that the host can only open two doors, B or C, with
-% the probability being 0.5 for both events; \textit{ergo}, 
-% \begin{equation}
-% \\P(H|AI) = \frac{1}{2}.
-% \end{equation}
-
-% The remaining probability, that of the host opening door C given only info I, is the following:
-
-% \begin{equation}
-% \\P(H|I) = \\P(H|AI)\\P(A|I) + \\P(H|BI)\\P(B|I) + \\P(H|CI)\\P(C|I),
-% \end{equation}
-
-% which is due to the fact that A, B and C are mutually exclusive and exhaust all
-% possibilities. For P(H|BI), the probability of the host opening C when the car
-% is behind B and we've picked A, we know that if the car is behind door B and we
-% have picked door A, the host has no choice but to open C, making P(H|BI) = 1.
-% P(H|CI), the probability of the host opening door C when the car is behind it
-% and we have picked A, is obviously 0 due to the rules of the game.  Filling in
-% the known probabilities gives us the following:
-
-% \begin{equation}
-%   \\P(H|I) = \frac{1}{2} \cdot \frac{1}{3} + 1 \cdot \frac{1}{3} = \frac{1}{2}.
-% \end{equation}
-
-% We now have all requisite probabilities to calculate the final probability of winning when we don't switch.
-
-% \begin{equation}
-%   \\P(A|HI) = \frac{\frac{1}{3} \cdot \frac{1}{2}}{\frac{1}{2}} = \frac{1}{3},
-% \end{equation}
-
-% which by exclusion gives us the probability of winning when switching:
-
-% \begin{equation}
-%   \\P(B|HI) = \frac{2}{3}.
-% \end{equation}
-
-% This surprising puzzle sheds some light on how Bayes' theorem works; the effect
-% of applying it is essentially that the order of dependence between events is
-% swapped. It lets us calculate the probability of P(A|HI) in terms of P(H|AI),
-% or to put it more informally, to use the probability of the host opening door C
-% when we have picked A to calculate the probability of the car being behind door
-% A given the host has opened door C.
-
-% Our primary interest is in its use for natural language processing. To
-% expound upon this, we first need to introduce the notion of Bayesian belief
-% networks. A good definition is given in \citet[80]{bod2004}:
-
-% \begin{quote}
-% Bayesian belief networks are data structures that represent probability
-% distributions over a collection of random variables. A network consists of a
-% directed acyclic graph, in which nodes represent random variables (unknown
-% quantities) and the edges between nodes represent causal influences between the
-% variables.
-% \end{quote}
-
-% We are particularly interested in one specific type of Bayesian belief network
-% -- the hidden Markov model. A Markov model is a stochastic process which has
-% the Markov property; that is to say, its behaviour does not depend on previous
-% process states, only on the current state. Markov models are classified
-% according to two binary axes: autonomous versus controlled and fully versus
-% partially observable. The hidden Markov model is autonomous and partially
-% observable; this makes it an excellent model for analysing natural language, as
-% it shares both these properties. A hidden Markov model is in itself a
-% stochastic finite state automaton, with each state generating an observation
-% and the states themselves being hidden (an important fact; it is here where
-% Bayes' rule comes into play). Using our observations, we can make probabilistic
-% inferences about the next transition that will happen in the process, thus
-% allowing us up to build up a collection of parameters for state transitions
-% that can be used to predict our next observation.
-
-% An additional important factor is that of the order of the model; the order of
-% the model denotes the items the model has in memory. For instance, a
-% first-order model will contain exactly one item in its memory, a second order
-% two, etc\ldots A natural language expression mapped to a model of order 0 will
-% simply give the frequencies for each item in the expression, whereas elevating
-% the order allows the establishment of probabilistic relations between sets of
-% items, bigrams (two items) for first-order models, trigrams (three items) for
-% second-order models and so on. Given sufficient training material, a program
-% analysing such models will be able to reproduce similar language (it has to be
-% said, often with little regard for making sense but with perfect
-% grammaticality) and be able to analyse new sentences as well based upon the
-% behaviour of previously stored models.
-
-% Now, there is one problem in the picture, and that is that such programs
-% require \textbf{sufficient} training material, and if not enough material is
-% given, inaccuracies will quickly arise. Such a problem easily poses itself in
-% the case of high morphological complexity, where tokens have much smaller
-% frequencies than in morphologically simple languages such as English; since
-% ancient Greek is of considerable morphological complexity, most taggers working
-% with this method will give inaccurate results. On the other hand, TreeTagger
-% implements an extra technique, that of binary decision trees, which allow it to
-% store infrequent analyses in its memory and use them when appropriate.
-
-% Our other tool, the Stanford Parser, also relies upon hidden Markov models; its
-% function is to analyse the dependency structure of sentences using
-% unlexicalized probabilistic context-free grammars, the term `unlexicalized'
-% implying that the use of class words to label words is reduced to only the
-% syntactically most important word classes; i.e.\ nouns are often not
-% classified.  This increases its speed and still retains a high degree of
-% accuracy; it is also widely known, well-supported and very extensible thanks to
-% the fact that it is written in Java, which opens its up to be connected with a
-% variety of other programs and libraries for various purposes, e.g.\ data
-% visualisation tools, statistical libraries, most other programming languages,
-% \ldots
 
 \section{Related work}
 
-\begin{itemize}
-\item Mimno and Wallach
-\item Dik and Whaling
-\item Lee
-\item the Open Philology Project
-\item Bamman
-\item Crane
-\end{itemize}
+Computational approaches to classical philology have been the object
+of increasing interest for the last few years. While none have chosen
+to focus on the language of the Greek papyri specifically, related
+areas have received attention and are relevant to the task at
+hand. Annotated corpora have been created, efforts to automatically
+tag Greek have been made, and some have even taken a stab at using
+natural language processing techniques for textual criticism. 
+% \subsection{Statistical methods for textual criticism}
+
+% \subsubsection{D. Mimno and H. Wallach}
+% \cite{mimno2009}
+
+\subsection{Artificial intelligence techniques applied to ancient Greek linguistics}
+
+\subsubsection{H. Dik and R. Whaling}
+In two papers based off their workshops on the topic
+\citep{dik2008,dik2009}, H. Dik and R. Whaling (a classics professor
+and computer scientist turned classicist, respectively, both at the
+University of Chicago) demonstrate a relatively simple methodology for
+morphological tagging of a corpus of ancient Greek in the context of
+the Perseus under PhiloLogic project under Helma Dik.  They trained
+Helmut Schmid's TreeTagger (found at
+\url{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/} and
+extensively described in \cite{schmid1994,schmid1995}) using a corpus
+of Homeric and New Testament Greek and applied it to run over their
+three-million word corpus. Initial results achieved about 80\%
+accuracy and rose up to 88\%; since the corpus was designed for
+academic use, it was then manually disambiguated.
+
+Their effort is remarkable in the sense that it is the only instance
+of an automatically annotated corpus of ancient Greek I have managed
+to find. While Perseus offers morphological analysis tool, this tool
+is designed to assist linear reading and generates parses on the fly,
+offering several options if several parses are possible. Perseus does
+not look at context; Dik and Whaling's corpus has been annotated with
+the explicit intention of doing so and then storing all parses in a
+relational database. This makes it possible to do morphological
+searches, e.g. look for all perfect forms of the verb
+\Greekλύειν\Latin, which, for linguistic purposes, is very interesting.  
+
+\subsubsection{J. Lee}
+\cite{lee2008nearest,conf/lrec/LeeH10}
+
+\subsection{Collaborative / open-source philology}
+
+\subsubsection{D. Bamman}
+\cite{bammanpbml2008,bammantlt8,Bamman:2008:BDL:1378889.1378892,bammandhq2009,springerlink:10.1007/978-3-642-20227-8_5}
+
+\subsubsection{G. Crane; the Open Philology Project}
+
+
+
+
+

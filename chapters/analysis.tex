@@ -9,12 +9,14 @@
 The tasks we aim to perform are the following: 
 
 \begin{itemize}
-\item \textbf{tokenization}, that is, the splitting of individual
-  words into separate 'tokens' which can be considered to form a single
-  linguistic unit;
-\item \textbf{stemming}, the splitting up of words into their morphemic
-  constituents for purposes of lemmatisation or reduction of the
-  complexity of assigning part-of-speech tags;
+\item \textbf{tokenization}, that is, the splitting of a text into a
+sequence of linguistic tokens which can be considered to form a
+coherent lexical unit.
+% \item \textbf{stemming}, the splitting up of words into their morphemic
+%   constituents for purposes of lemmatisation or reduction of the
+%   complexity of assigning part-of-speech tags;
+\item \textbf{morphological analysis} is the classification of
+individual words into categories based on their composition;
 \item \textbf{part-of-speech tagging} involves labeling each
   individual word with relevant information indicating its syntactic
   role;
@@ -94,39 +96,39 @@ learning, where the state-of-the-art approaches rely on massive
 amounts of unlabeled data which are then submitted to analysis. The
 exact approaches chosen are explained in detail in the next chapter.
 
-\section{Tokenization}
+% \section{Tokenization}
 
-Tokenization is also a tricky affair given the common usage in Greek
-of crasis and similar phenomena. This issue must also be resolved using a
-system which is as simple as possible. Resolving this ambiguity
-requires, in many instances, the use of external resources. Take the
-forms \Greekἅνθρωπος \Latin and \Greekἄνθρωπος \Latin, for instance. While this kind of crasis
-is not omnipresent in most Greek texts, it is certainly not
-inexistent. Solving this kind of overlap requires a system which is
-able to recognise accents and spirituses and is able to infer the
-elision of the definite pronoun \Greekὁ \Latin as well, a task which is not easy to
-generalise. The founder of the Perseus project, Gregory Crane, wrote
-Morpheus in the 80s, which is a morphological analysis tool for
-ancient Greek. He has not made the source code for this tool publicly
-available (and will not do so in the foreseeable future) but an SQL
-dump is freely available from the Perseus project's website which
-contains an astounding one million word forms (REFERENCE), many of which are
-one-off cases exactly like this one. We will make gratuitous use of
-this tool for tokenising Greek text. A possible objection is that
-ambiguity can exist between several such forms; but for tokenisation,
-this is hardly relevant.
+% Tokenization is also a tricky affair given the common usage in Greek
+% of crasis and similar phenomena. This issue must also be resolved using a
+% system which is as simple as possible. Resolving this ambiguity
+% requires, in many instances, the use of external resources. Take the
+% forms \Greekἅνθρωπος \Latin and \Greekἄνθρωπος \Latin, for instance. While this kind of crasis
+% is not omnipresent in most Greek texts, it is certainly not
+% inexistent. Solving this kind of overlap requires a system which is
+% able to recognise accents and spirituses and is able to infer the
+% elision of the definite pronoun \Greekὁ \Latin as well, a task which is not easy to
+% generalise. The founder of the Perseus project, Gregory Crane, wrote
+% Morpheus in the 80s, which is a morphological analysis tool for
+% ancient Greek. He has not made the source code for this tool publicly
+% available (and will not do so in the foreseeable future) but an SQL
+% dump is freely available from the Perseus project's website which
+% contains an astounding one million word forms (REFERENCE), many of which are
+% one-off cases exactly like this one. We will make gratuitous use of
+% this tool for tokenising Greek text. A possible objection is that
+% ambiguity can exist between several such forms; but for tokenisation,
+% this is hardly relevant.
 
-Another delicate point is punctuation: do we consider the Greek
-semicolon as delimiting a sentence or not? It seems to me that the
-best course of action here is to simply consider these as having a
-value a bit between the modern colon and semicolon as used in English
-and other modern languages. The reason for this is that semantic
-relations very frequently span over this symbol; therefore we would
-run the risk of achieving very low accuracy rates in this domain. On
-the other hand, this is also true for full sentences delimited by a
-period, but less frequently so. It would also not be computationally
-reasonable to check the previous sentence each time; this would cause
-massive overhead and effectively at least double the input size for
-our algorithm.
+% Another delicate point is punctuation: do we consider the Greek
+% semicolon as delimiting a sentence or not? It seems to me that the
+% best course of action here is to simply consider these as having a
+% value a bit between the modern colon and semicolon as used in English
+% and other modern languages. The reason for this is that semantic
+% relations very frequently span over this symbol; therefore we would
+% run the risk of achieving very low accuracy rates in this domain. On
+% the other hand, this is also true for full sentences delimited by a
+% period, but less frequently so. It would also not be computationally
+% reasonable to check the previous sentence each time; this would cause
+% massive overhead and effectively at least double the input size for
+% our algorithm.
 
-Once the text is tokenised, we may proceed to the next level, that is, morphological analysis. 
+% Once the text is tokenised, we may proceed to the next level, that is, morphological analysis. 

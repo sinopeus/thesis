@@ -26,12 +26,14 @@
 \usepackage[eulerchapternumbers,subfig,beramono,eulermath,pdfspacing,listings]{classicthesis}
 \usepackage{guit}
 \usepackage{arsclassica}
+\usepackage{enumitem}
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{automata,positioning,shapes.multipart}
 \usepackage{pstricks,pst-node,pst-text,pst-3d}
 \usepackage{float}
 \usepackage{setspace}
+\usepackage{etoolbox}
 
 \input{arsclassica-preamble}
 
@@ -91,6 +93,7 @@
 \backmatter
 \clearpage
 \input{frontbackmatter/bibliography}
-%\clearpage
-%\input{frontbackmatter/appendix}
+\mainmatter
+\clearpage
+\input{frontbackmatter/appendix}
 \end{document}
