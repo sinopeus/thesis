@@ -1,0 +1,531 @@
+
+\chapter{Concepts and techniques}
+\label{chap:conceptstechniques}
+\section{Mathematics}
+\label{sec:mathematics}
+
+
+\subsection{Set theory}
+\label{sec:settheory}
+
+Consider an object $o$ and a set $A$. We write 'object $o$ is an
+element of set $A$' as $o \in A$. Sets themselves are also objects and
+can belong to other sets. Consider two sets, $A$ and $B$. We write
+that $A$ is a subset $B$ as $A \subseteq B$; this implies that $B$
+contains all elements in $A$ and does not exclude the possibility of
+$A$ = $B$; if $A$ is a proper subset of $B$, i.e. all elements of $A$
+are in $B$ but not all elements of $B$ are in $A$, we write $A \subset
+B$. Mirroring these symbols from right to left gives us the symbols
+for supersets and strict supersets, respectively. The empty set, which
+contains no elements, is written as $\varnothing$.
+
+There exist different binary operators on sets (i.e. operators on two
+sets) which return another set. The most common operators are:
+\begin{itemize}
+\item the union of sets, written as $A \cap B$, denotes a set which
+  contains all elements which are in $A$ and $B$;
+\item the intersection of sets, written as $A \cup B$, denotes a set
+  which contains all elements which are in both $A$ and $B$;
+\item the difference of sets, written as $A \setminus B$, denotes a
+  set which contains every element from $A$ excluding those which are
+  also in $B$.
+\item the Cartesian product of sets, written as $A \times B$, is the
+  set containing all ordered pairs of elements from $A$ and $B$.
+\end{itemize}
+
+\subsection{Probability}
+\label{sec:probability}
+
+A \textbf{probability} is a measure for the likelihood of an event for an
+experiment, which we intuitively understand to be an action whose
+outcome we want to observe. Such events are then elements of a set
+containing all possible outcomes of an experiment; an event can be a
+point or subset of that set. We call this set the \textbf{sample space},
+denoted S. We denote the probability of an event E as P(E).
+
+Axiomatically, we can define probability as follows:
+
+\begin{enumerate}
+\item For every event $E$, $P(E) \geq 0$; no event can have a negative probability.
+\item $P(S) = 1$; that is to say, every experiment has an event.
+\item For any sequence of disjoint events $A_i$ (that is to say,
+  there is no overlap between events), the probability of any one of
+  these events occurring is the sum of their respective probabilities.
+\end{enumerate}
+
+A few other important properties of probabilities and events are the following:
+
+\begin{enumerate}
+\item The complement of an event $A$, which is the union of all
+  elements of $S$ which are not an element of $A$, is denoted $A^C$;
+  $P(A^C$ is ther probability of this event occurring and is equal to $1
+  - P(A)$.
+\item For any event E, $0 \leq P(E) \leq 1$.
+\item Given any two events $A$ and $B$, $A \subset B \rightarrow P(A) \leq P(B)$.
+\end{enumerate}
+
+Given probabilities of a number of events, we can establish
+relationships between these probabilities and compute related
+probabilities using the rules certain rules. A classic rule is the
+\textbf{multiplication rule}, which states that if we perform an
+experiment in $k$ parts and the $i^{th}$ part of the experiment has
+$n_i$ possible outcomes, and the outcomes of prior parts of the
+experiment do not affect latter ones, the probability of any specific
+sequence of partial outcome will be the product of all outcome counts
+$n_i$ with $i$ ranging from $1$ to $k$.
+
+Set theory is important when we want to know the probability of an
+event E which can be constructed from a set of sets $A_i$ using set
+operators. The third axiom of probability has already given us the
+solution for disjoint events; events may also overlap, and in this
+case, we need a more sophisticated formula. For the union of any $n$
+events $A_i$, the following holds:
+\begin{equation}
+  P(\bigcup_{i=1}^n A_i) = \sum\limits_{i=1}^n P(A_i)
+\end{equation}
+
+For the intersection of these $n$ events $A_i$, it can be proven that:
+\begin{equation}
+  P(\bigcap_{i=1}^n A_i) = \lim_{n \to \infty} P(A_i)
+\end{equation}
+Knowing both these rules is important when considering
+\textbf{conditional probability}; for two events $A$ and $B$, suppose
+we know $B$ has occurred and we want to know what the probability of
+$A$ occurring is given this information. We call this the conditional
+probability of $A$ given $B$ and write it $P(A|B)$. If $P(B) > 0$,
+then we define it as:
+
+\begin{equation}
+  P(A|B) = \frac{P(A \cap B)}{P(B)}
+\end{equation}
+
+Using this formula, we can directly derive \textbf{Bayes' theorem} as follows:
+
+\begin{equation}
+  \begin{aligned}
+    P(A|B) &= \frac{P(A \cap B)}{P(B)} \\
+    P(A|B) P(B) &= P(A \cap B)\\
+    P(A|B) P(B) &= P(B \cap A)\\
+    P(A|B) P(B) &= P(B|A) P(A)\\
+    P(B|A) &= \frac{P(A|B) P(B)}{P(A)}
+  \end{aligned}
+\end{equation}
+
+\subsection{Calculus and linear algebra}
+\label{sec:calculus}
+\begin{itemize}
+\item Derivatives and computing extrema
+\item Jacobian matrices
+\item Numerical methods
+\item Vector spaces
+\end{itemize}
+
+\subsection{Statistics}
+\label{sec:statistics}
+    \subsubsection{Regression}
+
+    Regression is a classic technique from statistics, often visualised as
+    'fitting a line to a set of points'. Classification is a related
+    technique which uses regression to classify new data points. This is
+    essentially what any probabilistic model for natural language
+    processing does, in one form or another. What follows is an overview
+    of various types of regression and corresponding methods for
+    classification.
+
+    We start with \textbf{univariate linear regression}. Given a set
+    of $n$ points in the plane, we want to find a hypothesis that best
+    corresponds to the location of these points, and we want this
+    hypothesis to be a linear function. This function is then of the form:
+    \begin{equation}
+      h_w(x) = w_1x + w_0
+    \end{equation}
+    Unless all points are collinear, it is of course impossible to
+    find a function of this form that gives a correct mapping for each
+    point. The best we can do is find the values of $w_o$ and $w_1$ for
+    which the empirical loss on the mappings is minimal. The traditional
+    way of doing this is to define a function that computes the squares of
+    the errors and sums it over all data points; this is called an
+    \textbf{$L_2$ loss function}. We now want to find the values of $w_0$
+    and $w_1$ for which this function attains a minimum. We can find these
+    minimal points by solving for the roots of the partial derivative
+    functions of this loss function with respect to $w_0$ and $w_1$.  This
+    problem is mathematically relatively simple and has a unique
+    solution. This solution is valid for all loss functions of this type.
+
+    Problems arise when we are trying to create a nonlinear model. In
+    this case, the minimum loss equations frequently do not have a unique
+    solution. We can of course still model the problem algebraically, and
+    the goal is the same: finding the roots of the partial derivative
+    function. Now, however, we need to use a more sophisticated method:
+    \textbf{gradient descent}. We can visualise this technique as
+    'descending a hill'; the 'hill' is the graphical representation of the
+    root of the system of partial derivatives, and by 'descending' this
+    hill, i.e. by iteratively picking values which bring us closer to the
+    bottom part of the valley next to the hill, which corresponds to the
+    minimal point of the function, eventually convergence will be reached
+    on the minimum and we will found the correct weights for our
+    function. The difference by which we change the value at each
+    iteration is called the \textbf{step} or \textbf{learning rate} and
+    determines how fast we will converge; it may be either a fixed
+    constant or a mutable value which can increase or decay according to
+    the current state of our descent.
+
+    \textbf{Multivariate linear regression} poses a similar problem;
+    only this time the function is not dependent on a single variable, but
+    on two or more. Such a function is a bit more complex, but we can
+    find a solution to the regression problem using analogous
+    techniques. Suppose the function has $n$ variables. Each example $x_j$
+    must be a vector with $n$ values. At this point, we are looking at a
+    function of the following form:
+    \begin{equation}
+      h_w(x_j) = w_0 + w_1x_{j,1} + w_2x_{j,2} + ... + w_nx_{j,n} = w_0 + \sum\limits_{i} w_ix_{j,i}
+    \end{equation}
+    We want to simplify this to make algebraic manipulations
+    easier. We therefore prepend an extra component $x_{j,0} = 1$ to the
+    vector $x_j$; now using vector notation we can simplify the
+    previous equation to:
+    \begin{equation}
+      h_w(x_j) = \sum\limits_{i} w_ix_{j,i} = w \cdot x_j
+    \end{equation}
+    What we are now looking for is a vector $w$ containg the weights
+    of our function which minimises the empirical loss, as in
+    univariate linear regression. We can equivalently use gradient
+    descent; only now, of course, the computational cost of that technique
+    will be higher. A common problem can now appear: \textbf{overfitting},
+    that is, giving an irrelevant dimension of the vector w too much
+    weight due to chance errors in the computation. This can be
+    compensated by taking into account the complexity of the hypothesis; a
+    statistical equivalent to Ockham's razor, if you will.
+
+    \subsubsection{Classification} 
+
+    We can define an analogous process for classification; only now
+    the function must not fit to the data itself but must create a
+    \textbf{decision boundary} between data points. If there exists a
+    linear function which satisfies this property for a given data set
+    , we call the bounding line or surface generated by this function a
+    \textbf{linear separator}, and the data set \textbf{linearly
+      separable}. The hypothesis function is now of the form:
+    \begin{equation}
+      h_w(x) = 1$ if $ w \cdot x \geq 0$, $0$ otherwise.$
+    \end{equation}
+    We can view this as a function $threshold(w \cdot x)$ which is
+    equal to 1 only if $w \cdot x = 0$ Note that while the separating
+    function is linear, the hypothesis function is not, and in fact has
+    the distinctly unappealing property of not being differentiable. We
+    can therefore not apply the technique of gradient descent
+    here. Furthermore, this type of function has exactly two outputs: 1 or
+    0. For our purposes, we need subtler methods of classification.  This
+    type of hypothesis function is therefore not fit for our purposes, but
+    it does give a good idea of what classification is.
+
+    The best option is replacing the hard threshold function with the
+    sigmoid or logistic function, which offers a good approximation and is
+    differentiable at every point. This function is of the form:
+    \begin{equation}
+      g(x) = \frac{1}{1 + e^{-x}}
+    \end{equation}
+    Such that our new hypothesis function is:
+    \begin{equation}
+      h_w(x) = g(w \cdot x) = \frac{1}{1 + e^{- w \cdot x}}
+    \end{equation}
+    If we use this function, we are performing \textbf{linear
+      classification with logistic regression}.
+
+\subsubsection{Logistic regression and the chain rule}
+\subsubsection{Clustering}
+
+
+\subsection{Formal language theory}
+\label{sec:formalgrammars}
+\begin{itemize}
+\item Languages and strings
+\item Regular languages
+\item Context-free grammar and languages
+\item The Chomsky hierarchy
+\end{itemize}
+
+\section{Natural language processing}
+\label{sec:nlp}
+
+\subsection{N-grams}
+\label{sec:ngrams}
+
+\subsection{Hidden Markov Models}
+\label{sec:hmm-maxent}
+
+\subsection{Viterbi decoding}
+\label{sec:viterbi}
+
+\section{Artificial intelligence and machine learning}
+\label{sec:aiml}
+
+\subsection{What is machine learning?}
+\label{sec:statistics}
+\begin{itemize}
+\item Supervised learning
+\item Unsupervised learning
+\end{itemize}
+
+\subsection{Neural networks}
+\label{sec:neuralnetworks}
+
+An artificial neural network is massively parallel distributed
+processor made up of simple processing units, which has a natural
+propensity for storing experiential knowledge and making it available
+for use.
+
+For the design of an architecture which allows us to solve the
+problems above, we have taken our cues largely from recent work in
+machine learning as applied to natural language processing. In
+particular, we follow the approach set out in Weston \& Collobert 2008
+and expanded in Weston et al. 2011, that is, the use of deep neural
+networks for joint training on our chosen corpus. This section is
+dedicated to a more expository overview of that architecture for the
+mathematical layman.
+
+An artificial neural network is a massively parallel processing system
+constructed from simple interconnected processing units (called
+neurons) which has the ability to learn by experience and store this
+knowledge for later use. The term 'neural network' is due to the
+resemblance of this architecture to the most powerful biological
+processor known to exist, the human brain, which has a way of
+functioning which is broadly analogous to this process. 
+
+Artificial neural networks find their origin in a mathematical model
+dating from before the first wave of artificial intelligence in 1956,
+the McCulloch-Pitts Threshold Logical Unit, known also as the
+McCulloch-Pitts neuron. Warren McCulloch was a psychiatrist and
+neuroanatomist; Walter Pitts a mathematical prodigy. Both met at the
+University of Chicago, where a neural modeling community led by the
+mathematical physicist N. Rashevsky had been active in the years
+preceding the publication in 1943 of the seminal paper A logical
+calculus of the ideas immanent in nervous activity. 
+
+Formally, we can define a neuron as a triplet (v,g,w) where:
+
+\begin{itemize}
+\item v is an input function which takes a number of inputs and computes their sum;
+\item g is an activation function which is applied to the output of the input function and determines if the neuron 'fires';
+\item w is an output function which receives its input from the activation
+  function and distributes it over a number of outputs.
+\end{itemize}
+
+Given its structure, we can also see a neuron as a composite function
+$F = w \circ g \circ v$. The combination of several of these units
+using directed links forms a neural network. A link connecting a node
+$i$ to a node $j$ transfers the output $a_i$ of node $i$ to node $j$
+scaled by a numeric weight $w_{i,j}$ associated with that specific
+link. This is the general model of a neural network; countless
+variations on this theme have been developed for different purposes,
+mainly by modifying the activation function and the interconnection of
+neurons.
+
+The activation function $g$ typically will be a hard threshold
+function (an example of this is the original McCulloch-Pitts neuron),
+which makes the neuron a perceptron, or a logistic (also known as a
+sigmoid) function, in which case we term the neuron a sigmoid
+perceptron. Both these functions are nonlinear; since each neuron
+itself represents a composition of functions, the neuron itself is a
+non-linear function; and since the entire network can also be seen as
+a composite function (since it takes an input and gives an output) the
+network can be viewed as a nonlinear function. Additionally, choosing
+to use a logistic function as an activation function offers
+mathematical possibilities, since it is differentiable. This offers
+similar possibilities as the use of the logistic function for
+regression (cf. \textit{supra}).
+
+The links between nodes can be configured in different ways, which
+each afford distinct advantages and disadvantages. Broadly, we can
+distinguish two models. The simplest model is the \textbf{feed-forward
+  network}, which can be represented as an acyclic directed graph. The
+propagation of an input through this kind of network can be seen as a
+stream, with posterior (downstream) nodes accepting outputs from prior
+(upstream) nodes. This type of network is the most widely-used and is
+used in the architecture. A more complex type is the \textbf{recurrent
+  network}, which feeds its output back to its input and thus contains a
+directed cycle; this type of network has interesting applications (for
+example in handwriting recognition), as they resemble the neural
+architecture of the brain more closely than feedforward networks do.
+
+Feed-forward networks are often organised (to continue the stream
+analogy) in a kind of waterfall structure using layers. The input is
+the initial stream, the output is the final stream; in between, we may
+place hidden layers, which are composed of neurons which take inputs
+and outputs as any neuron does, but whose output is then immediately
+transferred to a different neuron. Throughout the network, we can
+equip the neurons in each layer with distinct activation functions and
+link weights and in this way mold the learning process of the network
+to our purpose.
+
+Single-layer networks contain no hidden layers; the input is directly
+connected to the output. Therefore, the output is a linear combination
+of linear functions. This is undesirable in many cases. The main
+problem, demonstrated early on in the development of neural network
+theory, is the fact that such a network is unable to learn functions
+that are not linearly separable; one such function is the XOR
+function, which is a very simple logical operator. Despite this, such
+neural networks are useful for many tasks, as they offer an efficient
+way of performing logistic regression and linear classification.
+
+Our interest lies in multi-layer networks, however. Multi-layer
+networks contain one or more layer between the input and output layer,
+which are called hidden layers. By cascading the input through all
+these layers, we are in fact modeling a nonlinear function which
+consists of nested nonlinear soft threshold functions as used in
+logistic regression. The network can now be used to perform \textbf{nonlinear
+  regression}. Different algorithms exist which can be used to train the
+network; the most important one is the \textbf{backpropagation algorithm},
+which is the equivalent of the loss reduction techniques used in
+linear regression.
+
+Suppose that a neural network models a vector-valued hypothesis
+function $h_w$ which we want to fit to an example output vector
+$y$. We can create a $L_2$ loss function E by taking the error on this
+vector and squaring it. This function can be quite complex, but by
+taking partial derivatives of this function, we can consider the
+empirical loss on each output separately, like so:
+
+\begin{equation}
+  \begin{aligned} 
+    \frac{\partial}{\partial w} E(w) &= \frac{\partial}{\partial w} \lvert y - h_w(x) \rvert^2 \\
+    &= \frac{\partial}{\partial w} \sum (y_k - a_k(x))^2 \\
+    &=  \sum \frac{\partial}{\partial w} (y_k - a_k(x))^2
+  \end{aligned} 
+\end{equation}
+
+If the output function is to have $m$ outputs, instead of handling one
+large problem, we can subdivide the problem into $m$ smaller
+problems. This approach works if the network has no hidden layers, but
+due to the fact that nothing is really known about the hidden layers
+if we only look at the output layer, a new approach is necessary. This
+is called backpropagation, a shorthand term for backward error
+propagation.
+\begin{itemize}
+\item backpropagation
+\end{itemize}
+
+\subsection{Deep learning}
+\label{sec:neuralnetworks}
+
+% \section{Principles of statistical natural language processing} 
+% \label{sub:principles-nlp}
+
+% The crux of the proposed method is the use of the aforementioned TreeTagger,
+% developed by Helmut Schmid, which can lemmatize and tag at the same time,
+% followed by another iteration using the Stanford Parser to analyse sentence
+% dependencies. TreeTagger can be trained for any language, and its efficiency
+% for highly inflected languages such as ancient Greek is due to its combination
+% of two tagging methods, namely n-gram tagging and binary decision tree tagging,
+% the combination of which makes TreeTagger the fastest part-of-speech tagger
+% around. The Stanford Parser is the state of the art in sentence parsing.
+
+% The following section, therefore, is intended to provide some theoretical
+% background on statistical natural language processing. I have based myself upon
+% Manning and Schütze's \textit{Foundations of Statistical Natural Language
+% Processing} \citep{manning1999}, the current standard reference work, as well
+% as \citet{koshy2004} and \citet{hopcroft2001} for concepts relating to automata
+% theory, as well as on \citet{bod2004} for the paragraphs on statistics.
+% Furthermore, to illuminate some aspects of TreeTagger's workings, I have also
+% integrated Schmid's articles on tagging methodology as he applied it in
+% TreeTagger [\citeyear{schmid1994} and \citeyear{schmid1995}]. 
+
+% \subsection{Context-free grammar and pushdown automata} % (fold)
+% \label{sub:formallang}
+
+% The basis of all statistical natural language processing is the
+% conceptualisation of natural language within the Chomsky hierarchy as a formal
+% language generated by a \textbf{stochastic context-free grammar}, that is to say, a
+% context-free grammar whose production rules are augmented by a probability. In
+% computer science, such a language is termed a context-free language and defined
+% as any language that can be recognized by a \textbf{nondeterministic pushdown
+% automaton}. A nondeterministic pushdown automaton is understood to be a
+% nondeterministic finite state automaton with access to an infinite stack, a
+% finite state automaton being an automaton which is in a state that can
+% transition into another state when triggered by input. Put more simply, a
+% nondeterministic pushdown automaton possesses the following:
+
+% \begin{itemize} 
+
+% \item a \textbf{stack}, that is, a string of symbols which functions as the
+%   automaton's memory. The automaton only has access to the leftmost symbol in
+%   this string, a symbol which is dubbed the top of the stack; the top of the
+%   stack can be used to determine which transition the automaton will make
+%   next;
+
+% \item an \textbf{input tape} whose symbols are scanned one by one just like a
+%   finite-state automaton; 
+
+% \item a \textbf{finite state control unit}, which controls the state of the
+%   automaton. Normally this is done in response to input, but it is possible
+%   in some types of automata to transition into a new state without any
+%   input, as is the case for pushdown automata; this type of transition is
+%   termed $\epsilon$-transition or $\lambda$-transition.
+
+% \end{itemize}
+
+% A simple example of finite state automaton is a coin-operated turnstile: it has
+% two possible states, locked and unlocked, and two possible inputs, the
+% insertion of a coin or a push. Depending on the state the machine is currently
+% in, each of these inputs will trigger either a change or leave the machine in
+% its current state. For instance, if the turnstile is unlocked, a push will make
+% it turn and lock again; inserting a coin will do nothing.  Conversely, when it
+% is locked, a coin will unlock it, while a push will still leave it locked. This
+% type of automaton is deterministic, that is, there is only one next possible
+% state to transition to. A nondeterministic finite state automaton would for
+% example be a vending machine, which functions in a similar way but allows for
+% transitions to various states depending on input; different combinations of
+% coins and button presses will unlock different mechanisms in the machine and
+% let a specific item fall into the bottom compartment.
+
+% \begin{figure}
+%   \begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto] 
+%     \node[text width=2cm, text centered, state] (locked)   {$locked$}; 
+%     \node[text width=2cm, text centered, state](unlocked) [right=of locked] {$unlocked$};
+%     \node[text centered, node distance=2cm] (coin) [above left=of locked] {$coin$};
+%     \path[->] 
+%     (coin) edge [] node {} (locked)
+%     (locked) edge  [loop left] node {push} ()
+%     edge  [bend left=20] node {coin} (unlocked)
+%     (unlocked) edge  [bend left=20] node {push} (locked)
+%     edge [loop right] node {coin} ();
+%   \end{tikzpicture}
+%   \caption{Transition diagram for a deterministic finite state automaton modeling a turnstile. Adapted from \citet[762]{koshy2004}.} \label{fig:turnstile}
+% \end{figure}
+
+% When a stack is added to this setup, the automaton is essentially provided with
+% an infinite memory. Transitions will now be based upon the current state, the
+% input symbol and the symbol at the top of the stack. An $\epsilon$-transition
+% is possible as well, with $\epsilon$ replacing the input symbol. Thus, any
+% transition now consists of the following: the consumption of input, the
+% transition to a new state itself, and the replacement of the top of the stack
+% by any symbol (it is even possible for the current symbol to remain in place).
+
+% Natural language fits within this paradigm. Given an alphabet $\Sigma$ = \{a,
+% b, c, d, \ldots\} or even, in the case of Greek, \{$\alpha$, $\beta$, $\gamma$,
+% $\delta$, \ldots\} the initial state and top of the stack will give rise to a
+% sequence of characters or strings formed from the alphabet, which may be a
+% word, a sentence, an paragraph, \ldots In other words, context-free grammar
+% provides a simple yet precise method for mathematically describing and studying
+% the rules which govern the construction of natural language from smaller
+% blocks; one can parse generated strings (in themselves context-free languages)
+% and by induction assemble a grammar. It is also possible to feed a string as
+% input to a pushdown automaton applying a context-free grammar; this will show
+% whether the string is acceptable by the rules of the grammar or not.
+
+% \begin{figure}
+%   \begin{center}
+%     \begin{tikzpicture}[shorten >=1pt,node distance=3cm,on grid,auto, label distance=0.4cm] 
+%       \node[text centered] (input)   {$input$}; 
+%       \node[text centered, align=center, state, rectangle, minimum size=2cm] (fscontrol) [right=of input] {finite\\state\\control};
+%       \node[text centered] (acceptreject) [right=of fscontrol] {$accept/reject$};
+%       \node[text centered,rectangle split, rectangle split parts=3, draw, label=0:$stack$, minimum size=1.2cm] (stack) [below=of fscontrol] {$top$};
+%       \path[->] 
+%       (input) edge [] node {} (fscontrol)
+%       (fscontrol) edge  [] node {} (acceptreject)
+%       edge  [bend left=20] node {} (stack)
+%       (stack) edge  [bend left=20] node {} (fscontrol);
+%     \end{tikzpicture}
+%   \end{center}
+%   \caption{General structure of a pushdown automaton. Adapted from \citet[220]{hopcroft2001}.} \label{fig:pushdownautomaton}
+% \end{figure}
