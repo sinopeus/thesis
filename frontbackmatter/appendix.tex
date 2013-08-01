@@ -7,14 +7,9 @@
 \pretocmd{\chapter}{%
   \clearpage
   \pagenumbering{arabic}%
-  \renewcommand*{\thepage}{\thechapter.\arabic{page}}%
+  \renewcommand*{\thepage}{\thechapter-\arabic{page}}%
 }{}{}
-\chapter{Concepts and techniques}
-\section{Mathematics}
 
-\section{Natural language processing}
-
-\section{Machine learning}
-
-\chapter{Neural network layers}
-
+\input{frontbackmatter/appendices/conceptstechniques}
+\input{frontbackmatter/appendices/neuralnetwork}
+% \input{frontbackmatter/appendices/sourcecode}
