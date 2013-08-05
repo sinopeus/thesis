@@ -6,29 +6,29 @@
 %************************************************
 
 \section{Objectives}
-The tasks we aim to perform are the following: 
+Our main objective is the creation of a \textbf{statistical language
+model} for ancient Greek using techniques from machine learning; as an
+illustration, we will then apply it to the \textbf{corpus of papyri}
+as provided by papyri.info.
 
-\begin{itemize}
-\item \textbf{tokenization}, that is, the splitting of a text into a
-sequence of linguistic tokens which can be considered to form a
-coherent lexical unit.
-% \item \textbf{stemming}, the splitting up of words into their morphemic
-%   constituents for purposes of lemmatisation or reduction of the
-%   complexity of assigning part-of-speech tags;
-\item \textbf{morphological analysis} is the classification of
-individual words into categories based on their composition;
-\item \textbf{part-of-speech tagging} involves labeling each
-  individual word with relevant information indicating its syntactic
-  role;
-\item \textbf{chunk parsing} or \textbf{shallow parsing} (as opposed to deep parsing)
-  aims to label shallow syntactic constituents, such as individual
-  phrases and clauses.
-\end{itemize}
+Such a model, at heart, serves to assign probabilities to word
+sequences; however, it is key that the model is also able to apply the
+knowledge of these probabilities to specific problems in the analysis
+of language. The problems we want to tackle are classical
+\textbf{morphological analysis} and \textbf{syntactic analysis}.
 
-The performance of any NLP system on these tasks is determined by the
-quality of its underlying \textbf{language model}, which assigns
-probabilities to word sequences; thus, this is our primary task, and
-will provide the necessary data for the four tasks denoted above.
+The first problem largely corresponds with what is called
+\textbf{part-of-speech tagging} in the natural language processing
+jargon. For any token in the sentence, given its context, we want to
+model to produce a morphological analysis, which produces not only the
+part-of-speech, but all concomitant information as well: voice, tense,
+mood, case, gender, number, person, \ldots
+
+The second problem corresponds with what is called \textbf{shallow
+parsing} (or \textbf{chunking}). Given a sequence of words, we want to
+identify the main grammatical components of this sequence.  This type
+of parsing stands in contrast with \textbf{deep parsing}, which aims
+to produce full syntactic analyses of entire sentences.
 
 \section{Scope of the problem}
 We summarise the major component problems of our task facing us.

@@ -9,21 +9,38 @@
 \label{sec:langsource}
 \subsection{Choice of language}
 \label{sec:language}
+The language modeler is programmed in Python; as programming languages
+go, it possesses the clearest syntax and is reasonably concise. Python
+runs in an interpreter and is slower than compiled languages such as C
+or Java, but this is remedied by the large amount of available
+libraries designed to circumvent this issue. For computationally
+demanding numerical problems such as are frequently found in machine
+learning, we can use libraries such as Numpy, Scipy, Theano, ... These
+offer implementations of frequently used numerical algorithms written
+in C, which are compiled during the execution of the program and cached. 
 
-\begin{itemize}
-\item Python
-\item concise and simple syntax
-\item slow language, fast numerical libraries: Numpy, Scipy, Theano, Matplotlib ...
-\item excellent Unicode support since version 3
-\end{itemize}
+In the past few years, Python has been switching from version 2 to
+version 3, which brought a lot of changes in syntax and generated a
+great deal of cross-compatibility problems. Despite this, many
+libraries are now available for Python 3, including the ones we are
+interested in using. Therefore, we chose to use Python 3.3 instead of
+Python 2.7.x; it offers superior Unicode and string processing
+capabilities to preceding versions.
 
 \subsection{Source code availability}
 \label{sec:sourcecode}
-
-\begin{itemize}
-\item GitHub
-\item based off J. Turian's implementation but documented, cleaned up, improved ...
-\end{itemize}
+The source code is available at
+\url{https://github.com/sinopeus/thrax}. The core numerical
+algorithms, encapsulated in Theano graphs, are based off Joseph
+Turian's implementation of an unsupervised model builder in Python
+2. I rebuilt the entire program surrounding this numerical component
+to fit my needs: the result is a documented, cleaned up and overall
+improved program. I also added functionality for the supervised phase
+to complete the picture. The program's configuration system was
+enhanced and is now easily editable by hand as well as
+programmatically. With basic knowledge of programming, it is possible
+to train a network for any given NLP task by modifying the
+configuration.
 
 \section{The full process}
 \label{sec:process}

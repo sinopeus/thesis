@@ -31,8 +31,8 @@ the requirements for the degree of}\\ \\
         {\Large\spacedlowsmallcaps{\myDegree}}\\
 
         {\normalsize
-          Submitted by: \myName \\
-          Supervisor: \myProf \\
+          Submitted by: {\large\spacedlowsmallcaps{\myName}} \\
+          Supervisor: \spacedlowsmallcaps{\myProf} \\
           \myUni \\
           \myFac \\
           \myDepartment \\
