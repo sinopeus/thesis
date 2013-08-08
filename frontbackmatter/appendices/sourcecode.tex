@@ -1,11 +1,18 @@
 \chapter{Source code}
 
+For the sake of completeness, we have provided the Python source code
+used to create the language model in this appendix. A plain-text copy
+is bundled with this document in compact disc format for archival
+purposes. Running the model creator without correctly setting up the
+directory structure and configuration files will simply yield all
+sorts of errors. More extensive documentation can be found in the
+README file located in the main project directory. The source may
+equally be found on GitHub at \url{https://github.com/sinopeus/thrax}.
+
 \section{Training}
-\subsection{Unsupervised trainer}
-\label{sec:unsuptrainer}
+\subsection{Trainer}
+\label{sec:trainer}
 \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/train.py}
-\subsection{Supervised trainer}
-\label{sec:suptrainer}
 \subsection{Training state}
 \label{sec:trainstate}
 \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/state.py}
@@ -22,16 +29,16 @@
 \subsection{Language model parameters}
 \label{sec:nnetworkparams}
 \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/model/parameters.py}
-\subsection{Neural networks}
-\label{sec:nnetwork}
-\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/nn/nn.py}
-\subsection{Neural network parameters}
-\label{sec:nnetworkparams}
-\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/nn/parameters.py}
+% \subsection{Neural networks}
+% \label{sec:nnetwork}
+% \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/nn/nn.py}
+% \subsection{Neural network parameters}
+% \label{sec:nnetworkparams}
+% \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/nn/parameters.py}
 \section{Numerical subroutines}
 \subsection{Pairwise ranking cost function}
 \label{sec:modelcost}
 \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/model/graph.py}
-\subsection{Neural network cost function}
-\label{sec:nncost}
-\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/nn/graph.py}
+% \subsection{Neural network cost function}
+% \label{sec:nncost}
+% \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/nn/graph.py}

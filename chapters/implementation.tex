@@ -42,47 +42,185 @@ programmatically. With basic knowledge of programming, it is possible
 to train a network for any given NLP task by modifying the
 configuration.
 
+\section{Implementing the network efficiently}
+\label{sec:implementation}
+
+In this section, we highlight a few optimisations applied during the
+implementation of the neural network; using these, we reduce the
+computational requirements of training such a network
+significantly. These techniques are commonplace in machine learning
+and programming in general and should not be considered original ideas
+by the author.
+
+\subsection{Lookup table}
+\label{sec:ltable}
+The lookup table is initialised from a dictionary file sorted by
+descending order of frequency (see \textit{infra}). A hash table is
+created which associates each word in the dictionary with its
+frequency rank. Separately, a matrix of dimensions $D \times d^{wrd}$
+is set up which is filled with random floating point numbers between
+$0$ and $10^{-2}$. A lookup table operations is now a two-step process
+on two discrete data structures. This allows us to store the word
+sequences more compactly for processing. If necessary, we can meld
+both structures into one (if we wish to redistribute the embeddings
+and the dictionary together in a serialised format, for example).
+
+\subsection{Batch processing}
+\label{sec:batch}
+Examples are not processed individually by the system, but in
+batches. First, a batch size is chosen. Then, a number of text windows
+corresponding to this batch size is read from the training
+corpus. Each individual window is passed through the lookup table,
+which returns matrices such as the one in \ref{eq:ltmatrix}. These
+matrices are then rotated horizontally and stacked. We thus obtain a
+rank-three tensor $T$ whose entries we denote as $T_{ijk}$, with $i$
+corresponding to the example number within the batch, $j$
+corresponding to a text window position, and $k$ corresponding to an
+embedding component. Using this method, we can feed many examples in
+parallel to the program. This is particularly handy if we wish to
+exploit the capacities of GPUs, which are explicitly designed for
+massively parallel linear algebra operations.
+
+\subsection{Matrix-vector representation}
+\label{sec:matrixvectorreps}
+The representation given in the previous chapter is advantageous in
+the sense that it is organised clearly, with each layer assuming
+exactly one task. When actually programming such a network, it is best
+to choose a data structure which reduces the amount of space needed
+and simplifies the computation. We switch to matrix-vector
+representation, where a network contains the following objects:
+
+\begin{itemize}
+\item an embedding matrix as defined in \ref{sec:ltable};
+\item a hidden weight matrix of dimensions $n_{in} \times n_{hu}$;
+\item a hidden bias vector of dimension $n_{hu}$;
+\item an output weight matrix of dimension $n_{hu} \times n_{out}$;
+\item a output bias vector of dimension $n_{out}$.
+\end{itemize}
+
+We generate an output by performing a simple sequence of
+operations. Given the output of a lookup table operation over a text
+window in matrix form, we multiply this with the hidden weight matrix
+and then add the hidden bias vector to each column. The resulting
+matrix is passed through the chosen nonlinear function, in our case the
+hard hyperbolic tangent, which is applied to each element in the
+matrix. The resulting matrix is multiplied once more, this times with
+the output weight matrix, and the output bias vector is added to each
+column. In this manner, we obtain a correctly sized output vector with
+minimal computational overhead. An additional advantage is, due to the
+properties of matrix multiplication, we can easily apply the exact
+same operation to a complete batch such as described in
+\ref{sec:batch}.
+
+\subsection{Optimising computation with Theano}
+\label{sec:theano}
+
+\subsubsection{Symbolic graphs}
+\label{sec:graph}
+\subsubsection{Automatic differentiation}
+\label{sec:autodiff}
+\subsubsection{Compiling to C and CUDA}
+\label{sec:graph}
+
 \section{The full process}
 \label{sec:process}
-
 \subsection{Preparing the training corpora}
 \label{sec:trainingcorpora}
-\begin{itemize}
-\item conversion from TLG or TEI format to raw text
-\item conversion from Beta Code to Unicode
-\item stripping all characters which are not relevant, such as
-critical notation, paragraph markers etc.
-\item lowercase all words
-\item detailed tokenisation is not necessary
-\item convert annotation to a unified system
-\item create conversion script from classic annotation to one-hot vector annotation
-\end{itemize}
+We begin by preprocessing the training corpora. Since we need a corpus
+for each phase of learning, but most preprocessing is analogous, we
+give one set of instructions and add on a few for the supervised
+phase. The \texttt{prep\_scripts} directory in the repository and the
+bundled CD provides Python scripts for performing all necessary steps
+efficiently; the \texttt{README} file shows how to use these.
+
+\subsubsection{General method}
+\label{sec:supcorp}
+Firstly, we convert all corpora to plain text. The TLG is made
+available in its own format; Perseus provides all texts in XML; and
+the PROIEL project offer different formats, the handiest of which will
+be the CoNLL format. We strip all critical, linguistic and discourse
+annotation.
+
+We then convert the plain text corpora to Unicode characters; both the
+TLG and Perseus encode all their Greek texts using ASCII by proxy of
+Beta Code, but our object corpus is encoded in Unicode. We consider
+the spacing and punctuation provided by the corpora as sufficient
+tokenisation for our purposes. We then realign the corpora by
+inserting and deleting line breaks such that each line maps to exactly
+one sentence; since the approach depends on text windows centered on
+one word, we add padding to both sides of the sentence by prepending
+and appending the word PADDING $wsz / 2$ times before and after each
+line.
+
+After having converted all texts to this format, we merge them into
+one large text file. For assessment purposes, we split the file into
+nine parts training corpus and one part validation corpus. We realign
+everything once more such that we obtain a file where every line maps
+to exactly one word or punctuation symbol. Sentences are now delimited
+using empty lines. From this file, we also create a frequency table
+which we use to create a comprehensive dictionary which we use for the
+lookup table layer in the network.
+
+\subsubsection{Supervised corpora}
+\label{sec:supcorp}
+The creation of our supervised corpora is performed analogously, with
+the difference that all annotations are exported to separate
+files. The annotation systems are then normalised to one unified
+system; all layout changes are performed jointly on both the text and
+the annotation file to prevent misalignment. Once this is done, all
+annotations are split into individual characters and distributed over
+several text files for furthe processing. We want to create a one-hot
+vector for each specific character; a script is provided to automate
+this. The final vectors are not stored in plain text but as a
+serialised matrix to reduce space usage and facilitate the
+initialisation of the program.
 
 \subsection{Training the model}
 \label{sec:createmodel}
-\begin{itemize}
-\item window size of 11 words, due to the frequency of long-range dependencies in Greek
-\item represent features in 50-dimensional vectors (more dimensions
-  could affect the computation time adversely)
-\item unsupervised iterations over increasing dictionaries: 5.000,
-10.000, 20.000, 40.000, 80.000, 160.000, 360.000
-\item stop at the point of diminishing returns (computing the ranking
-for a dictionary of 360.000 given a corpus of size n requires 360.000
-ranking formula calculations, which is bound to take a lot of time)
-\item continue training, now supervised but with the same hyperparameters and parameters as the supervised model
-\end{itemize}
+
+For the training hyperparameters, we chose to set embedding sizes at
+50. The text window size was set at 11 due to the prevalence of
+long-range dependencies in ancient Greek. The learning rates for the
+neural network parameters and the embeddings were set at $1.1 \cdot
+10^{-8}$ and $3.4 \cdot 10^{-11}$, respectively. The input layer size
+was set equal to the window size; the output layer size was set to 1;
+the hidden layer size was set to 100.
+
+The algorithm was iterated over increasing dictionary sizes: we
+started with 4.000 words and subsequently doubled the dictionary size
+at each iteration. At each iteration, we validate our model; we stop
+at the point of diminishing returns to avoid computational overhead,
+since the full dictionary contains more than 700K word forms, and we
+do not want to be calculating the pairwise ranking criterion for this
+many words over our corpus, given the fact that it is already large.
+
+The supervised phase is initialised with the embeddings created by the
+unsupervised algorithm, as well as the first linear layer. The same
+hyperparameters are used, except that we modify our output size
+according to the task at hand by giving it the same dimensions as the
+necessary output vector.
 
 \subsection{Preparing the object corpus}
 \label{sec:createmodel}
-\begin{itemize}
-\item conversion from  TEI format to raw text
-\item one sentence per line!
-\item stripping all characters which are not relevant, such as
-critical notation, paragraph markers etc. but padding the text where necessary
-\item store tags sequentially
-\item basic tokenisation is handled during tagging
-\item run sentence through networks, then concatenate relevant outputs
-\item convert from one-hot vector notation to classic annotation
-\item iterate over every sentence
-\item done!
-\end{itemize}
+The corpus is provided by \texttt{papyri.info} in EpiDoc XML format
+and freely accessible at
+\url{https://github.com/papyri/idp.data}. Each papyrus is stored in
+one XML file; the format itself allows for extensive annotation,
+facilitating textual searches to a great degree. However, the
+techniques we have used to annotate text require it to be provided in
+plain text format. We provide a script to strip all XML markup.
+
+Once we have everything in plain text, we can process the text as we
+did in the previous phase: extraneous characters are removed, one word
+is placed on each line, and sentences are delimited using spaces. In
+this way, we can easily align annotations with minimal headaches. We
+also create an extra accompanying file equipped with line numbers for
+the corresponding words in the text file in order to track each word
+back to its original line.
+
+Once the corpus is preprocessed, we can proceed to tagging. The method
+described in the previous chapter is used. We tag one papyrus at a
+time and then write the tagging output to disk following the directory
+structure of the \texttt{papyri.info} repository. We repeat the process
+for every papyrus. After we are done, we convert all files back to
+EpiDoc.

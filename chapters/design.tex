@@ -3,60 +3,6 @@
 \label{chp:design} % \minitoc\mtcskip %
 % ************************************************
 
-\section{Inspiration}
-\label{sec:inspiration}
-
-The idea of designing a system to automatically process ancient Greek
-was originally inspired by the work of R. Whaling and H. Dik, who used
-a purely supervised method for tagging a corpus of classical
-Greek. They trained H. Schmid's TreeTagger using a relatively small
-corpus of annotated Greek and proceeded to tag their corpus with it,
-offsetting the relatively large error rate with manual work done by
-graduate students at the University of Chicago. Whaling and Dik's
-method enabled them to annotate the corpus in much less time than
-would have been necessary would the annotation process have been
-executed manually.
-
-An early prototype of this thesis attempted to use similar supervised
-methods to annotate the corpus of the papyri. Despite high
-expectations, experience showed that the lack of extensive annotated
-corpora is a severe hindrance, as the main way to improve the accuracy
-of any NLP system is to offer it more training data. Feeding 400.000
-words as training data to the Stanford POS Tagger resulted in a measly
-60\% accuracy on a validation set held out from the training corpus.
-
-Recent literature in the field revealed that state-of-the-art results
-were being achieved using a combination of unsupervised and supervised
-learning techniques, dubbed semi-supervised approaches. Unsupervised
-approaches can make use of unannotated data as a preparation for
-supervised training, and work by trying to divide the raw data into
-clusters on the basis of various criteria. Notably, R. Collobert and
-others developed a versatile architecture which achieved high accuracy
-on several NLP tasks and required a relatively low amount of
-optimisation. See \citet{collobert2008}, \citet{collobert-2011}. Accuracy
-for POS tagging reached up to 97.20\%, while for chunking, scores of
-up to 93.63\% were achieved; similarly high results were achieved for
-named entity recognition and semantic role labeling. this is an
-impressive performance given the fact that most of the architecture is
-shared among all tasks and the majority of the parameters of the
-system are inferred through unsupervised methods. 
-
-Given that far larger amounts of raw textual material are available
-for ancient Greek, it seems that this kind of technique is suited to
-the problem at hand. The 400.000 word training corpus used in the
-experiment with the Stanford POS Tagger is much smaller and limited
-than corpora like that offered by the Perseus project (about 7M words)
-and the TLG (about 109M words at last count, though these are not
-freely available). Making use of this untapped resource is
-desirable. This chapter is dedicated to an overview of the
-architecture; the approach followed in \citet{collobert-2011} and
-\citet{turian2010word} is respected with amendments and
-simplifications where needed in order to accommodate for some
-characteristics of Greek (in particular the very high complexity of
-its morphology requires a subtler approach). The exact implementation
-of the system is left for the next chapter.
-
-
 \section{Creating a language model}
 \label{sec:training-nn}
 
@@ -141,7 +87,9 @@ network and its training process. These are:
   how much we want to adjust the network parameters at each gradient
   step;
 \item the \textbf{embedding learning rate}, written $\lambda_{e}$: the same as
-  $\lambda$, but for the purpose of learning embeddings;
+  $\lambda$, but for the purpose of learning embeddings - usually
+  smaller to limit the influence of individual observations on the
+  training process;
 \item the \textbf{input, output and hidden size}, written $n^l_{in}$, $n^l_{out}$, and $n^l_{hu}$, respectively: the number of neurons
   contained in a layer $l$.
 \end{itemize}
@@ -175,7 +123,8 @@ columns are now the embeddings for the input window.
 Formally, given a word index vector $w \in N^{wsz}$ and a lookup table
 $L \in R^{d_{wrd} \times D}$, we can express this as as a function
 $LT$:
-\begin{equation}
+
+\begin{equation} \label{eq:ltmatrix}
   LT(L, w) = \left( \begin{array}{cccc}
       L_{1,w_1} & L_{1,w_2} & \ldots & L_{1,w_{wsz}} \\
       L_{2,w_1} & L_{2,w_2} & \ldots & L_{2,w_{wsz}} \\
@@ -362,8 +311,8 @@ category corresponding to the number of components in the
 corresponding output vector:
 
 \begin{itemize}
-\item major part of speech: verb, noun, adjective, pronoun, particle
-  , adverb, numeral, preposition, conjunction, interjection;
+\item major part of speech: verb, noun, adjective, pronoun, particle,
+  adverb, numeral, preposition, conjunction, interjection;
 \item minor part of speech: article / determinative, personal,
   demonstrative, indefinite, interrogative, relative, possessive,
   reflexive, reciprocal, proper;
@@ -387,8 +336,8 @@ corresponding output vector:
     first field  & lemma type & \specialcell{a - adjective\\c - conjunction\\d - adverb\\e - exclamation\\g - particle\\l - article\\m - numerals\\n - noun\\p - pronoun\\r - preposition\\t - participle\\v - verb\\x - miscellanea} \\ \hline
     second field & person & \specialcell{1 - first person\\2 - second person\\3 - third person} \\ \hline
     third field  & number & \specialcell{d - dual\\p - plural\\s - singular} \\ \hline
-    fourth field & tense & \specialcell{g - gerund \\ p - participle \\ a - aorist\\f - future\\i - imperfect\\l - pluperfect\\p - present\\r - perfect\\t - future perfect} \\ \hline
-    fifth field & mood & \specialcell{i - indicative\\m - imperative\\n - infinitive\\o - optative\\s - subjunctive} \\ \hline
+    fourth field & tense & \specialcell{a - aorist\\f - future\\i - imperfect\\l - pluperfect\\p - present\\r - perfect\\t - future perfect} \\ \hline
+    fifth field & mood & \specialcell{g - gerund \\ p - participle \\ i - indicative\\m - imperative\\n - infinitive\\o - optative\\s - subjunctive} \\ \hline
     sixth field & diathesis & \specialcell{a - active\\e - energetic\\m - medial\\p - passive} \\ \hline
     seventh field & gender & \specialcell{f - feminine\\m - masculine\\n - neuter\\ o, p and q - unclear} \\ \hline
     eighth field & case & \specialcell{a - accusative\\d - dative\\g - genitive\\n - nominative\\v - vocative} \\ \hline
