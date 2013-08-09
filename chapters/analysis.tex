@@ -14,15 +14,17 @@ We propose that both problems have not been tackled in an adequate way
 up to now.
 
 \section{Problem statement}
+Firstly, we aim to develop a \textbf{language model for ancient
+Greek}. We understand this to be a statistical model designed to
+assign probability scores to word sequences; however, it is key that
+the model is also able to apply the knowledge of these probabilities
+to specific problems in the analysis of language. We extend this model
+to cover the tasks of \textbf{morphological analysis} and
+\textbf{partial syntactic parsing}.
 
-\subsection{A language model for ancient Greek}
-\subsubsection{Definitions \& objectives} A \textbf{language model} is a statistical
-model designed to assign probability scores to word sequences;
-however, it is key that the model is also able to apply the knowledge
-of these probabilities to specific problems in the analysis of
-language. The problems we want to tackle are classical
-\textbf{morphological analysis} and \textbf{syntactic analysis}.
+\subsection{Morphological analysis}
 
+\subsubsection{Definition}
 The first problem largely corresponds with what is called
 \textbf{part-of-speech tagging} in the natural language processing
 jargon. For any token in the sentence, given its context, we want to
@@ -30,15 +32,75 @@ model to produce a morphological analysis, which produces not only the
 part-of-speech \textit{stricto sensu}, but all concomitant information
 as well: voice, tense, mood, case, gender, number, person, \ldots
 
-The second problem corresponds with what is called \textbf{shallow
-parsing} (or \textbf{chunking}). Given a sequence of words, we want to
-identify the main grammatical components of this sequence.  This type
-of parsing stands in contrast with \textbf{deep parsing}, which aims
-to produce full syntactic analyses of entire sentences, including
-\textbf{parse trees}, which give a graphical representation of their
-syntactic structure.
+\subsubsection{Objective}
+The Perseus word study tool is currently capable of analysing any
+Greek word form morphologically and offers a limited degree of
+disambiguation; nonetheless, no exact quantification exists of the
+correctness of these disambiguations and we cannot measure our results
+against the performance of this tool. The TreeTagger model developed
+in \cite{dik2008,dik2009}, on the other hand, has been evaluated for
+accuracy and reaches 91\% accuracy by using an annotated training set
+consisting of 150K words from the Greek New Testament and 2K words
+culled from Lysias.
 
-\subsubsection{Technique} 
+We aim to supersede this performance by leveraging raw textual data
+from the Perseus project and the \textit{Thesaurus Linguae Graecae}
+using unsupervised machine learning techniques, as detailed
+\textit{infra}. In our view, given much larger corpora than used by
+\citeauthor{dik2008}, we can achieve a 95\% accuracy rate with minimal
+manual finetuning and integration with other morphological tools.
+
+\subsection{Partial syntactic parsing}
+\subsubsection{Definition}
+The second problem corresponds with what is called \textbf{partial} or
+\textbf{shallow parsing}, or \textbf{chunking}. Given a sequence of
+words, we want to identify the main grammatical components of this
+sequence.  This type of parsing stands in contrast with \textbf{deep
+parsing}, which aims to produce full syntactic analyses of entire
+sentences, including \textbf{parse trees}, which give a graphical
+representation of their syntactic structure.
+
+\subsubsection{Objective}
+Our closest competitor for this task is \cite{mambrini2012}, as 
+the method employed by \cite{lee2010dependency} to attain high parsing
+accuracy is unfeasible. We stipulate that \cite{mambrini2012} goes
+further than we plan to by engaging in deep parsing. Chunking as we
+will perform it is more restricted and does not attempt to map
+head-dependency structures. Instead, we simply look at text windows
+and attempt to assign a syntactic label to the central word of each
+window. For the deep parsing accuracy criterium most related to this,
+label accuracy, \citeauthor{mambrini2012} achieve 62.9\% accuracy on
+their only prose test set. We adopt this as our minimal benchmark.
+
+\subsection{Application to a corpus of papyri}
+\subsubsection{Definition}
+Once the model is constructed, we aim to apply it to a corpus of
+papyri provided digitally by \texttt{papyri.info}. The object corpus
+contains about 4.5 million words. Given the nature of the provided
+material, the state of these texts varies from extremely corrupted to
+nearly pristine. The texts are dated from 300BC to 800AD, spanning
+more than a millennium; many different discourse registers are
+represented, although literary texts are not included.
+
+Linguistically speaking, this is a less than desirable state of
+affairs. By virtue of the characteristics mentioned in the previous
+paragraph, the corpus will contains thousands of unorthodox or
+corrupted word forms. This heightens the complexity of the task at
+hand, and we cannot but lower our standards for accuracy if we wish to
+proceed in an automated way. Nevertheless, we aim to provide
+limited inferences for this type of token.
+
+\subsubsection{Objective}
+We can perform only very limited testing for this task, since there is
+no extant annotation for the object corpus. Instead, we only evaluate
+the accuracy of our model when applied in an unsupervised fashion to a
+test set selected from the papyri. To supplement this, we plan to
+distribute this corpus in order to allow for manual verification by
+the philological community. Our end goal is to create an annotated
+version of the corpus in XML format, encoded in Unicode and following
+the TEI standard for XML documents.
+
+\section{Methodology}
 In general, a language model is created by choosing a modeling
 criterium and applying it to a a large set of observations. These
 observations may be raw word sequences or annotated word sequences,
@@ -51,38 +113,23 @@ We choose a two-phase training method based on deep neural networks,
 which is explained and illustrated in further detail and more
 concretely in subsequent chapters.
 
-The first phase attempts to create a simple probabilistic model using
-a little linguistic knowledge as possible: the goal is to assign
-scores to word sequences that are proportional to the probability of
-these sequences being `correct', i. e. likely to appear in real
-linguist data. Maximising these scores is achieved by corrupting data
-from the observation corpus; the model is then adjusted to give the
-real observation a higher score than the corrupted observation.
+The first phase uses a large unlabelled corpus to create a simple
+probabilistic model using a little linguistic knowledge as possible:
+the goal is to assign scores to word sequences that are proportional
+to the probability of these sequences being `correct', i. e. likely to
+appear in real linguist data. Maximising these scores is achieved by
+corrupting data from the observation corpus; the model is then
+adjusted to give the real observation a higher score than the
+corrupted observation.
 
 The second phase is implemented on top of the first and consists in
 using a new observation corpus, this time equipped with
 annotation. These annotations are transformed into vectors with a set
 number of components, which each represent a linguistic feature. The
-scores returned by the model are now in vector form, each component
-being a score similar to the one developed in the first phase.
-
-
-\subsection{Annotating a corpus of documentary papyri}
-\subsubsection{The corpus: scale and complexity}
-The object corpus contains about 4.5 million words. Given the nature
-of the provided material, the state of these texts varies from
-extremely corrupted to nearly pristine. The texts are dated from 300BC
-to 800AD, spanning more than a millennium; many different discourse
-registers are represented, although literary texts are not included.
-
-Linguistically speaking, this is a less than desirable state of
-affairs. By virtue of the characteristics mentioned in the previous
-paragraph, the corpus will contains thousands of unorthodox or
-corrupted word forms. This heightens the complexity of the task at
-hand, and we cannot but lower our standards for accuracy if we wish to
-proceed in an automated way. Nevertheless, it is possible to develop a
-model which is able to make inferences (albeit limited ones) about
-unknown forms.
+parameters of the model are then adjusted to fit the behavior of the
+observation corpus. The scores returned by the model are now in vector
+form, each component being a score similar to the one developed in the
+first phase.
 
 % The second major obstacle is the ancient Greek language itself. Though
 % it has lost a great deal of morphological complexity in its evolution
@@ -121,19 +168,21 @@ unknown forms.
 \section{Context}
 
 The problem of Greek morphological analysis can essentially be
-considered solved for individual words; contextual disambiguation, on
-the other hand, has only been attempted once with mitigated
-success. The idea of designing a system to automatically process
-ancient Greek as envisioned in this work was originally inspired by
-the work of R. Whaling and H. Dik [\cite{dik2008,dik2009}, see
-\ref{sec:dikwhaling} as well], who used a purely supervised method for
-tagging a corpus of classical Greek. They trained H. Schmid's
-TreeTagger using a relatively small corpus of annotated Greek and
-proceeded to tag their corpus with it, offsetting the relatively large
-error rate with manual work done by graduate students at the
-University of Chicago. Whaling and Dik's method enabled them to
-annotate the corpus in much less time than would have been necessary
-would the annotation process have been executed manually.
+considered solved for individual words, as demonstrated by the Perseus
+word study tool; contextual disambiguation, on the other hand, has
+only been attempted once with mitigated success in
+\cite{dik2008,dik2009}. The idea of designing a system to
+automatically process ancient Greek as envisioned in this work was
+originally inspired by this approach.
+
+The authors used a purely supervised method for tagging a corpus of
+classical Greek. They trained H. Schmid's TreeTagger using a
+relatively small corpus of annotated Greek and proceeded to tag their
+corpus with it, offsetting the relatively large error rate with manual
+work done by graduate students at the University of Chicago. This
+enabled the authors to annotate the corpus in much less time than
+would have been necessary would the annotation process have been
+executed manually.
 
 An early prototype of this thesis attempted to use similar supervised
 methods to annotate the corpus of the papyri. Despite high
@@ -151,13 +200,14 @@ supervised training, and work by trying to divide the raw data into
 clusters on the basis of various criteria. Notably, R. Collobert and
 others developed a versatile architecture which achieved high accuracy
 on several NLP tasks and required a relatively low amount of
-optimisation. See \citet{collobert2008}, \citet{collobert-2011}. Accuracy
-for POS tagging reached up to 97.20\%, while for chunking, scores of
-up to 93.63\% were achieved; similarly high results were achieved for
-named entity recognition and semantic role labeling. this is an
-impressive performance given the fact that most of the architecture is
-shared among all tasks and the majority of the parameters of the
-system are inferred through unsupervised methods. 
+optimisation \citep{collobert2008,collobert-2011}. Accuracy rates for
+POS tagging reached up to 97.20\%, while for chunking, scores of up to
+93.63\% were achieved; state-of-the-art results were also achieved for
+named entity recognition and semantic role labeling, which we will not
+considere here. This is an impressive performance: most of the
+architecture is actually shared among all tasks and the majority of
+the parameters of the system are inferred through unsupervised
+methods.
 
 Given that far larger amounts of raw textual material are available
 for ancient Greek, it seems that this kind of technique is suited to
@@ -185,12 +235,58 @@ if we want our system to be able to analyse large amounts of prose.
 What's more, the project seems to be lacking manpower and has lost
 steam since its inception, the last update dates from 2012, more than
 a year ago at the time of this writing.
-\section{Motivation}
-In which we show why our objectives are worthwhile, and how we may
-profit from the completion of our objectives.
-%% follow an objection-rebuttal scheme
 
-% \begin{itemize}
-% \item searchable corpus
-% \item corpus-based grammar
-% \end{itemize}
+
+\section{Motivation}
+
+** WORK IN PROGRESS **
+
+\subsection{Corpus-based grammars and lexica}
+\label{sec:corpusbasedgrammars}
+Expanding our method to other texts might bring the benefit of
+comprehensive corpus-based grammars and lexica, which can integrate
+available data on the fly and create a self-updating and reliable web
+of grammatical knowledge. Instead of focusing mainly upon a few choice
+authors or laboriously trudging through the huge wealth of ancient
+Greek literature to linearly create lexica and grammars, all of it
+could be harnessed at once in a quantitatively precise and easily
+visualisable way.
+
+\url{http://www.digitalhumanities.org/dhq/vol/003/1/000033/000033.html}
+\cite{bamman2008building,bammandhq2009}
+
+\subsection{Historical and variational linguistics} % (fold)
+\label{sec:histlinguistics}
+The language of the papyri has an important role to play in the
+historical linguistics of Greek; once a full annotation has been
+achieved, it could be possible to implement the same methods used for
+synchronic language processing to map language changes in a
+statistical way; it could be possible to estimate the transition
+probabilities for diachronic grammatical evolutions, which has the
+potential to create a picture of the evolution of Greek that would be
+both comprehensive and precise. It even has potential on a comparative
+level; given the long history and meandering evolutionary trajectory
+of the Greek language, one could observe from the data catalysts for
+language evolution in one direction or the other and apply that
+comparatively.
+
+One might also win valuable insight into language diversity in Egypt;
+using the paraliterary data already available from the Trismegistos,
+linguistic phenomena and evolutions could be visualised on a map and
+give insight into the diatopic, diastratic and diaphasic variation of
+Egyptian koin\^e, much in the way of modern dialect survey maps but
+directly linked to the original texts.
+
+\subsection{Textual criticism}
+\label{sec:textualcriticism}
+Textual criticism, too, could benefit from improved access to
+linguistic data; dubious \textit{passus} could be disambiguated by
+comparing them to similar instances in papyri from the same period and
+adapting constructions and words from them.  This technique is
+harnessed by \cite{mimno2009}, who use the techniques of statistical
+NLP solely for these specific critical problems.  Though textual
+criticism will for the foreseeable future still necessitate trained
+papyrologists, the need for a very in-depth knowledge of the corpus of
+papyri can be greatly reduced by calling upon data from other parts of
+the corpus to present a series of statistically possible solutions for
+textual issues.

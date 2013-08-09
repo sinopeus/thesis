@@ -1,10 +1,13 @@
 % ************************************************
 \chapter{Design}
-\label{chp:design} % \minitoc\mtcskip %
+\label{chp:design} % \minitoc\mtcskip % %
 % ************************************************
 
 \section{Creating a language model}
 \label{sec:training-nn}
+
+\subsection{Deep networks for natural language modeling}
+\label{sec:deepnetworks}
 
 Neural networks as a technique are anything but new; the general
 concepts underlying them date from more than half a century ago, and
@@ -14,8 +17,8 @@ complex tasks efficiently; and even with the hardware which was in use
 a decade ago and before, training a neural network was a feasible
 task. Training a deep neural network, which contains several hidden
 layers (hence the term \textit{deep}), is another matter; doing this
-requires the backpropagation algorithm, which until the mid-2000's
-was simply too slow for use on the hardware of the day. 
+requires the backpropagation algorithm, which until the mid-2000's was
+simply too slow for use on the hardware of the day.
 
 At this point, G. Hinton, who had been one of the first proponents of
 the use of deep networks in the 1980's as a professor at Carnegie
@@ -23,15 +26,16 @@ Mellon University, blew new life into the field he helped create with
 his paper ``Learning multiple layers of representation''
 \citep{hinton2007learning}. He demonstrated that it was possible to
 perform very complex learning tasks relatively efficiently and to
-great effect using this type of network. The way this is done is by
-stepping down from the traditional approach where neural networks are
-given a certain amount of classified examples and training them to
-classify observations based on these; rather, the goal is now to train
-\textbf{generative networks}, i. e., networks that can randomly
-generate possible observations. Examples given to the network do not
-need to be classified in advance; instead, given an observation, the
-network's parameters are adjusted to maximise the likelihood of data
-of its kind being generated.
+great effect using this type of network.
+
+The way this is done is by stepping down from the traditional approach
+where neural networks are given a certain amount of classified
+examples and training them to classify observations based on these;
+rather, the goal is now to train \textbf{generative networks}, i. e.,
+networks that can randomly generate possible observations. Examples
+given to the network do not need to be classified in advance; instead,
+given an observation, the network's parameters are adjusted to
+maximise the likelihood of data of its kind being generated.
 
 A classic task for this type of network is handwritten digit
 recognition; a network is trained by feeding it a large amount of
@@ -47,8 +51,8 @@ each word by a fixed-length vector with $n$ components, these vectors
 define how the word is embedded within an $n$-dimensional vector
 space; hence, these vectors are termed
 \textbf{embeddings}.\footnote{To avoid confusion: note that the
-  components of this feature vector do not necessarily show a one-on-one
-  correspondence with linguistic features!} 
+components of this feature vector do not necessarily show a one-on-one
+correspondence with linguistic features!}
 
 The unified architecture proposed by Collobert et al. uses these
 embeddings, which are tailored during training using a huge amount of
@@ -77,39 +81,41 @@ hyperparameters that will influence the parameters of the neural
 network and its training process. These are:
 
 \begin{itemize}
-\item the \textbf{embedding dimensions}, written $d_{wrd}$: the number of
-  components in a word feature vector;
-\item the \textbf{dictionary size}, written $D$: how many words we want to consider
-  when training;
-\item the \textbf{window size}, written $wsz$: the number of words we want to
-  consider per example;
-\item the \textbf{learning rate}, written $\lambda$: when using gradient descent,
-  how much we want to adjust the network parameters at each gradient
-  step;
-\item the \textbf{embedding learning rate}, written $\lambda_{e}$: the same as
-  $\lambda$, but for the purpose of learning embeddings - usually
-  smaller to limit the influence of individual observations on the
-  training process;
-\item the \textbf{input, output and hidden size}, written $n^l_{in}$, $n^l_{out}$, and $n^l_{hu}$, respectively: the number of neurons
-  contained in a layer $l$.
+\item the \textbf{embedding dimensions}, written $d_{wrd}$: the number
+of components in a word feature vector;
+\item the \textbf{dictionary size}, written $D$: how many words we
+want to consider when training;
+\item the \textbf{window size}, written $wsz$: the number of words we
+want to consider per example;
+\item the \textbf{learning rate}, written $\lambda$: when using
+gradient descent, how much we want to adjust the network parameters at
+each gradient step;
+\item the \textbf{embedding learning rate}, written $\lambda_{e}$: the
+same as $\lambda$, but for the purpose of learning embeddings -
+usually smaller to limit the influence of individual observations on
+the training process;
+\item the \textbf{input, output and hidden size}, written $n^l_{in}$,
+$n^l_{out}$, and $n^l_{hu}$, respectively: the number of neurons
+contained in a layer $l$.
 \end{itemize}
 
 \begin{figure}
   \includegraphics[width=\textwidth]{nnstructure}
-  \caption{The basic network structure, using a window approach. Figure from \cite[2499]{collobert-2011}.} \label{fig:nnstructure}
+  \caption{The basic network structure, using a window
+approach. Figure from
+\cite[2499]{collobert-2011}.} \label{fig:nnstructure}
 \end{figure}
 
-\subsubsection{Lookup table layer}
-The lookup table itself is a matrix with $d_{wrd}$ rows and $D$
-columns. Its initial construction is as follows: given a frequency
-table, the $D$ most common words are chosen and placed in order. Each
-word is now assigned an index according to its ranking in the
-frequency table. The most common word gets index 1, the second most
-common index 2 etc., up to the word in the $D^{th}$ place in the
-table, which is assigned index $D$. For each index, a new embedding of
-size $d_{wrd}$ with small random values is created and assigned to
-that index. The lookup table matrix itself is constructed by
-concatenating these $D$ vectors as columns.  In this way, a lookup
+\subsubsection{Lookup table layer} The lookup table itself is a matrix
+with $d_{wrd}$ rows and $D$ columns. Its initial construction is as
+follows: given a frequency table, the $D$ most common words are chosen
+and placed in order. Each word is now assigned an index according to
+its ranking in the frequency table. The most common word gets index 1,
+the second most common index 2 etc., up to the word in the $D^{th}$
+place in the table, which is assigned index $D$. For each index, a new
+embedding of size $d_{wrd}$ with small random values is created and
+assigned to that index. The lookup table matrix itself is constructed
+by concatenating these $D$ vectors as columns.  In this way, a lookup
 operation for an index $i$ is actually nothing more than the selection
 of the $i^{th}$ column from this matrix.
 
@@ -118,21 +124,31 @@ text window, each word is converted to its corresponding index, which
 is then fed to the neuron corresponding to its position in the window,
 which retrieves the embedding of that word from the lookup table. The
 output of all neurons is then concatenated into a single matrix, whose
-columns are now the embeddings for the input window. 
+columns are now the embeddings for the input window.
 
 Formally, given a word index vector $w \in N^{wsz}$ and a lookup table
 $L \in R^{d_{wrd} \times D}$, we can express this as as a function
 $LT$:
 
-\begin{equation} \label{eq:ltmatrix}
-  LT(L, w) = \left( \begin{array}{cccc}
-      L_{1,w_1} & L_{1,w_2} & \ldots & L_{1,w_{wsz}} \\
-      L_{2,w_1} & L_{2,w_2} & \ldots & L_{2,w_{wsz}} \\
-      \ldots   & \ldots  & \ldots & \ldots \\
-      L_{d_{wrd},w_1} & L_{d_{wrd},w_2} & \ldots & L_{d_{wrd},w_{wsz}} \end{array} \right)
+\begin{equation} \label{eq:ltmatrix} LT(L, w) =
+\left( \begin{array}{cccc} L_{1,w_1} & L_{1,w_2} & \ldots &
+L_{1,w_{wsz}} \\ L_{2,w_1} & L_{2,w_2} & \ldots & L_{2,w_{wsz}} \\
+\ldots & \ldots & \ldots & \ldots \\ L_{d_{wrd},w_1} & L_{d_{wrd},w_2}
+& \ldots & L_{d_{wrd},w_{wsz}} \end{array} \right)
 \end{equation}
-\subsubsection{Linear layer}
 
+An interesting feature of this type of representation is that it is in
+fact a highly performant abstraction for the classic $n$-gram. In most
+NLP architectures $n$ is given a relatively low value in order to
+limit computational expenses; the Google $n$-gram project, which is the
+largest of its kind, limits itself to five-grams. N-grams are also
+used differently: the first $n - 1$ words serve as the context for the
+$n^{th}$ word in the $n$-gram. Here, we can take advantage of the
+purely numerical form of text window embeddings by choosing a somewhat
+larger text window size and considering the central column in such
+windows in its full context, both prior and posterior.
+
+\subsubsection{Linear layer}
 A linear layer takes a fixed size vector and performs a linear
 operation on it: the dot product of this vector with a set of
 parameters $W$ is computed and a bias added. Formally, given the
@@ -484,13 +500,25 @@ again use similar annotation schemes but with different emphases. We
 enumerate the tags for the Perseus and the PROIEL annotation system,
 respectively.
 
-We see in table 4 that they respectively use nineteen and twenty-four different
-features. The Perseus system is less detailed than the PROIEL system,
-but by virtue of this fact also less complex. A possible approach is
-to map overlaps in both systems and find the simplest possible tag set
-which can be derived from that. We can immediately make a one-hot
-vector from this, since all annotated words are equipped with a single
-syntactig tag.
+We see in table 4 that they respectively use nineteen and twenty-four
+different features. The Perseus system is less detailed than the
+PROIEL system, but by virtue of this fact also less complex. A
+possible approach is to map overlaps in both systems and find the
+simplest possible tag set which can be derived from that. We can
+immediately make a one-hot vector from this, since all annotated words
+are equipped with a single syntactic tag. 
+
+Another approach is provided in \cite{conf/lrec/LeeH10}, who attempt
+to port the Perseus treebank to the PROIEL format. The approach has
+its downside: the authors try to convert every detail of the Perseus
+treebank format to the PROIEL format and achieve an accuracy rate
+which still necessitates human postprocessing. We will consider it
+feasible to switch to their system once a full-fledged conversion from
+one scheme to the other has been carried through to completion. Until
+then, we apply a simpler system with reduced information
+density. Since we do not have to cope with head-dependency relations,
+we use the simpler approach to reduce computational overhead in our
+experimental setup.
 
 \section{Selecting and processing training data}
 \label{sec:trainingdata}
@@ -514,20 +542,6 @@ restricted size of the corpus.
 All texts are preprocessed by converting all words to lowercase and
 placing exactly one sentence on every line. Only Greek punctuation is
 left; critical notation etc. is pruned.
-
-\subsection{Possible improvements}
-\label{sec:supervised}
-
-% \begin{itemize}
-% \item affix features
-% \item gazetteers
-% \item cascading features
-% \item ensemble voting
-% \item parsing
-% \item word representations
-% \item software optimisation
-% \end{itemize}
-
 
 \section{Annotating the corpus}
 \label{sec:annotating}

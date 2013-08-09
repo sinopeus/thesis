@@ -7,35 +7,51 @@
 \let\cleardoublepage\relax
 \let\cleardoublepage\relax
 
-\chapter*{Abstract}
+% \chapter*{Abstract}
 
-\vfill
+% \vfill
 
 \selectlanguage{dutch}
 \pdfbookmark[1]{Samenvatting}{Samenvatting}
 \chapter*{Samenvatting}
 
 %motivation
-Ondanks de bewezen voordelen van de corpuslingu\"istiek is er een
-groot gebrek aan geannoteerde digitale corpora voor het
-Oudgrieks. Grote hoeveelheden tekst zijn ondertussen digitaal
-beschikbaar, maar door gebrek aan mankracht is het niet mogelijk deze
-handmatig te analyseren. Een betrouwbare methode om dit probleem
-automatisch aan te pakken, al zou deze niet perfect zijn, zou een stap
-in de goede richting zijn.
+Ondanks de bewezen diensten van corpusgebaseerde methoden in het
+taalkundig onderzoek is er een groot gebrek aan geannoteerde digitale
+corpora voor het Oudgrieks. Grote hoeveelheden tekst zijn ondertussen
+digitaal beschikbaar, maar door gebrek aan mankracht is het niet
+mogelijk deze handmatig te analyseren. Een betrouwbare methode om dit
+probleem automatisch aan te pakken, al zou deze niet perfect zijn, zou
+een stap in de goede richting zijn.
 % problem statement & approach
 In dit werk trachten we een dergelijke methode te ontwikkelen met
-behulp van technieken uit de artificiële intelligentie en bij wijze
-van \textit{case study} toe te passen op een corpus gedigitaliseerde
-documentaire papyri. Deze methode berust op een implementatie van een
-zgn. artificieel neuraal netwerk, d.i. een wiskundig model dat in
-staat is om patronen te herkennen en te leren. 
+behulp van spitstechnieken uit de artificiële intelligentie en bij
+wijze van \textit{case study} toe te passen op een corpus
+gedigitaliseerde documentaire papyri. Deze methode berust op een
+implementatie van een zgn. artificieel neuraal netwerk, d.i. een
+wiskundig model dat in staat is om patronen te herkennen en te
+leren. We passen de methode beschreven in \cite{collobert-2011} toe op
+het Oudgrieks.
 
-Een groot niet-geannoteerd corpus en een kleiner geannoteerd corpus
-wordt ingegeven in het model bij wijze van leermateriaal. Het model
-voorziet zowel morfologische als oppervlakkige syntactische analyse.
-Vervolgens laten we het model aan patroonherkenning doen op het corpus
-papyri.
+Het leerproces van dit netwerk wordt opgedeeld in twee fasen. In een
+eerste wordt gebruik gemaakt van een groot ongeannoteerd corpus om via
+een eenvoudig criterium een wiskundig model op te bouwen dat elk woord
+kadert binnen het taalgebruik in het geheel.  Dit model kent kansen
+toe aan reeksen woorden naargelang die al dan niet 'correct' zijn door
+te schatten of gelijkaardige reeksen kunnen voorkomen in het
+corpus. 
+
+Een tweede fase schakelt over op een kleiner, geannoteerd corpus. Na
+het defini\"eren van een wiskundige voorstelling voor morfologische en
+syntactische categorie\"en worden meerdere netwerken ge\"initialiseerd
+die gebruik maken van de voorheen opgebouwde wiskundige
+representatie. De modellen worden afgestemd op de woord-annotatieparen
+en be\"invloeden elkaar onderling om zo goed mogelijk gebruik te maken
+van patronen die van potentieel nut zijn voor de taak van elk netwerk.
+
+Vervolgens passen we het zo bekomen model toe op een digitaal
+beschikbaar corpus papyri. Dit wordt na afloop in een verdeelbaar
+formaat omgezet en geopensourcet voor verdere verwerking.
 
 % results
 *resultaten*

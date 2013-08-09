@@ -114,13 +114,91 @@ same operation to a complete batch such as described in
 
 \subsection{Optimising computation with Theano}
 \label{sec:theano}
+Theano, proposed in \cite{bergstra+al:2010-scipy} and available at
+\url{http://deeplearning.net/software/theano/}, is a numerical library
+for Python which allows for efficient computations on large arrays
+using symbolic expressions. We mention a few key optimisations of the
+implementation made using Theano.
 
-\subsubsection{Symbolic graphs}
+\subsubsection{Graphs and symbolic expressions}
 \label{sec:graph}
+A Theano graph is a structured representation of a computation. The
+nodes of such a graph belong to one of three types: variables,
+operations and applications, termed variable, op and apply nodes. The
+structure and sequence of the computation is stored by connecting
+these nodes; a connection is called an edge. Such graphs can be
+constructed symbolically by defining a set of variables of the types
+provided by Theano and then applying a sequence of operations to
+them. The library registers the operations and incrementally
+constructs a graph. Once the graph is constructed, we can store it as
+a function which we can apply to any valid input which is of the form
+of the initial variables of the graph.
+
+For instance, we might define an input matrix as a Theano variable,
+apply the necessary neural network layers to it, and then return a
+function which we can apply to any variable of the same type as the
+original graph input. Furthermore, Theano applies optimisations to
+these functions to improve their efficiency, accuracy and execution
+speed.
+
 \subsubsection{Automatic differentiation}
 \label{sec:autodiff}
+This approach yields the benefit of automatic differentiation. Every
+operation defined by Theano is also paired with a its derivative
+function, which is precomputed. If we model a computation which
+consists of the application of several operations (i.e. we create a
+composite function), it is possible to apply the chain rule to the
+respective derivatives of the operations of which the computation
+consists; by doing this, we can find the derivative of the entire
+computation. In this way, Theano can compute the derivative of
+symbolic expressions of arbitrary length at minimal cost. Given the
+essential role of derivative functions in machine learning in general
+and in neural networks in particular, this is truly a boon. We can
+forgo the arduous manual computation of the neural network layer
+gradients and automate the process, and simultaneously benefit from
+increased precision and efficiency.
+
 \subsubsection{Compiling to C and CUDA}
 \label{sec:graph}
+Another important optimisation performed by Theano is situated 'closer
+to the metal', so to speak. Python is a high-level programming
+language, that is to say, it is to a great degree an abstraction of
+the internal workings of a computer, hiding details such as memory
+management and register operations from the user in favor of a more
+intuitive way of writing programs. This reduces the amount of manual
+optimisation that can be applied to a program: lower-level languages
+such as C allow direct access to basic machine functions. A Python
+program will typically require a running time ten to one-hundred times
+longer than an equivalent C program.
+
+For computationally demanding numerical routines which are applied
+over large datasets, this is wholly undesirable. Theano can avoid
+being tied down to Python-level performance by partially or fully
+compiling functions constructed from graphs to C code, which is then
+compiled and stored for the rest of the execution of the
+program. This offers a tremendous speed increase for certain types of
+computation.
+
+Standard C programs run on the computer's central processing unit, but
+the library can accelerate the computation even more by making use of
+the capacities of the discrete graphical processing units which are
+present in some computers. These are designed to execute very simple
+instructions in a massively parallel fashion and can be programmed
+using low-level languages by using application programming interfaces
+(APIs) developed specifically for that purpose. 
+
+This is termed general programming for graphical processing units, or
+GPGPU; two widely used APIs exist, CUDA, which is a closed standard
+developed by Nvidia for their own devices and OpenCL,an open standard
+which was developed by a consortium of companies\footnote{Chief among
+these is Apple Inc., which owns the trademark, as well as companies
+such as AMD, IBM, Qualcomm, Intel and Nvidia.} and is not restricted
+to GPUs specifically. Theano is capable of writing C programs that
+interface with CUDA; compiling functions to pure C can speed the
+execution time up by by one to two orders of magnitude, as mentioned
+above; but optimising certain parts of the computation by interfacing
+with CUDA can lead to speed increases of another order or two of
+magnitude!
 
 \section{The full process}
 \label{sec:process}

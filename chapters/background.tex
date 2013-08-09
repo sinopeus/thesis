@@ -6,7 +6,6 @@
 
 \section{Historical background}
 \subsection{The language of the papyri}
-
 The papyri began to be studied linguistically not by papyrologists and
 historians, but rather by Biblical scholars and grammarians interested in
 their relevance in the development of koin\^{e} Greek,
@@ -17,7 +16,6 @@ resurgence of scholarship on the topic;\footnote{Vide
   \cite{cronert1903,deissmann1895,deissmann1897,deissmann1929,dieterich1898,thumb1901,thumb1897}.}
 an excellent overview of pre-1970s research may be found in
 \cite{mandilaras1973} and \cite{gignac1976,gignac1981}.
-
 
 During this period, E. Mayser begon work on the earliest compendious
 grammar of the papyri; it limits itself to the Ptolemaic era but
@@ -96,7 +94,6 @@ since 2005.
 
 \subsection[Corpus lingustics]{Corpus linguistics\footnote{The
 following section is based \emph{passim} on \citet{okeeffe2010}.}}
-
 A corpus or text corpus is a large, structured collection of texts
 designed for the statistical testing of linguistic hypotheses. The
 core methodological concepts of this mode of analysis may be found in
@@ -170,9 +167,7 @@ Papyrorum Judaicarum, etc. We are primarily interested in the digital
 techniques used to create linguistic corpora; so let us first take a
 look at the progress of the digital classics.
 
-
 \subsection{The digital classics}
-
 Classical philology, despite its status as one of the oldest and most
 conservative scientific disciplines still in existence today, has in
 the last fifty years found itself at the front lines of the digital
@@ -254,7 +249,6 @@ this open setup is desirable, as the database is not fit for them as
 it is, but can with some effort be molded into a useful tool.
 
 \subsection{Natural language processing}
-
 Natural language processing (henceforth NLP) is a subdiscipline in
 computer science concerned with the interaction between natural human
 language and computers. Its history well and truly starts in the
@@ -311,8 +305,6 @@ is also a treebank, i.e.\ a database of syntactically annotated
 sentences. It contains data for Herodotus and the New Testament.
 
 \section{Concepts and techniques}
-
-
 While there is, of course, no room in this thesis for an extended
 course in mathematics or computer science, it is necessary to have
 some background in order to understand the techniques used for the
@@ -325,7 +317,6 @@ technique, only a layman's explanation is given. For further
 formalism, see \vref{chap:conceptstechniques}.
 
 \section{Related work}
-
 Computational approaches to classical philology have been the object
 of increasing interest for the last few years. While none have chosen
 to focus on the language of the Greek papyri specifically, related
@@ -334,7 +325,7 @@ hand. Annotated corpora have been created, efforts to automatically
 tag Greek have been made, and some have even taken a stab at using
 natural language processing techniques for textual criticism. 
 
-\subsubsection{D. W. Packard's \textit{Morph}}
+\subsection{Morphological analysis}
 \cite{packard1973computer} was the first attempt to create a system
 for the automated morphological analysis of Greek, which he dubbed
 Morph. The author did not aim at creating a theoretically well-founded
@@ -359,13 +350,21 @@ rented; the author mentions having to use one dollar's worth of
 computing time to analyse the Apology of Socrates}), and the rule-based
 system relies heavily on the author's knowledge of Greek.
 
-\subsubsection{G. Crane's \textit{Morpheus}}
-G. Crane, of Perseus project fame, developed a system on top of
-Packard's implementation, dubbed Morpheus, by augmenting the analyser
-with a generative component. Work on the system, that would later
-become the backend for the Perseus morphological analyser, began in
-1984 and was aided by two graduate students at Berkeley, Neel Smith
-and Joshua Kosman.
+A critical assessment of the methodology and results of this paper is
+not possible: no concrete measure of the system's accuracy is
+given. The source code is also nowhere to be found; even if it was
+freely available, testing it would be a complicated affair, as it is
+written in assembly language specific to the IBM 360 mainframe and not
+compatible with modern computer architectures. We mention it for
+historical reasons, as Packard's method is central in the development
+of later morphological analysis tools. 
+
+Notably, Gregory Crane's \textit{Morpheus} was developed in C and Lisp
+on top of Packard's implementation by augmenting the analyser with a
+generative component. Work on the system, that would later become the
+backend for the Perseus morphological analyser, began in 1984 and was
+aided by two graduate students at Berkeley, Neel Smith and Joshua
+Kosman.
 
 The generative component of the system creates an extensive table of
 possible word forms using stems and suffixes such as provided by
@@ -375,53 +374,29 @@ Morphological parsing is essentially done by looking up forms in this
 word table. This comes at the cost of a lot of space; on the other
 hand, parsing a word which is in the database is a very fast
 operation, since the word itself doesn't have to be manipulated, and
-since the tables have been maintained and improved for years using
+the tables have been maintained and improved for years using
 user input.
 
-Morpheus is without question the best tool for Greek morphological
-analysis available. For years, it has been a core component of the
-success of the Perseus project. Recently, there has been a drive to
-create an open source version of the original
+An important issue is that of parse ambiguity. The morphological
+complexity of Greek ensures that over 50\% of words present in the
+parse table have multiple parses \cite{dik2008}. Disambiguation is
+therefore key for the next development stage of morphological analysis
+tools for ancient Greek.
+
+Despite this, Morpheus is without question the best tool for Greek
+morphological analysis available. For years, it has been a core
+component of the success of the Perseus project. Recently, there has
+been a drive to create an open source version of the original
 program,\footnote{\textit{Pace} \cite{blackwell2009}.} which is now
-available on GitHub at \url{https://github.com/PerseusDL/morpheus}. 
+available on GitHub at \url{https://github.com/PerseusDL/morpheus}.
 
-\subsubsection{H. Dik and R. Whaling}
-\label{sec:dikwhaling}
-In two papers based off their workshops on the topic
-\citep{dik2008,dik2009}, H. Dik and R. Whaling (a classics professor
-and computer scientist turned classicist, respectively, both at the
-University of Chicago) demonstrate a relatively simple methodology for
-morphological tagging of a corpus of ancient Greek in the context of
-the Perseus under PhiloLogic project under Helma Dik.  They trained
-Helmut Schmid's TreeTagger (found at
-\url{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/} and
-extensively described in \cite{schmid1994,schmid1995}) using a corpus
-of Homeric and New Testament Greek and applied it to run over their
-three-million word corpus. Initial results achieved about 80\%
-accuracy and rose up to 88\%; since the corpus was designed for
-academic use, large swathes of text were then manually disambiguated
-to the best of the ability of the authors and a team of volunteers.
-
-Their effort is remarkable in the sense that it is the only instance
-of an automatically annotated corpus of ancient Greek I have managed
-to find. While Perseus offers a morphological analysis tool, this tool
-is designed to assist linear reading and generates parses on the fly
-from a database, offering several options if several parses are
-possible. Recently, this system has been improved using user votes,
-frequency tables and a simple system of bigrams, in order to return
-the most likely parse. Dik and Whaling's corpus, though, has been
-annotated with the explicit intention of storing all parses and their
-context in a relational database. This makes it possible to perform
-morphological searches. For linguistic purposes, this is a very
-interesting tool.
-
-\subsubsection{J. Lee}
 \cite{lee2008nearest} offers a new approach to the analysis of Greek
-morphology by using machine learning methods. The method proposed
-relies on large amounts of data and makes use of nearest-neighbour
-analysis techniques. This stands in contrast to the traditional
-rule-driven approach used by earlier parsers such as
-\cite{packard1973computer} or \cite{crane1991generating}. 
+morphology by using machine learning methods melded with the approach
+used by Morpheus. The method proposed relies on large amounts of data
+and makes use of nearest-neighbour analysis techniques. This stands in
+contrast to the traditional rule-driven approach used by earlier
+parsers such as \cite{packard1973computer} or
+\cite{crane1991generating}.
 
 By applying affix transformations to word forms in order to analyse
 their relation to other forms, a nearest-neighbour metric is
@@ -461,3 +436,60 @@ sense that it shows that it is not necessary to create very complex
 rulesets for morphological analysis. With minimal integration of
 linguistic knowledge, we can create a simple heuristic which offers
 reasonable results.
+
+\subsection{Syntactic parsing}
+Efforts to develop a model for syntactic parsing of ancient Greek are
+in an embryonic stage. \cite{mambrini2012} contains a few experiments
+with syntactically parsing ancient Greek. Training data was taken
+exclusively from the Perseus ancient Greek dependency treebank and
+partitioned into different sets to observe the influence of
+differences in author and genre on the results. These were split up
+into training and validation sets. and used to train MaltParser
+\citep{nivre2006maltparser}. Initial performance on the Homeric texts
+is disappointing due to the scarcity of resources for training the
+parser. 44.1\% tokens were given a fully correct labeling, including
+relations and their head word, 60.3\% were correctly assigned a head
+word, and 49.2\% were correctly assigned a relation.
+
+Adjusting the hyperparameters and features of the model manually
+yielded a considerable boost in performance, with accuracy rates
+increasing to 71.72\%, 78.26\% and 81.62\% on the Homeric texts. The
+improved model is then tested on Hesiod, Sophocles and
+Plato. Unsurprisingly, performance on the Hesiodic poems is far better
+than on the Sophocles and Plato, which demonstrates that the barrier
+between textual genres is a serious obstacle for this type of
+parsing. The authors are currently working on expanding their training
+set and testing different systems.
+
+\cite{lee2010dependency} is also interesting 
+
+\subsection{Corpus annotation}
+\label{sec:dikwhaling}
+In two papers based off their workshops on the topic
+\citep{dik2008,dik2009}, H. Dik and R. Whaling (a classics professor
+and computer scientist turned classicist, respectively, both at the
+University of Chicago) demonstrate a relatively simple methodology for
+morphological tagging of a corpus of ancient Greek in the context of
+the Perseus under PhiloLogic project under Helma Dik.  They trained
+Helmut Schmid's TreeTagger (found at
+\url{http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/} and
+extensively described in \cite{schmid1994,schmid1995}) using a corpus
+of Homeric and New Testament Greek and applied it to run over their
+three-million word corpus. Initial results achieved about 80\%
+accuracy and after adjustments rose up to 88\%; since the corpus was
+designed for academic use, large swathes of text were then manually
+disambiguated to the best of the ability of the authors and a team of
+volunteers.
+
+Their effort is remarkable in the sense that it is the only instance
+of an automatically annotated corpus of ancient Greek I have managed
+to find. While Perseus offers a morphological analysis tool, this tool
+is designed to assist linear reading and generates parses on the fly
+from a database, offering several options if several parses are
+possible. Recently, this system has been improved using user votes,
+frequency tables and a simple system of bigrams, in order to return
+the most likely parse. Dik and Whaling's corpus, though, has been
+annotated with the explicit intention of storing all parses and their
+context in a relational database. This makes it possible to perform
+morphological searches. For linguistic purposes, this is a very
+interesting tool.

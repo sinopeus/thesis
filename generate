@@ -4,6 +4,7 @@ echo `/Users/xavier/bin/texcount -total -inc -char thesis.tex | ack 'in text' | 
 pdflatex ./thesis
 biber ./thesis
 makeindex ./thesis
+makeglossaries ./thesis
 pdflatex ./thesis
 pdflatex ./thesis
 cp thesis.pdf toledo_files/masterpaper.pdf

@@ -21,7 +21,7 @@
 \usepackage{xspace}
 \usepackage{mparhack}
 \usepackage{fixltx2e}
-\usepackage{glossary}
+\usepackage[xindy,toc]{glossaries}
 \usepackage{relsize}
 \usepackage{lipsum}
 \usepackage[eulerchapternumbers,subfig,beramono,eulermath,pdfspacing,listings]{classicthesis}
@@ -36,8 +36,12 @@
 \usepackage{setspace}
 \usepackage{etoolbox}
 \usepackage{listings}
-\input{arsclassica-preamble}
 
+%% initialisation
+\input{arsclassica-preamble}
+\makeglossaries
+
+%% commands
 \newcommand{\Greek}{\fontencoding{LGR}\selectfont}
 \newcommand{\Latin}{\fontencoding{T1}\selectfont}
 \newcommand\fullsc[1]{\scalebox{1.06}[1.09]{\textsc{#1}}}
@@ -45,6 +49,7 @@
   \begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
 \newcommand{\thickhline}{\noalign{\hrule height 0.8pt}}
 \begin{document}
+\include{frontbackmatter/glossary}
 \pagestyle{plain}
 \dominitoc
 
@@ -57,6 +62,7 @@
 \clearpage
 \input{frontbackmatter/abstract}
 \pagestyle{scrheadings}
+\onehalfspacing
 \input{frontbackmatter/preface}
 \input{frontbackmatter/acknowledgements}
 \clearpage
@@ -91,4 +97,5 @@
 \clearpage
 \input{frontbackmatter/appendix}
 \input{frontbackmatter/index}
+\printglossaries
 \end{document}
