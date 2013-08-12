@@ -42,6 +42,7 @@
 \makeglossaries
 
 %% commands
+
 \newcommand{\Greek}{\fontencoding{LGR}\selectfont}
 \newcommand{\Latin}{\fontencoding{T1}\selectfont}
 \newcommand\fullsc[1]{\scalebox{1.06}[1.09]{\textsc{#1}}}
@@ -77,14 +78,22 @@
 \mainmatter
 \pagenumbering{arabic}
 
+\part{Introduction}
+\label{part:introduction}
 \input{chapters/introduction}
 \input{chapters/background}
 \input{chapters/analysis}
+
+\part{Methodology}
+\label{part:methodology}
 \input{chapters/design}
 \input{chapters/implementation}
-\input{chapters/interpretation}
+
+\part{Results \& discussion}
+\label{part:results}
+\input{chapters/results}
 \input{chapters/assessment}
-\input{chapters/further_work}
+% \input{chapters/further_work}
 \input{chapters/conclusion}
 
 % *****************************************************************
@@ -93,9 +102,6 @@
 \backmatter
 \clearpage
 \input{frontbackmatter/bibliography}
-\mainmatter
 \clearpage
 \input{frontbackmatter/appendix}
-\input{frontbackmatter/index}
-\printglossaries
 \end{document}

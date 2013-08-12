@@ -1,11 +1,12 @@
-
 % ************************************************
 \chapter{Background}
 \label{chp:background} %\minitoc\mtcskip
 % ************************************************
 
 \section{Historical background}
+
 \subsection{The language of the papyri}
+\label{sec:lpapyri}
 The papyri began to be studied linguistically not by papyrologists and
 historians, but rather by Biblical scholars and grammarians interested in
 their relevance in the development of koin\^{e} Greek,
@@ -224,7 +225,7 @@ textual tools, the entire package carrying a very interesting price
 tag for the average user — it is free to use, and for the greatest
 part, open source as well.
 
-The databases I have mentioned are quite general in scope; but within
+The databases we have mentioned are quite general in scope; but within
 the domain of classical philology, other specialised projects
 exist. Within the field of papyrology the digital revolution has taken
 a firm foothold. Starting with several separate databases, the field
@@ -275,19 +276,18 @@ the rule-based systems used till then. The concept of generative
 linguistics as espoused by Chomsky, while still possessing as firm a
 foothold as ever in traditional linguistics departments, was pruned in
 favour of data-driven methodology.\footnote{This is an interesting
-controversy with the two camps being represented by Peter Norvig, a
-prominent AI and machine learning researcher, and Noam Chomsky
-himself, respectively. Though this is not the place to treat it
-extensively, we refer to \cite{katz2012}, an interview on artificial
-intelligence with Noam Chomsky, and \cite{norvig2011chomsky}, in which
-Peter Norvig provides an extensive rebuttal.}
+  controversy with the two camps being represented by Peter Norvig, a
+  prominent AI and machine learning researcher, and Noam Chomsky
+  himself, respectively. Though this is not the place to treat it
+  extensively, we refer to \cite{katz2012}, an interview on artificial
+  intelligence with Noam Chomsky, and \cite{norvig2011chomsky}, in which
+  Peter Norvig provides an extensive rebuttal.}
 
-Modern natural language processing is therefore situated on the
-crossroads between various fields: artificial intelligence, computer
-science, statistics, and corpus and computational linguistics. It
-looks to be an exciting field for the coming years as its techniques
-are under constant improvement and ever more present in our daily
-lives.
+Modern natural language processing is situated on the crossroads
+between various fields: artificial intelligence, computer science,
+statistics, and corpus and computational linguistics. It looks to be
+an exciting field for the coming years as its techniques are under
+constant improvement and ever more present in our daily lives.
 
 Most NLP software is designed explicitly with living languages in
 mind; English, being a world language and the international
@@ -305,6 +305,7 @@ is also a treebank, i.e.\ a database of syntactically annotated
 sentences. It contains data for Herodotus and the New Testament.
 
 \section{Concepts and techniques}
+\label{sec:shortconcepts}
 While there is, of course, no room in this thesis for an extended
 course in mathematics or computer science, it is necessary to have
 some background in order to understand the techniques used for the
@@ -314,9 +315,10 @@ artificial intelligence and natural language processing applied in
 this thesis. For the less mathematically inclined reader, formalism
 has been reduced to a minimum; instead, for each concept and
 technique, only a layman's explanation is given. For further
-formalism, see \vref{chap:conceptstechniques}.
+formalism, see \hyperref[chap:conceptstechniques]{appendix A}.
 
 \section{Related work}
+\label{sec:relatedwork}
 Computational approaches to classical philology have been the object
 of increasing interest for the last few years. While none have chosen
 to focus on the language of the Greek papyri specifically, related
@@ -326,6 +328,7 @@ tag Greek have been made, and some have even taken a stab at using
 natural language processing techniques for textual criticism. 
 
 \subsection{Morphological analysis}
+
 \cite{packard1973computer} was the first attempt to create a system
 for the automated morphological analysis of Greek, which he dubbed
 Morph. The author did not aim at creating a theoretically well-founded
@@ -368,7 +371,7 @@ Kosman.
 
 The generative component of the system creates an extensive table of
 possible word forms using stems and suffixes such as provided by
-Morph. The exact system is detailed in \cite{crane1991generating}.
+Morph. The exact system is detailed in \cite{crane1991generating}. *MORE DETAIL*
 
 Morphological parsing is essentially done by looking up forms in this
 word table. This comes at the cost of a lot of space; on the other
@@ -422,20 +425,22 @@ version of the first five books Septuagint is used to establish these
 metrics. This corpus consists of 470K words and can be reduced to a
 set of about 37K unique words. Yet it is unnecessary to restrict
 training to such a corpus if one does not look at n-grams but only at
-stand-alone word forms. The question, then, is: why not use the output
-of Morpheus, the system designed by Gregory Crane and honed over the
-years, as training material? It is freely available as an SQL database
-and contains \textasciitilde1M unique parses which are generated using very large
+stand-alone word forms. 
+
+The question, then, is: why not use the output of Morpheus, the system
+designed by Gregory Crane and honed over the years, as training
+material? It is freely available as an SQL database and contains
+\textasciitilde1M unique parses which are generated using very large
 corpora for verification. The nearest-neighbor metric may be applied
 to these word forms and arguably form a better picture, as well as
 allowing for better extrapolation to data not present in the training
 corpus.
 
-Despite this glaring flaw, the applied method is still laudable in the
-sense that it shows that it is not necessary to create very complex
-rulesets for morphological analysis. With minimal integration of
-linguistic knowledge, we can create a simple heuristic which offers
-reasonable results.
+A last notable result \citep{dik2008,dik2009} in morphological
+annotation we will only mention in passing in this section; it is
+treated in more detail \textit{infra} in \ref{sec:dikwhaling}, as
+it is relevant not only to the problem of morphological analysis, but
+also to that of corpus annotation, our second major goal.
 
 \subsection{Syntactic parsing}
 Efforts to develop a model for syntactic parsing of ancient Greek are
@@ -448,20 +453,33 @@ into training and validation sets. and used to train MaltParser
 \citep{nivre2006maltparser}. Initial performance on the Homeric texts
 is disappointing due to the scarcity of resources for training the
 parser. 44.1\% tokens were given a fully correct labeling, including
-relations and their head word, 60.3\% were correctly assigned a head
-word, and 49.2\% were correctly assigned a relation.
+relations and their head word, 60.3\% were assigned a head
+word correctly, and 49.2\% were assigned a label correctly.
 
 Adjusting the hyperparameters and features of the model manually
 yielded a considerable boost in performance, with accuracy rates
-increasing to 71.72\%, 78.26\% and 81.62\% on the Homeric texts. The
-improved model is then tested on Hesiod, Sophocles and
-Plato. Unsurprisingly, performance on the Hesiodic poems is far better
-than on the Sophocles and Plato, which demonstrates that the barrier
-between textual genres is a serious obstacle for this type of
-parsing. The authors are currently working on expanding their training
-set and testing different systems.
+increasing to 71.72\%, 78.26\% and 81.62\% respective to the
+aforementioned accuracy criteria on the Homeric texts. The improved
+model is then tested on Hesiod, Sophocles and Plato. Unsurprisingly,
+performance on the Hesiodic poems is far better than on the Sophocles
+and Plato, which demonstrates that the barrier between textual genres
+is a serious obstacle for this type of parsing. The authors are
+currently working on expanding their training set and testing
+different systems.
 
-\cite{lee2010dependency} is also interesting 
+Another interesting approach to the problem of parsing ancient Greek
+is found in \cite{lee2010dependency}. The author develops and trains a
+parsing system for the Septuagint which relies on two resources: a
+treebank of the New Testament, made available by PROIEL, and a
+parallel text of the Septuagint in the original Hebrew. The original
+is annotated with cantillation marks, which serve as prosodic markers
+to be observed during public chanting of the religious texts. These
+marks at times facilitate disambiguation of sentence parses for the
+Hebrew text, which the author exploits to improve the Greek
+parses. Remarkable results are achieved: 79.4\% of words are attached
+to their correct head word. Among these, 88.5\% also receive correct
+labels, leading to general accuracy rate of 70.7\%, results which are
+comparable to those attained by \cite{mambrini2012}.
 
 \subsection{Corpus annotation}
 \label{sec:dikwhaling}
@@ -482,7 +500,7 @@ disambiguated to the best of the ability of the authors and a team of
 volunteers.
 
 Their effort is remarkable in the sense that it is the only instance
-of an automatically annotated corpus of ancient Greek I have managed
+of an automatically annotated corpus of ancient Greek we have managed
 to find. While Perseus offers a morphological analysis tool, this tool
 is designed to assist linear reading and generates parses on the fly
 from a database, offering several options if several parses are

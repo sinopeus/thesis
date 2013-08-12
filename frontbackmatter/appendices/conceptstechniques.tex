@@ -1,6 +1,6 @@
 
 \chapter{Concepts and techniques}
-\label{chap:conceptstechniques}
+\label{chp:conceptstechniques}
 \section{Mathematics}
 \label{sec:mathematics}
 
@@ -406,7 +406,41 @@ propagation.
 \end{itemize}
 
 \subsection{Deep learning}
-\label{sec:neuralnetworks}
+\label{sec:deeplearning}
+
+A single-layer neural network is a compact structure that can perform
+complex tasks efficiently; and even with the hardware which was in use
+a decade ago and before, training a neural network was a feasible
+task. Training a deep neural network, which contains several hidden
+layers (hence the term \textit{deep}), is another matter; doing this
+requires the backpropagation algorithm, which until the mid-2000's was
+simply too slow for use on the hardware of the day.
+
+At this point, G. Hinton, who had been one of the first proponents of
+the use of deep networks in the 1980's as a professor at Carnegie
+Mellon University, blew new life into the field he helped create with
+his paper ``Learning multiple layers of representation''
+\citep{hinton2007learning}. He demonstrated that it was possible to
+perform very complex learning tasks relatively efficiently and to
+great effect using this type of network.
+
+The way this is done is by stepping down from the traditional approach
+where neural networks are given a certain amount of classified
+examples and training them to classify observations based on these;
+rather, the goal is now to train \textbf{generative networks}, i. e.,
+networks that can randomly generate possible observations. Examples
+given to the network do not need to be classified in advance; instead,
+given an observation, the network's parameters are adjusted to
+maximise the likelihood of data of its kind being
+generated. 
+
+A classic task for this type of network is handwritten digit
+recognition; a network is trained by feeding it a large amount of
+examples of handwritten digits. For each example, the parameters are
+adjusted; after a sufficiently large amount of examples, the network
+is capable of generating handwritten digits itself, in a vast number
+of variations.
+
 
 % \section{Principles of statistical natural language processing} 
 % \label{sub:principles-nlp}

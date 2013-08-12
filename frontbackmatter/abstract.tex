@@ -22,24 +22,27 @@ corpora voor het Oudgrieks. Grote hoeveelheden tekst zijn ondertussen
 digitaal beschikbaar, maar door gebrek aan mankracht is het niet
 mogelijk deze handmatig te analyseren. Een betrouwbare methode om dit
 probleem automatisch aan te pakken, al zou deze niet perfect zijn, zou
-een stap in de goede richting zijn.
+een stap in de goede richting zijn. In het bijzonder een pijnpunt is
+dat dit gebrek aan geannoteerde corpora het ook zeer moeilijk maakt om
+dit soort methode te ontwikkelen.
+
 % problem statement & approach
-In dit werk trachten we een dergelijke methode te ontwikkelen met
-behulp van spitstechnieken uit de artificiële intelligentie en bij
-wijze van \textit{case study} toe te passen op een corpus
-gedigitaliseerde documentaire papyri. Deze methode berust op een
-implementatie van een zgn. artificieel neuraal netwerk, d.i. een
-wiskundig model dat in staat is om patronen te herkennen en te
-leren. We passen de methode beschreven in \cite{collobert-2011} toe op
-het Oudgrieks.
+In dit werk trachten dit pijnpunt te omzeilen door en een dergelijke
+methode te ontwikkelen met behulp van spitstechnieken uit de
+artificiële intelligentie en bij wijze van \textit{case study} toe te
+passen op een corpus gedigitaliseerde documentaire papyri. Deze
+methode berust op een implementatie van een zgn. artificieel neuraal
+netwerk, d.i. een wiskundig model dat in staat is om patronen te
+herkennen en te leren. We passen de methode beschreven in
+\cite{collobert-2011} toe op het Oudgrieks.
 
 Het leerproces van dit netwerk wordt opgedeeld in twee fasen. In een
 eerste wordt gebruik gemaakt van een groot ongeannoteerd corpus om via
-een eenvoudig criterium een wiskundig model op te bouwen dat elk woord
-kadert binnen het taalgebruik in het geheel.  Dit model kent kansen
-toe aan reeksen woorden naargelang die al dan niet 'correct' zijn door
-te schatten of gelijkaardige reeksen kunnen voorkomen in het
-corpus. 
+een eenvoudig criterium een wiskundig model op te bouwen dat woorden
+kan kaderen binnen het taalgebruik in het geheel.  Dit model kent
+kansen toe aan reeksen woorden al naargelang die al dan niet 'correct'
+zijn door te schatten of gelijkaardige reeksen kunnen voorkomen in het
+corpus.
 
 Een tweede fase schakelt over op een kleiner, geannoteerd corpus. Na
 het defini\"eren van een wiskundige voorstelling voor morfologische en

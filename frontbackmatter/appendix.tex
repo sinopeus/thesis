@@ -1,15 +1,17 @@
-% %************************************************
+% % ************************************************
 % \appendix
 % \chapter{Appendix}
 % \label{chap:appendix}
-% %************************************************
+% % ************************************************
+\part{Appendix}
+\mainmatter
 \appendix
 \pretocmd{\chapter}{%
   \clearpage
   \pagenumbering{arabic}%
   \renewcommand*{\thepage}{\thechapter-\arabic{page}}%
 }{}{}
-
 \input{frontbackmatter/appendices/conceptstechniques}
 % \input{frontbackmatter/appendices/neuralnetwork}
 \input{frontbackmatter/appendices/sourcecode}
+\input{frontbackmatter/appendices/traininglog}

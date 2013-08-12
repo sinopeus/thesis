@@ -1,96 +1,28 @@
 %************************************************
-\chapter{Introduction} 
+\chapter{Thesis} 
 \label{chp:introduction}
 %\minitoc\mtcskip
 %************************************************
+\section{Statement}
 
+The following work deals with the application of techniques from the
+field of machine learning and natural language processing to ancient
+Greek. We intend to show that it is possible to use these techniques
+to generate linguistic annotation in an accurate and efficient manner.
 
-\section{Thesis statement}
+In order to achieve this, we have implemented a state-of-the-art machine
+learning architecture for natural language processing, proposed in
+\cite{collobert2008,collobert-2011}. The chosen approach makes use of
+raw Greek text to counterbalance the relative scarcity of annotated
+ancient Greek corpora, which are essential in most natural language
+processing systems.
 
-The following work is concerned with the application of techniques
-from the field of artificial intelligence and machine learning to an
-ancient Greek corpus, namely that of the documentary papyri.
-
-It intends to prove that it is possible to use these techniques, which
-are generally applied to English and other modern languages, to
-generate linguistic annotation for this corpus in an accurate and
-efficient manner.
-
-In order to achieve this, we have implemented the architecture proposed
-in Collobert \& Weston 2008 and Collobert et al. 2011. This
-architecture relies on cutting-edge techniques in machine learning and
-offers the possibility of using data devoid of linguistic annotation
-as part of the training corpus. After implementing this architecture,
-we took a sample from fully tagged texts and used it to check the
-general accuracy of the system. We have done the same for the papyri,
-albeit manually and using a smaller sample due to the fact that there
-is no preexisting annotation for the corpus of documentary papyri.
-
-% The basic idea is the one proposed in two articles by H. Dik and R.
-% Whaling, [\citeauthor{dik2008}, \citeyear{dik2008} and
-% \citeyear{dik2009}], in which they document their method for
-% semi-automatically tagging the Perseus project's texts under their own
-% framework, PhiloLogic. They start with a database of analysed forms
-% and a series of tagged texts which they use as initial data to train a
-% decision tree tagger, TreeTagger, developed by Helmut Schmid at the
-% University of Stuttgart, a tool which despite being developed in 1995
-% has aged well as far as performance is concerned. They achieved
-% remarkable accuracy: with refinements to the training data they
-% achieved 96.2\% accuracy during tests on the original training data
-% and 91\% accuracy on new data, a result which compares quite favorably
-% when compared to TreeTagger's 97\% accuracy when used on German
-% newspaper articles considering the high complexity of ancient Greek
-% and the variety of styles of ancient Greek literature.
-
-% It occurred to me that this might be a great method for processing the
-% corpus of papyri with a relatively small effort for a high payoff;
-% using data from the Perseus and PROIEL projects, it could be possible
-% to train TreeTagger for both morphology and syntax, apply the
-% resulting parameters to the corpus and thus for the greatest part
-% obviate the need for manual tagging.  Given the extent of the corpus
-% (about 50,000 texts containg almost 4,500,000 words), achieving even
-% 85\% accuracy would reduce the amount of untagged words to 675,000,
-% many of which I would expect to be proper names or morphologically
-% `erroneous' forms as are often found in the papyri, data which could
-% itself undergo additional processing, though that is a task not easily
-% automated en rather beyond the scope of this work.  \footnote{As I set
-% out to verify the originality of my thesis, I found that this
-% statistical approach has been used before for textual criticism!
-% \textit{Vide} \citet{mimno2009}, an abstract of which may be found at
-% \url{http://people.cs.umass.edu/~wallach/publications/mimno09computational.txt}.}
+We evaluate our method by measuring the absolute performance of the
+model against a validation corpus and executing a case study on a
+freely available digital corpus of documentary papyri.
 
 \section{Motivation}
-
-%% papyrological & historical
-The study of the language of the papyri has in the past thirty years
-seen little evolution until the recent appearance of Evans and Obbink's
-\textit{The Language of the Papyri} \citep{lpapyri}, which has placed
-the subject in the spotlight again. Twentieth-century scholarship on the
-topic, though still useful for those interested in the study of the
-papyri for historical purposes, is either antiquated, limited in scope
-or incomplete (see \textit{infra}). Despite this, the papyri are
-useful source material for the history and evolution of the Greek
-language, as they contain not only official texts but private
-documents as well, whose linguistic features and peculiarities have
-the potential to foster new insights into the nature of colloquial
-Greek. Such a corpus could be a boon to scholars interested in the
-Greek of the papyri, as it would facilitate, for instance, the
-creation of linguistically sound grammars and lexica.
-
-%% linguistic
-Furthermore, and perhaps more importantly, applying the same
-methodology to other Greek texts offers new linguistic
-perspectives. The largest corpus of ancient Greek, the \textit{Thesaurus
-Linguae Graecae}, contains more than a hundred million words.  A system
-is in place which offers morphological and lemmatic analysis in a
-rudimentary form, but this cannot serve as a full linguistic
-corpus. Using manual methods to tag this corpus is rather prohibitive
-due to its size, but using computational methods, we can make an
-attempt at offering a relatively complete linguistic corpus for
-ancient Greek.
-
-%% methodological
-We also wish to demonstrate the potential of a methodology based on
+We wish to demonstrate the potential of a methodology based on
 computational techniques for the study of the classical languages. The
 field has seen a move towards digitalisation in the past half century,
 but a lot of potential is left untapped. Steps in the right direction
@@ -103,15 +35,41 @@ computational methods for Greek linguistics will hopefully serve as
 further proof of their potential for other branches of classics, such
 as stylometry, authorship verification, textual criticism, and more.
 
-% \section{Objective}
-% Our central objective is twofold: we want to develop a statistical
-% model of Greek which enables us to perform automated linguistic
-% analysis, and we want to use this model to annotate a corpus of
-% documentary papyri. Along with this, we want to demonstrate that
-% quantitative techniques commonly used in natural language processing
-% can be successfully applied to ancient Greek, and thus encourage the
-% development of other tools of this kind.
+Specifically, we want to apply such techniques to the problem of
+linguistic annotation in order to open new perspectives on the
+structure and evolution of the Greek language. Massive amounts of
+source material are now digitally available: resources such as the
+\textit{Thesaurus Linguae Graecae} and the Perseus project provide us
+with dozens of millions of words. What has been lacking is the
+systematic development of large annotated corpora. While systems have
+been put in place which offer morphological and lemmatic analysis in a
+rudimentary form, this cannot serve as a full linguistic corpus; of
+these, only two of note exist, which together number about half a
+million words and thus are relatively small compared to the vast
+textual repository of the TLG. We need to expand this type of resource
+to many more texts. The problem is that using manual methods to tag
+the large Greek corpora is rather prohibitive due to their size. By
+making use of computational methods, we can make an attempt at
+offering a relatively complete linguistic corpus for ancient Greek.
 
+The chosen case study, the annotation of a corpus of documentary
+papyri, is meant to evoke the possibilities afforded by these methods
+by directly applying them to a corpus which has not been subjected to
+a modern linguistic study. The question of the language of the papyri
+has in the past thirty years seen little evolution until the recent
+appearance of \cite{lpapyri}, which has placed the subject in the
+spotlight again. Twentieth-century scholarship on the topic, though
+still useful for those interested in the study of the papyri for
+historical purposes, is either antiquated, limited in scope or
+incomplete; for more on this, see section \vref{sec:lpapyri}. 
+
+Despite this, the papyri are useful source material for the history
+and evolution of the Greek language: the corpus consists of more than
+4.5 million words, spanning more than a thousand years and many
+different discourse registers. Annotating this corpus would be a boon
+to scholars interested in the Greek of the papyri and Greek historical
+linguistics in general, as it would facilitate the creation of
+linguistically sound grammars and lexica.
 
 \section{Contributions}
 
@@ -119,25 +77,35 @@ as stylometry, authorship verification, textual criticism, and more.
 
 We begin by giving an overview of the background for this thesis.
 First the historical and linguistic background of the question is
-handled, expounding on previous efforts to study the grammar of the
-papyri and to apply the techniques of corpus linguistics to the Greek
-language in general. Second comes a technical section, describing a
-set of core concepts and techniques which are relevant to the task at
-hand and are necessary to understand the underpinnings of the applied
-methodology.
+handled in chapter \vref{chp:background}. We give a historical overview of
+previous efforts to study the grammar of the papyri, as well as of the
+applications of the techniques of corpus linguistics to the Greek
+language in general.
 
-This is followed by an analysis of the objectives and requirements, as
-well as a general (that is, only described in broad strokes, without
-providing full details of the algorithms and implementation)
-methodology. Correspondingly, a chapter is dedicated to the general
-algorithmic design and structure of our program, followed by a chapter
-delving into the actual implementation, which provides more details on
-the choice of programming language, the availability of the source
-code, the technical requirements for running our code, etc.
+Secondly, in section \vref{sec:shortconcepts}, we illustrate critical
+concepts and techniques for the task at hand which are necessary to
+understand the underpinnings of the applied methodology. Formalism is
+kept to a minimum; for that, we refer to appendix
+\vref{chp:conceptstechniques}.
 
-We then offer an interpretation and a critical assessment of our
-program's output. Special attention is, of course, given to the
-linguistic accuracy of our results. A final chapter is dedicated to an
-overview of further possibilities for research in this field and of
-possible applications outside papyrology and to the field of Greek
-linguistics in general.
+We proceed with an overview of directly related work in
+section \vref{sec:relatedwork}. A problem statement and proposed solution is
+offered in chapter \vref{chp:analysis} with specific reference to the
+scholarly context; jointly, we extend a brief overview of the
+possibilities the proposed method offers.
+
+The theory behind the natural language processing architecture, as
+well as a method to represent Greek morphological annotations
+mathematically are illustrated in chapter \vref{chp:design}. The
+implementation is detailed in chapter \vref{chp:implementation}: we provide
+details on the choice of programming language, the availability of the
+source code, the technical requirements for running our code, etc. The
+source code is found in appendix \vref{chp:sourcecode}.
+
+We detail our results in chapter \vref{chp:results} with a critical
+assessment in chapter \vref{chp:assessment}, where we state our
+contribution. Section \vref{sec:further_work} of this chapter is
+specifically dedicated to an overview of future avenues for research
+on this type of method. Finally, we summarize our findings in chapter
+\vref{chp:conclusion}.
+

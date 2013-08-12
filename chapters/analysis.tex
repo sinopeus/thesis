@@ -32,7 +32,7 @@ model to produce a morphological analysis, which produces not only the
 part-of-speech \textit{stricto sensu}, but all concomitant information
 as well: voice, tense, mood, case, gender, number, person, \ldots
 
-\subsubsection{Objective}
+\subsubsection{Benchmark}
 The Perseus word study tool is currently capable of analysing any
 Greek word form morphologically and offers a limited degree of
 disambiguation; nonetheless, no exact quantification exists of the
@@ -60,7 +60,7 @@ parsing}, which aims to produce full syntactic analyses of entire
 sentences, including \textbf{parse trees}, which give a graphical
 representation of their syntactic structure.
 
-\subsubsection{Objective}
+\subsubsection{Benchmark}
 Our closest competitor for this task is \cite{mambrini2012}, as 
 the method employed by \cite{lee2010dependency} to attain high parsing
 accuracy is unfeasible. We stipulate that \cite{mambrini2012} goes
@@ -90,46 +90,16 @@ hand, and we cannot but lower our standards for accuracy if we wish to
 proceed in an automated way. Nevertheless, we aim to provide
 limited inferences for this type of token.
 
-\subsubsection{Objective}
+\subsubsection{Benchmark}
 We can perform only very limited testing for this task, since there is
-no extant annotation for the object corpus. Instead, we only evaluate
-the accuracy of our model when applied in an unsupervised fashion to a
+no extant annotation for the object corpus. Instead, we evaluate the
+accuracy of our model when applied in an unsupervised fashion to a
 test set selected from the papyri. To supplement this, we plan to
 distribute this corpus in order to allow for manual verification by
 the philological community. Our end goal is to create an annotated
 version of the corpus in XML format, encoded in Unicode and following
 the TEI standard for XML documents.
 
-\section{Methodology}
-In general, a language model is created by choosing a modeling
-criterium and applying it to a a large set of observations. These
-observations may be raw word sequences or annotated word sequences,
-depending on the chosen criterium. Each observation is coupled with an
-adjustment of the language model to maximise the score for that
-particular observation type. The larger the set, the better, as each
-observation makes the model a better reflection of linguistic reality.
-
-We choose a two-phase training method based on deep neural networks,
-which is explained and illustrated in further detail and more
-concretely in subsequent chapters.
-
-The first phase uses a large unlabelled corpus to create a simple
-probabilistic model using a little linguistic knowledge as possible:
-the goal is to assign scores to word sequences that are proportional
-to the probability of these sequences being `correct', i. e. likely to
-appear in real linguist data. Maximising these scores is achieved by
-corrupting data from the observation corpus; the model is then
-adjusted to give the real observation a higher score than the
-corrupted observation.
-
-The second phase is implemented on top of the first and consists in
-using a new observation corpus, this time equipped with
-annotation. These annotations are transformed into vectors with a set
-number of components, which each represent a linguistic feature. The
-parameters of the model are then adjusted to fit the behavior of the
-observation corpus. The scores returned by the model are now in vector
-form, each component being a score similar to the one developed in the
-first phase.
 
 % The second major obstacle is the ancient Greek language itself. Though
 % it has lost a great deal of morphological complexity in its evolution
@@ -165,24 +135,34 @@ first phase.
 % amounts of unlabeled data which are then submitted to analysis. The
 % exact approaches chosen are explained in detail in the next chapter.
 
-\section{Context}
+\section{Research context}
+
+\subsection{State of the question}
+
+While we can see from \ref{sec:relatedwork} that natural language
+processing for ancient Greek seems to have garnered some attention, we
+can make several observations of note on the current state of research.
 
 The problem of Greek morphological analysis can essentially be
 considered solved for individual words, as demonstrated by the Perseus
 word study tool; contextual disambiguation, on the other hand, has
-only been attempted once with mitigated success in
+only been attempted once with some success in
 \cite{dik2008,dik2009}. The idea of designing a system to
 automatically process ancient Greek as envisioned in this work was
 originally inspired by this approach.
 
-The authors used a purely supervised method for tagging a corpus of
-classical Greek. They trained H. Schmid's TreeTagger using a
-relatively small corpus of annotated Greek and proceeded to tag their
-corpus with it, offsetting the relatively large error rate with manual
-work done by graduate students at the University of Chicago. This
-enabled the authors to annotate the corpus in much less time than
-would have been necessary would the annotation process have been
-executed manually.
+Extending this methodology to syntactic analysis is a
+\textit{desideratum}. There are only two projects concerned with
+treebanks or databases of semantically annotated Greek. The Perseus
+project has developed a dependency treebank for Latin and ancient
+Greek [decribed in \cite{bammancrane2011}, available at
+\url{http://nlp.perseus.tufts.edu/syntax/treebank/}]. It is an
+admirable effort, but limited in scope and containing mainly poetry.
+The project seems to be lacking manpower and has lost steam since its
+inception, as the last update dates from 2012, more than a year ago at
+the time of this writing.
+
+The PROIEL project \citep{proiel}
 
 An early prototype of this thesis attempted to use similar supervised
 methods to annotate the corpus of the papyri. Despite high
@@ -192,22 +172,38 @@ of any NLP system is to offer it more training data. Feeding 400.000
 words as training data to the Stanford POS Tagger resulted in a measly
 60\% accuracy on a validation set held out from the training corpus.
 
-Recent literature in the field revealed that state-of-the-art results
-were being achieved using a combination of unsupervised and supervised
+It is key to observe that we have touched a sore point with this
+result: there is a deadlock between the development of extensive
+annotated corpora and the development of natural language processing
+tools for ancient Greek. The absence of sufficiently large and diverse
+annotated corpora is a severe impediment to the development of such
+tools; at the same time, these tools, due to lack of philological
+manpower, are necessary for the extension and improvement of such
+corpora! Breaking this deadlock is quintessential for further progress.
+
+\subsection{Proposed solution}
+
+We propose to do so by adopting alternative methodologies. Recent
+literature in the field of machine learning methods for English
+natural language processing revealed that state-of-the-art results
+can be attained using a combination of unsupervised and supervised
 learning techniques, dubbed semi-supervised approaches. Unsupervised
 approaches can make use of unannotated data as a preparation for
-supervised training, and work by trying to divide the raw data into
-clusters on the basis of various criteria. Notably, R. Collobert and
-others developed a versatile architecture which achieved high accuracy
-on several NLP tasks and required a relatively low amount of
-optimisation \citep{collobert2008,collobert-2011}. Accuracy rates for
-POS tagging reached up to 97.20\%, while for chunking, scores of up to
-93.63\% were achieved; state-of-the-art results were also achieved for
-named entity recognition and semantic role labeling, which we will not
-considere here. This is an impressive performance: most of the
-architecture is actually shared among all tasks and the majority of
-the parameters of the system are inferred through unsupervised
-methods.
+supervised training, and work by trying to embed words in a vector
+space relative to other words according to their syntactic properties.
+
+Notably, \citeauthor{collobert2008} developed a versatile architecture
+which achieved high accuracy on several NLP tasks and required a
+relatively low amount of optimisation
+\citep{collobert2008,collobert-2011}. The architecture was originally
+applied to a diverse array of NLP tasks for English. Accuracy rates
+for POS tagging reached up to 97.20\%, while for chunking, scores of
+up to 93.63\% were achieved; state-of-the-art results were also
+achieved for named entity recognition and semantic role labeling,
+which we will not considere here. This is an impressive performance:
+most of the architecture is actually shared among all tasks and the
+majority of the parameters of the system are inferred through
+unsupervised methods.
 
 Given that far larger amounts of raw textual material are available
 for ancient Greek, it seems that this kind of technique is suited to
@@ -216,8 +212,10 @@ experiment with the Stanford POS Tagger is much smaller and limited
 than corpora like that offered by the Perseus project (about 7M words)
 and the TLG (about 109M words at last count, though these are not
 freely available). Making use of this untapped resource is
-desirable. \hyperref[chp:design]{Chapter \ref*{chp:design}} is
-dedicated to an overview of the architecture; the approach followed in
+desirable. 
+
+\hyperref[chp:design]{Chapter \ref*{chp:design}} is dedicated to an
+overview of the architecture; the approach followed in
 \citet{collobert-2011} and \citet{turian2010word} is respected with
 amendments and simplifications where needed in order to accommodate
 for some characteristics of Greek (in particular the very high
@@ -225,21 +223,7 @@ complexity of its morphology requires a subtler approach). The exact
 implementation of the system is left for
 \hyperref[chp:implementation]{chapter \ref*{chp:implementation}}.
 
-Most resources do provide morphological analysis, but there are very
-few projects concerned with treebanks or databases of semantically
-annotated Greek. The Perseus project, for instance, has developed a
-dependency treebank for Latin and ancient Greek. It is an admirable
-effort, but limited in scope and containing mainly poetry, which is in
-itself valid training data, but certainly not sufficient training data
-if we want our system to be able to analyse large amounts of prose.
-What's more, the project seems to be lacking manpower and has lost
-steam since its inception, the last update dates from 2012, more than
-a year ago at the time of this writing.
-
-
-\section{Motivation}
-
-** WORK IN PROGRESS **
+\section{Possibilities}
 
 \subsection{Corpus-based grammars and lexica}
 \label{sec:corpusbasedgrammars}

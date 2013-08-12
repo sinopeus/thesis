@@ -15,7 +15,7 @@ runs in an interpreter and is slower than compiled languages such as C
 or Java, but this is remedied by the large amount of available
 libraries designed to circumvent this issue. For computationally
 demanding numerical problems such as are frequently found in machine
-learning, we can use libraries such as Numpy, Scipy, Theano, ... These
+learning, we can use libraries such as NumPy, SciPy, Theano, ... These
 offer implementations of frequently used numerical algorithms written
 in C, which are compiled during the execution of the program and cached. 
 
@@ -30,17 +30,32 @@ capabilities to preceding versions.
 \subsection{Source code availability}
 \label{sec:sourcecode}
 The source code is available at
-\url{https://github.com/sinopeus/thrax}. The core numerical
-algorithms, encapsulated in Theano graphs, are based off Joseph
-Turian's implementation of an unsupervised model builder in Python
-2. I rebuilt the entire program surrounding this numerical component
-to fit my needs: the result is a documented, cleaned up and overall
-improved program. I also added functionality for the supervised phase
-to complete the picture. The program's configuration system was
-enhanced and is now easily editable by hand as well as
+\url{https://github.com/sinopeus/thrax}. The core structure and
+numerical algorithms, encapsulated in Theano graphs, are based off
+Joseph Turian's implementation of this unsupervised model builder in
+Python 2. I rebuilt the entire program surrounding this numerical
+component to fit my needs: the result is a documented, cleaned up and
+overall improved program. I also added functionality for the
+supervised phase to complete the picture. The program's configuration
+system was enhanced and is now easily editable by hand as well as
 programmatically. With basic knowledge of programming, it is possible
 to train a network for any given NLP task by modifying the
 configuration.
+
+\subsection{Requirements}
+\label{sec:requirements}
+
+The program was written for Python 3.3.2 using development versions of
+the following libraries:
+
+\begin{itemize}
+\item NumPy: 1.8.0, \url{https://github.com/numpy/numpy};
+\item SciPy: 0.13.0, \url{https://github.com/scipy/scipy};
+\item Theano: 0.6rc3, \url{https://github.com/Theano/Theano}.
+\end{itemize}
+
+Each of these libraries has its own dependencies, which, evidently,
+the user desirous to replicate our setup should install.
 
 \section{Implementing the network efficiently}
 \label{sec:implementation}
@@ -110,7 +125,8 @@ column. In this manner, we obtain a correctly sized output vector with
 minimal computational overhead. An additional advantage is, due to the
 properties of matrix multiplication, we can easily apply the exact
 same operation to a complete batch such as described in
-\ref{sec:batch}.
+\ref{sec:batch} by repeating this operation over each row of the batch
+tensor.
 
 \subsection{Optimising computation with Theano}
 \label{sec:theano}
@@ -278,6 +294,23 @@ hyperparameters are used, except that we modify our output size
 according to the task at hand by giving it the same dimensions as the
 necessary output vector.
 
+After the architecture (model and networks) is built, it is
+serialised; that is to say, the internal state of the architecture
+during training time is stored to disk. Serialisation allows us to
+immediately load the model into memory during the execution of our
+tagging program. When tagging, we use the architecture in a read-only
+manner, i.e. we only predict and do not adjust parameters any more.
+
+Tagging is essentially a process of probabilistic prediction; text
+windows are passed through each of the networks, which return a
+prediction of the expected features of the central words in these
+windows in the form of an output vector. For tagging a sentence with
+$n$ words, we create $n$ text windows and use these as input. Each
+window generates an output vector; we pick the component with the
+maximum score and attribute the corresponding tag to the central word
+in the original text window. This process is iterated over every
+sentence in the target text. 
+
 \subsection{Preparing the object corpus}
 \label{sec:createmodel}
 The corpus is provided by \texttt{papyri.info} in EpiDoc XML format
@@ -300,5 +333,4 @@ Once the corpus is preprocessed, we can proceed to tagging. The method
 described in the previous chapter is used. We tag one papyrus at a
 time and then write the tagging output to disk following the directory
 structure of the \texttt{papyri.info} repository. We repeat the process
-for every papyrus. After we are done, we convert all files back to
-EpiDoc.
+for every papyrus. 

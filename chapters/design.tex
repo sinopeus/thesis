@@ -3,70 +3,65 @@
 \label{chp:design} % \minitoc\mtcskip % %
 % ************************************************
 
-\section{Creating a language model}
-\label{sec:training-nn}
+\section{Overview}
+In general, a language model is created by choosing a modeling
+criterium and applying it to a a large set of observations. These
+observations may be raw word sequences or annotated word sequences,
+depending on the chosen criterium. Each observation is coupled with an
+adjustment of the language model to maximise the score for that
+particular observation type. The larger the set, the better, as each
+observation makes the model a better reflection of linguistic reality.
 
-\subsection{Deep networks for natural language modeling}
-\label{sec:deepnetworks}
+We choose a two-phase training method and exclusively follow the
+natural language processing architecture based on deep neural
+networks\footnote{Details on this type of network may be found in
+\vref{sec:deeplearning}.} described in \cite{collobert-2011}; all
+theories and techniques described are their work and ideas, except for
+the specific adaptations made to accommodate the system to ancient
+Greek. We give a summary overview of the architecture as described in
+the paper; subsequent sections provide more detail and specific
+modifications necessary to process ancient Greek.
 
-Neural networks as a technique are anything but new; the general
-concepts underlying them date from more than half a century ago, and
-thousands of applications have been found that make use of them. A
-single-layer neural network is a compact structure that can perform
-complex tasks efficiently; and even with the hardware which was in use
-a decade ago and before, training a neural network was a feasible
-task. Training a deep neural network, which contains several hidden
-layers (hence the term \textit{deep}), is another matter; doing this
-requires the backpropagation algorithm, which until the mid-2000's was
-simply too slow for use on the hardware of the day.
+The first phase uses a large unlabelled corpus to create a simple
+probabilistic model using a little linguistic knowledge as possible:
+the goal is to assign scores to word sequences that are proportional
+to the probability of these sequences being `correct', i. e. likely to
+appear in real linguistic data. Maximising these scores is achieved by
+corrupting data from the observation corpus; the model is then
+adjusted to give the real observation a higher score than the
+corrupted observation.
 
-At this point, G. Hinton, who had been one of the first proponents of
-the use of deep networks in the 1980's as a professor at Carnegie
-Mellon University, blew new life into the field he helped create with
-his paper ``Learning multiple layers of representation''
-\citep{hinton2007learning}. He demonstrated that it was possible to
-perform very complex learning tasks relatively efficiently and to
-great effect using this type of network.
-
-The way this is done is by stepping down from the traditional approach
-where neural networks are given a certain amount of classified
-examples and training them to classify observations based on these;
-rather, the goal is now to train \textbf{generative networks}, i. e.,
-networks that can randomly generate possible observations. Examples
-given to the network do not need to be classified in advance; instead,
-given an observation, the network's parameters are adjusted to
-maximise the likelihood of data of its kind being generated.
-
-A classic task for this type of network is handwritten digit
-recognition; a network is trained by feeding it a large amount of
-examples of handwritten digits. For each example, the parameters are
-adjusted; after a sufficiently large amount of examples, the network
-is capable of generating handwritten digits itself, in a vast number
-of variations.
-
-Applying the method to natural language processing requires the
-development of a structured internal representation for each word (or
-each letter, but we will consider words).  If we choose to designate
-each word by a fixed-length vector with $n$ components, these vectors
-define how the word is embedded within an $n$-dimensional vector
-space; hence, these vectors are termed
-\textbf{embeddings}.\footnote{To avoid confusion: note that the
+This method creates a structured internal representation for each word
+in vector form, which define how the word is embedded within an
+$n$-dimensional vector space; hence, these vectors are termed
+\textbf{embeddings}. (\textit{Ne sit confusio}: note that the
 components of this feature vector do not necessarily show a one-on-one
-correspondence with linguistic features!}
+correspondence with linguistic features.)
 
-The unified architecture proposed by Collobert et al. uses these
-embeddings, which are tailored during training using a huge amount of
-natural language data, to initialise networks which will be trained in
-a supervised manner. These networks operate in the same manner and
-make use of the same embeddings, with the difference that they are
-task-specific and trained on classified examples. Performance
-improvements are due to the fact that at this stage, most of the
-general learning is actually already done and we are applying
-classification to certain clusters in the vector space, which allows
-the model to make more accurate inferences when classifying rare words
-or phrases.
+The second phase is implemented on top of the first. The embeddings
+created in the first phase are used to initialise new networks for
+each of the tasks we want to train. We then use a new observation
+corpus, this time equipped with annotation. We convert these
+annotations to a vector form, with each vector component representing
+a linguistic feature. The parameters of the network are then further
+adjusted to fit the behavior of the observation corpus. The scores
+returned by the model are now in vector form, each component being a
+score similar to the one developed in the first phase.
 
-\subsection{Network structure}
+Performance improvements are expected due to the fact that at this
+stage, most of the general learning is actually already done and we
+are applying classification to certain clusters in the vector space,
+which allows the model to make more accurate inferences when
+classifying rare words or phrases.
+
+The model can then be used to generate annotation for unlabelled
+sentences. Given a sequence centered around a word, a vector
+containing scores for each possible tag for this central word is
+returned. Prediction is handled by concatenating this type of output
+for entire sentences and applying the Viterbi algorithm [described
+formally in \ref{sec:viterbi}] to the resulting matrix.
+
+\section{Network structure}
 \label{sec:networkstructure}
 
 Deep networks contain multiple layers which are sequentially trained;
@@ -74,7 +69,7 @@ the input of a layer is weighted and passed on to the following layer,
 which may be either an output layer or a hidden layer. Several layers
 are stacked in this manner.
 
-\subsubsection{Hyperparameters}
+\subsection{Hyperparameters}
 
 Before constructing a network, we need to decide on a set of
 hyperparameters that will influence the parameters of the neural
@@ -106,7 +101,7 @@ approach. Figure from
 \cite[2499]{collobert-2011}.} \label{fig:nnstructure}
 \end{figure}
 
-\subsubsection{Lookup table layer} The lookup table itself is a matrix
+\subsection{Lookup table layer} The lookup table itself is a matrix
 with $d_{wrd}$ rows and $D$ columns. Its initial construction is as
 follows: given a frequency table, the $D$ most common words are chosen
 and placed in order. Each word is now assigned an index according to
@@ -148,7 +143,7 @@ purely numerical form of text window embeddings by choosing a somewhat
 larger text window size and considering the central column in such
 windows in its full context, both prior and posterior.
 
-\subsubsection{Linear layer}
+\subsection{Linear layer}
 A linear layer takes a fixed size vector and performs a linear
 operation on it: the dot product of this vector with a set of
 parameters $W$ is computed and a bias added. Formally, given the
@@ -164,7 +159,7 @@ representing the amount of hidden units in layer $l$. Linear layers
 transform their input and several such layers can be stacked, similar
 to how linear functions can be composed.
 
-\subsubsection{Hard hyperbolic tangent layer}
+\subsection{Hard hyperbolic tangent layer}
 
 If we intend for our network to be able to model a highly nonlinear
 system such as language, we need to introduce nonlinearity
@@ -193,7 +188,7 @@ We approximate this function using the hard hyperbolic tangent, defined for a sc
 We can define this function for vector inputs in the same manner
 as for the hyperbolic tangent function.
 
-\subsubsection{Scoring layer}
+\subsection{Scoring layer}
 
 The final layer. This is actually simply a linear layer which is
 designed to output a vector containing as many elements as there are
@@ -201,6 +196,7 @@ possible tags for the task at hand. Each output element is a score
 which reflects the probability of the corresponding tag for the
 central word in the input window.
 
+\section{Phases of learning}
 \subsection{Unsupervised learning}
 \label{sec:unsupervised}
 
@@ -218,9 +214,11 @@ In effect, we want the non-corrupted window to achieve a higher score
 than the corrupted window. We can achieve this by adjusting the
 parameters $\theta$ such that the pairwise ranking of $x$ and $w$ is
 minimal, since this implies that $f_{\theta}(x)$ must yield a higher
-score than $f_{\theta}(x^{(w)})$. Summing this operation over all
-possible pairs $(x, w)$ and defining a mapping from the parameters
-$\theta$ to this sum, we obtain a general cost function:
+score than $f_{\theta}(x^{(w)})$.
+
+Summing this operation over all possible pairs $(x, w)$ and defining a
+mapping from the parameters $\theta$ to this sum, we obtain a general
+cost function:
 \begin{equation}
   \theta \mapsto \sum\limits_{x \in X} \sum\limits_{w \in D} r(\theta, x, w)
 \end{equation}
@@ -228,17 +226,17 @@ Where $X$ is the set of possible windows of size $wsz$ and $D$ the chosen
 dictionary. Minimizing this function with respect to $\theta$ will
 ensure the relevant parameters (the embeddings and the first two
 layers) are tuned so that our ranking function $f_{\theta}$ yields
-accurate scores. Using this simple criterion, we have a method for
-crafting a set of parameters that contains a consistent structured
-internal representation of the training data. Despite the relatively
-simplicity of the criterion, the huge amounts of parameters results in
-a very taxing and lengthy computation. Furthermore, there is no
-guarantee that the cost function has a single minimum with respect to
-$\theta$; a full grid search would be necessary, which necessitates
-vast amounts of computing time. 
+accurate scores. 
 
-% \subsubsection{Curriculum learning}
-% \label{sec:curricula}
+Using this simple criterion, we have a method for crafting a set of
+parameters that contains a consistent structured internal
+representation of the training data. Despite the relatively simplicity
+of the criterion, the huge amounts of parameters results in a very
+taxing and lengthy computation. Furthermore, there is no guarantee
+that the cost function has a single minimum with respect to $\theta$;
+a full grid search would be necessary, which necessitates vast amounts
+of computing time.
+
 Instead, the process is sped up using \textbf{curriculum learning};
 the basic idea of this technique is analogous to the learning process
 children are put through in school: instead of starting their
@@ -272,21 +270,14 @@ in learning will already return excellent scores and will only
 necessitate minor adjustments to the parameters, while new
 observations can be fit into the general picture more easily.
 
-% \subsubsection{Genetic model generation}
-% \label{sec:geneticmodels}
-
-% The second is genetic model generation by using \textbf{model breeding}. 
-% \begin{itemize}
-% \item model `breeding'
-% \item at each iteration of increasing dictionary sizes, search for
-%   optimal parameters
-% \item use a validation set: a selection of sentences held out from a
-%   corpus
-% \item optimise by trying different parameters and then evaluating the
-%   accuracy of the network's output for the validation sentences
-% \item at each step, pick the best model, then expand on this
-%   (`breeding lines')
-% \end{itemize}
+We note that we do not generate all possible corrupt windows for
+parameter adjustment each time we treat a text window. Instead, at
+each window, we pick a random word with which to corrupt the window;
+we improve the model by running the learning algorithm for several
+epoch; this type of training minimises the time to process a training
+corpus once but can be run indefinitely. We can set a number of epochs
+to run successively, and define a validation criterium for
+transitioning to the next epoch.
 
 \subsection{Supervised learning}
 \label{sec:supervised}
@@ -307,6 +298,9 @@ share parameters, are trained simultaneously and are allowed to modify
 shared parameters. Individual (non-shared) network parameters are
 modified only during training for a specific task. This technique
 allows us to generalise the training benefit from each example.
+
+\section{Adapting the architecture for ancient Greek}
+\label{sec:adaptation}
 
 Composing such a one-hot vector is not simple for Greek morphology:
 any given word will belong to multiple morphological categories. For
@@ -519,62 +513,3 @@ then, we apply a simpler system with reduced information
 density. Since we do not have to cope with head-dependency relations,
 we use the simpler approach to reduce computational overhead in our
 experimental setup.
-
-\section{Selecting and processing training data}
-\label{sec:trainingdata}
-
-For the unsupervised learning phase, we need a maximally large
-corpus. I chose the TLG CD-ROM E, which contains about 9.3M words, and
-the Perseus texts, which contain about 7.7M words. Since both corpora
-shared material, duplicated sentences were scrapped. The final corpus
-contains about 16.9M words. For training the model, this corpus is
-split sentence-wise into a training corpus, from which representations
-are learned, and a validation corpus, to check the accuracy of the
-generated representations. The file is split 90-10.
-
-The supervised learning phase makes use of the Perseus treebank and
-the PROIEL annotated texts of Herodotus and the New Testament. These
-respectively contain approx. 350K and 195K words, making for a total
-of about 545K words. Again, a validation set is withheld, in a
-slightly lower proportion than in the unsupervised phase due to the
-restricted size of the corpus.
-
-All texts are preprocessed by converting all words to lowercase and
-placing exactly one sentence on every line. Only Greek punctuation is
-left; critical notation etc. is pruned.
-
-\section{Annotating the corpus}
-\label{sec:annotating}
-
-After the architecture (model and networks) is built, it is
-serialised; that is to say, the internal state of the architecture
-during training time is stored to disk. Serialisation allows us to
-immediately load the model into memory during the execution of our
-tagging program. When tagging, we use the architecture in a read-only
-manner, i.e. we only predict and do not adjust parameters any more.
-
-Tagging is essentially a process of probabilistic prediction; text
-windows are passed through each of the networks, which return a
-prediction of the expected features of the central words in these
-windows in the form of an output vector. For tagging a sentence with
-$n$ words, we create $n$ text windows and use these as input. Each
-window generates an output vector; we pick the component with the
-maximum score and attribute the corresponding tag to the central word
-in the original text window. This process is iterated over every
-sentence in the target text. 
-
-% In order to find the most likely sequence of tags, we can use the
-% Viterbi algorithm. Suppose we have a matrix $A \in R^{m \cross n}$. We
-% can convert this matrix to a graph G by associating every component of
-% the matrix to an edge and a node and adding $m$ nodes which correspond
-% to a start state $q_0$. 
-% \begin{itemize}
-% \item find the most likely sequence using Viterbi decoding
-% \item when viewing the matrix as a graph, we can trace a path through
-%   this matrix
-% \item edge weights are probabilities of any tag following another
-%   given a word following another
-% \item nodes are states, that is, word-tag correspondences
-% \item the path with the largest product of edge weights corresponds to
-%   the most likely tag sequence
-% \end{itemize}
