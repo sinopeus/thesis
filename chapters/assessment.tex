@@ -6,52 +6,124 @@
 
 \section{Hypothesis}
 Have we reached our goals?
+% What are the major patterns in the observations? (Refer to spatial and temporal variations.)
+% What are the relationships, trends and generalizations among the results?
+% What are the exceptions to these patterns or generalizations?
+% What are the likely causes (mechanisms) underlying these patterns resulting predictions?
+% Is there agreement or disagreement with previous work?
+% Interpret results in terms of background laid out in the introduction - what is the relationship of the present results to the original question?
+% What is the implication of the present results for other unanswered questions in earth sciences, ecology, environmental policy, etc....?
+% Multiple hypotheses: There are usually several possible explanations for results. Be careful to consider all of these rather than simply pushing your favorite one. If you can eliminate all but one, that is great, but often that is not possible with the data in hand. In that case you should give even treatment to the remaining possibilities, and try to indicate ways in which future work may lead to their discrimination.
 \section{Strengths \& weaknesses}
-How thorough is our methodology? Comparison with
-\cite{dik2008,dik2009,mambrini2012}.
+We use the same training data for the supervised phase as is used in
+\cite{dik2008,dik2008}. 
+
+We use none of the data used in \cite{mambrini2012}.
 \section{Contribution}
+% What are the things we now know or understand that we didn't know or understand before the present work?
+% Include the evidence or line of reasoning supporting each interpretation.
+% What is the significance of the present results: why should we care? 
 \begin{itemize}
 \item method
 \item corpus
 \end{itemize}
 
-% \begin{itemize}
-% \item What are the major patterns in the observations? (Refer to spatial and temporal variations.)
-% \item What are the relationships, trends and generalizations among the results?
-% \item What are the exceptions to these patterns or generalizations?
-% \item What are the likely causes (mechanisms) underlying these patterns resulting predictions?
-% \item Is there agreement or disagreement with previous work?
-% \item Interpret results in terms of background laid out in the introduction - what is the relationship of the present results to the original question?
-% \item What is the implication of the present results for other unanswered questions in earth sciences, ecology, environmental policy, etc....?
-% \item Multiple hypotheses: There are usually several possible explanations for results. Be careful to consider all of these rather than simply pushing your favorite one. If you can eliminate all but one, that is great, but often that is not possible with the data in hand. In that case you should give even treatment to the remaining possibilities, and try to indicate ways in which future work may lead to their discrimination.
-% \item Avoid bandwagons: A special case of the above. Avoid jumping a currently fashionable point of view unless your results really do strongly support them. 
-% \item What are the things we now know or understand that we didn't know or understand before the present work?
-% \item Include the evidence or line of reasoning supporting each interpretation.
-% \item What is the significance of the present results: why should we care? 
-
-% \end{itemize}
 \section{Further work}
 \label{sec:further_work}
 \subsection{Improving the language model}
 \subsubsection{Larger training sets}
-\begin{itemize}
-\item mainly: TLG holds much more text but does not free it
-\item connection with projects like Open Philology: build large tagged
-corpora using crowdsourcing
-\end{itemize}
+Improving the unsupervised model can be done in two ways: by running
+the unsupervised modeling phase for more epochs, or by increasing the
+amount of training data. The first option is certainly feasible at
+this point, but our training set exhausts most of the available
+material. 
+
+A first option is the corpus of papyri; however, we chose to exclude
+it from the training set to avoid skewing the results. But the most
+obvious option is the integral \textit{Thesaurus Linguae Graecae},
+which contains more than 109M words but is still not freely
+available. This is an order of magnitude larger than our current
+training corpus! This is a huge amount of resources which we can
+exploit to improve our model.
+
+The main reason for these texts not being published in a downloadable
+format is that the TLG requires funds to run its servers. However, we
+still find it hard to justify that such a rich resource for classical
+scholarship should not be distributed more widely to facilitate
+further study. While this is no place for an extended philippic in
+favour of open-sourcing the TLG, we still think a strong case can be
+presented for this.
+
+The supervised component of our model can also be improved by running
+more epochs (although this is not as beneficial as it is for the
+unsupervised model), but especially by increasing the size of the
+training corpus. We opted to only use the PROIEL treebank and not the
+Perseus treebank to minimise headaches related to the conversion of
+one annotation standard to another. Especially the syntactic
+annotation standards used by both, while sharing some common concepts,
+are very different in implementation. 
+
+This could be fixed by developing an effective and accurate system for
+this type of conversion; this has been attempted in
+\cite{conf/lrec/LeeH10}, but the accuracy rate of that experiment (in
+the low 80\%s for both Latin and Greek) is too low to allow extended
+use. In any case, it is our opinion that developing a more unified
+system for ancient Greek treebanks is a \textit{desideratum} before
+the scale of current treebanks is expanded.
+
 \subsubsection{Linguistic foreknowledge}
-\begin{itemize}
-\item simplicity is strength of model
-\item can we use foreknowledge strategically?
-\end{itemize}
+We chose our training method because of its simplicity; but it is a
+good question whether it is possible to use more linguistic
+foreknowledge strategically. \cite{collobert-2011} equip their model
+with a selective set of simple linguistic features which are tuned to
+improve performance for certain tasks. For instance, they improve
+performance for named entity recognition by adding a feature for
+capitalisation, which is handy given the use of capital letters in
+English to indicate proper nouns. They also equip their system with a
+gazetteer, which is a large list of proper nouns.
+
+Similarly, we could recruit supplemental resources to improve
+performance at our chosen tasks as well as others \ref{sec:expand}. A
+large database of morphological parses exists in the form of the SQL
+dump of the Perseus word study tool. We could implement a supplemental
+network which reduces the number of possible parses for each word
+which is in this database and is trained to pick the correct one; if
+it is not, we use the unmodified neural architecture to estimate a
+likely parse.
+
+A similar technique we could use is cascading. Using this technique,
+we train taggers for diverse tasks which are interconnected; we apply
+these taggers sequentially and use the outputs of previous taggers for
+each task. In this way, we can also heavily limit possibilities. For
+example, by first finding the correct part-of-speech for a word, we
+can immediately eliminate certain morphological categories. A noun,
+for instance, has no voice, tense or mood, and developing such
+sequential tagging method would prevent us from spending valuable
+computation time on these 'no-brainers'.
+
 \subsubsection{Integration with other resources}
+A key point for the further development of a large-scale
+infrastructure for ancient Greek annotated corpora is the integration
+of diverse resources. We find an example of this in the recent
+merger of several papyrological resources on the web into
+\texttt{papyri.info}. The recently announced Open Philology Project
+\citep{crane2013} is another good example of this kind of enterprise.
+
 \subsubsection{Expanding the range of tasks}
-\begin{itemize}
-\item stemming
-\item named entity recognition
-\item semantic role labeling
-\item deep parsing
-\end{itemize}
+\label{sec:expand}
+Another interesting prospect is the expansion of the architecture to a
+larger array of tasks. The possibilities, are certainly there:
+\cite{collobert-2011} explores named entity recognition
+(\textit{cfr.supra}) and semantic role labeling with noteworthy
+success. Deep parsing using the same type of embeddings with recurrent
+neural networks has shown excellent results, as shown in
+\cite{collobert2011deep}, which attains benchmark performance. 
+
+All of this is done using large-scale unsupervised learning with a
+small kernel of supervised training data, the same technique we have
+applied. The same method would also fit for ancient Greek; but again
+progress is blocked by a lack of annotated language data. 
+
 % \section{Named entity recognition}
 % \label{sec:ner}
 

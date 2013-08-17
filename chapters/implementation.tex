@@ -31,8 +31,8 @@ capabilities to preceding versions.
 \label{sec:sourcecode}
 The source code is available at
 \url{https://github.com/sinopeus/thrax}. The core structure and
-numerical algorithms, encapsulated in Theano graphs, are based off
-Joseph Turian's implementation of this unsupervised model builder in
+numerical algorithms, encapsulated in Theano graphs, are largely based on
+Joseph Turian's implementation of \citep{collobert2008} in
 Python 2. I rebuilt the entire program surrounding this numerical
 component to fit my needs: the result is a documented, cleaned up and
 overall improved program. I also added functionality for the
@@ -249,7 +249,7 @@ line.
 After having converted all texts to this format, we merge them into
 one large text file. For assessment purposes, we split the file into
 nine parts training corpus and one part validation corpus. We realign
-everything once more such that we obtain a file where every line maps
+everything once more; we now obtain a file where every line maps
 to exactly one word or punctuation symbol. Sentences are now delimited
 using empty lines. From this file, we also create a frequency table
 which we use to create a comprehensive dictionary which we use for the
@@ -257,13 +257,13 @@ lookup table layer in the network.
 
 \subsubsection{Supervised corpora}
 \label{sec:supcorp}
-The creation of our supervised corpora is performed analogously, with
+The creation of our supervised corpus is performed analogously, with
 the difference that all annotations are exported to separate
 files. The annotation systems are then normalised to one unified
 system; all layout changes are performed jointly on both the text and
 the annotation file to prevent misalignment. Once this is done, all
 annotations are split into individual characters and distributed over
-several text files for furthe processing. We want to create a one-hot
+several text files for further processing. We want to create a one-hot
 vector for each specific character; a script is provided to automate
 this. The final vectors are not stored in plain text but as a
 serialised matrix to reduce space usage and facilitate the
@@ -329,7 +329,7 @@ also create an extra accompanying file equipped with line numbers for
 the corresponding words in the text file in order to track each word
 back to its original line.
 
-Once the corpus is preprocessed, we can proceed to tagging. The method
+Once the corpus is preprocessed, we can proceed with tagging. The method
 described in the previous chapter is used. We tag one papyrus at a
 time and then write the tagging output to disk following the directory
 structure of the \texttt{papyri.info} repository. We repeat the process

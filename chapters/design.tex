@@ -5,7 +5,7 @@
 
 \section{Overview}
 In general, a language model is created by choosing a modeling
-criterium and applying it to a a large set of observations. These
+criterium and applying it to a large set of observations. These
 observations may be raw word sequences or annotated word sequences,
 depending on the chosen criterium. Each observation is coupled with an
 adjustment of the language model to maximise the score for that
@@ -23,7 +23,7 @@ the paper; subsequent sections provide more detail and specific
 modifications necessary to process ancient Greek.
 
 The first phase uses a large unlabelled corpus to create a simple
-probabilistic model using a little linguistic knowledge as possible:
+probabilistic model using as little linguistic knowledge as possible:
 the goal is to assign scores to word sequences that are proportional
 to the probability of these sequences being `correct', i. e. likely to
 appear in real linguistic data. Maximising these scores is achieved by
@@ -32,7 +32,7 @@ adjusted to give the real observation a higher score than the
 corrupted observation.
 
 This method creates a structured internal representation for each word
-in vector form, which define how the word is embedded within an
+in vector form, which defines how the word is embedded within an
 $n$-dimensional vector space; hence, these vectors are termed
 \textbf{embeddings}. (\textit{Ne sit confusio}: note that the
 components of this feature vector do not necessarily show a one-on-one
@@ -122,7 +122,7 @@ output of all neurons is then concatenated into a single matrix, whose
 columns are now the embeddings for the input window.
 
 Formally, given a word index vector $w \in N^{wsz}$ and a lookup table
-$L \in R^{d_{wrd} \times D}$, we can express this as as a function
+$L \in R^{d_{wrd} \times D}$, we can express this as a function
 $LT$:
 
 \begin{equation} \label{eq:ltmatrix} LT(L, w) =
@@ -188,13 +188,21 @@ We approximate this function using the hard hyperbolic tangent, defined for a sc
 We can define this function for vector inputs in the same manner
 as for the hyperbolic tangent function.
 
-\subsection{Scoring layer}
+\subsection{Output layer}
 
-The final layer. This is actually simply a linear layer which is
-designed to output a vector containing as many elements as there are
-possible tags for the task at hand. Each output element is a score
-which reflects the probability of the corresponding tag for the
-central word in the input window.
+The final linear layer. This layer is designed to output a vector
+containing as many elements as there are possible tags for the task at
+hand.  Each output element is a score which reflects a network score
+for the corresponding tag for the central word in the input window.
+
+\subsection{Softmax layer}
+
+An optional layer, used for supervised training and tagging (see
+\textit{infra}). This layer applies the softmax operation
+\cite{bridle1990probabilistic} to the output vector of the previous
+layer to obtain an output which converts the scores such that they sum
+to one, just as the probabilities in a sample space do.
+
 
 \section{Phases of learning}
 \subsection{Unsupervised learning}
@@ -230,8 +238,8 @@ accurate scores.
 
 Using this simple criterion, we have a method for crafting a set of
 parameters that contains a consistent structured internal
-representation of the training data. Despite the relatively simplicity
-of the criterion, the huge amounts of parameters results in a very
+representation of the training data. Despite the relative simplicity
+of the criterion, the large amount of parameters results in a very
 taxing and lengthy computation. Furthermore, there is no guarantee
 that the cost function has a single minimum with respect to $\theta$;
 a full grid search would be necessary, which necessitates vast amounts
@@ -286,9 +294,16 @@ The supervised training phase involves the creation of task-specific
 networks which are initialised with the embeddings created during the
 unsupervised phase; these form a shared first part of all networks. A
 given network is then tailored to have an adapted output as necessary
-for the task of interest. Training proceeds in the classical fashion,
-by providing correctly formatted examples and adjusting all parameters
-(including the shared ones) to minimize the squared error.
+for the task of interest. 
+
+During training, we also construct a transition table for all
+tasks. This ensures that we can apply classical NLP algorithms which
+rely on hidden Markov models to our chosen architecture when we
+proceed to tag text. Accordingly, we choose a new cost function which
+takes this transition table into account.
+
+Training then proceeds in the classical fashion by gradient descent on
+this function.
 
 The output of a network of this type is a vector; each specific
 feature is encoded in on component of this vector by setting this
@@ -339,23 +354,28 @@ corresponding output vector:
 \item degree: comparative, superlative.
 \end{itemize}
 
-\begin{table}
-  \begin{tabular}{|l|l|l|}
-    \hline
-    \textbf{field}            & \textbf{category} & \textbf{possible values} \\ \thickhline
-    first field  & lemma type & \specialcell{a - adjective\\c - conjunction\\d - adverb\\e - exclamation\\g - particle\\l - article\\m - numerals\\n - noun\\p - pronoun\\r - preposition\\t - participle\\v - verb\\x - miscellanea} \\ \hline
-    second field & person & \specialcell{1 - first person\\2 - second person\\3 - third person} \\ \hline
-    third field  & number & \specialcell{d - dual\\p - plural\\s - singular} \\ \hline
-    fourth field & tense & \specialcell{a - aorist\\f - future\\i - imperfect\\l - pluperfect\\p - present\\r - perfect\\t - future perfect} \\ \hline
-    fifth field & mood & \specialcell{g - gerund \\ p - participle \\ i - indicative\\m - imperative\\n - infinitive\\o - optative\\s - subjunctive} \\ \hline
-    sixth field & diathesis & \specialcell{a - active\\e - energetic\\m - medial\\p - passive} \\ \hline
-    seventh field & gender & \specialcell{f - feminine\\m - masculine\\n - neuter\\ o, p and q - unclear} \\ \hline
-    eighth field & case & \specialcell{a - accusative\\d - dative\\g - genitive\\n - nominative\\v - vocative} \\ \hline
-    ninth field & degree of comparison & \specialcell{c - comparative\\s - superlative} \\ \hline
-    \hline
-  \end{tabular}
-  \caption{The Perseus ennealiteral morphological abbreviation system.} \label{table:perseusmorph}
-\end{table}
+These can be encoded in various ways. In tables 1 and 2, we give a
+description of the morphological annotation system used in the
+annotated corpora made by the PROIEL project, which we use in our
+supervised phase.
+% \begin{table}
+%   \begin{tabular}{|l|l|l|}
+%     \hline
+%     \textbf{field}            & \textbf{category} & \textbf{possible values} \\ \thickhline
+%     first field  & lemma type & \specialcell{a - adjective\\c - conjunction\\d - adverb\\e - exclamation\\g - particle\\l - article\\m - numerals\\n - noun\\p - pronoun\\r - preposition\\t - participle\\v - verb\\x - miscellanea} \\ \hline
+%     second field & person & \specialcell{1 - first person\\2 - second person\\3 - third person} \\ \hline
+%     third field  & number & \specialcell{d - dual\\p - plural\\s - singular} \\ \hline
+%     fourth field & tense & \specialcell{a - aorist\\f - future\\i - imperfect\\l - pluperfect\\p - present\\r - perfect\\t - future perfect} \\ \hline
+%     fifth field & mood & \specialcell{g - gerund \\ p - participle \\ i - indicative\\m - imperative\\n - infinitive\\o - optative\\s - subjunctive} \\ \hline
+%     sixth field & diathesis & \specialcell{a - active\\e - energetic\\m - medial\\p - passive} \\ \hline
+%     seventh field & gender & \specialcell{f - feminine\\m - masculine\\n - neuter\\ o, p and q - unclear} \\ \hline
+%     eighth field & case & \specialcell{a - accusative\\d - dative\\g - genitive\\n - nominative\\v - vocative} \\ \hline
+%     ninth field & degree of comparison & \specialcell{c - comparative\\s - superlative} \\ \hline
+%     \hline
+%   \end{tabular}
+%   \caption{The Perseus ennealiteral morphological abbreviation system.} \label{table:perseusmorph}
+% \end{table}
+
 
 \begin{table}
   \begin{tabular}{|l|l|l|}
@@ -377,139 +397,216 @@ corresponding output vector:
 \end{table}
 
 \begin{table}
-  \begin{tabular}{|l|l|l|}
+  \begin{tabular}{|l|l|}
     \hline
-    \textbf{field}            & \textbf{value} & \textbf{Perseus first field equivalent} \\ \thickhline
-    A- & adjective & $\rightarrow$ a \\ \hline
-    C- & paratactic conjunctions & $\rightarrow$ c \\ \hline
-    Df & adverbs & $\rightarrow$ d \\
-    Dq & adverbial response particles (where, how, etc.) & $\rightarrow$ g \\
-    Du & adverbial question particles (where, how, etc.)  & $\rightarrow$ g \\ \hline
-    F- & Hebrew loan words & $\rightarrow$ x \\ \hline
-    G- & hypotactic conjunctions & $\rightarrow$ c \\ \hline
-    I- & illocutive particles & $\rightarrow$ g \\ \hline
-    Ma & cardinal numerals & $\rightarrow$ m \\
-    Mo & ordinal numerals & $\rightarrow$ m \\ \hline
-    Nb & nouns (in general) & $\rightarrow$ n \\
-    Ne & nouns (proper names) & $\rightarrow$ n \\ \hline
-    Pc & pronouns (reciprocative) & $\rightarrow$ p \\
-    Pd & pronouns (demonstrative) & $\rightarrow$ p \\
-    Pi & pronouns (interrogative) & $\rightarrow$ p \\
-    Pk & pronouns (reflexive) & $\rightarrow$ p \\
-    Pp & pronouns (personal) & $\rightarrow$ p \\
-    Pr & pronouns (relative) & $\rightarrow$ p \\
-    Ps & pronouns (possessive) & $\rightarrow$ p \\
-    Px & pronouns (quantitative, i.e.\ some, all, none, same, other) & $\rightarrow$ x \\ \hline
-    R- & prepositions & $\rightarrow$ r \\ \hline
-    S- & article & $\rightarrow$ l \\ \hline
-    V- & verb & $\rightarrow$ v \\ \hline
+    \textbf{field}            & \textbf{value} \\ \thickhline
+    A- & adjective  \\ \hline
+    C- & paratactic conjunctions \\ \hline
+    Df & adverbs  \\
+    Dq & adverbial response particles (where, how, etc.)  \\
+    Du & adverbial question particles (where, how, etc.) \\ \hline
+    F- & Hebrew loan words \\ \hline
+    G- & hypotactic conjunctions \\ \hline
+    I- & illocutive particles  \\ \hline
+    Ma & cardinal numerals \\
+    Mo & ordinal numerals \\ \hline
+    Nb & nouns (in general) \\
+    Ne & nouns (proper names) \\ \hline
+    Pc & pronouns (reciprocative) \\
+    Pd & pronouns (demonstrative) \\
+    Pi & pronouns (interrogative) \\
+    Pk & pronouns (reflexive)  \\
+    Pp & pronouns (personal) \\
+    Pr & pronouns (relative) \\
+    Ps & pronouns (possessive) \\
+    Px & pronouns (quantitative, i.e.\ some, all, none, same, other) \\ \hline
+    R- & prepositions \\ \hline
+    S- & article \\ \hline
+    V- & verb \\ \hline
     \hline
   \end{tabular}
   \caption{The PROIEL biliteral lemmatic abbreviation system.} \label{table:proiellemmata}
 \end{table}
 
+% \begin{table}
+%   \begin{tabular}{|l|l|l|}
+%     \hline
+%     \textbf{field}            & \textbf{value} & \textbf{Perseus first field equivalent} \\ \thickhline
+%     A- & adjective & $\rightarrow$ a \\ \hline
+%     C- & paratactic conjunctions & $\rightarrow$ c \\ \hline
+%     Df & adverbs & $\rightarrow$ d \\
+%     Dq & adverbial response particles (where, how, etc.) & $\rightarrow$ g \\
+%     Du & adverbial question particles (where, how, etc.)  & $\rightarrow$ g \\ \hline
+%     F- & Hebrew loan words & $\rightarrow$ x \\ \hline
+%     G- & hypotactic conjunctions & $\rightarrow$ c \\ \hline
+%     I- & illocutive particles & $\rightarrow$ g \\ \hline
+%     Ma & cardinal numerals & $\rightarrow$ m \\
+%     Mo & ordinal numerals & $\rightarrow$ m \\ \hline
+%     Nb & nouns (in general) & $\rightarrow$ n \\
+%     Ne & nouns (proper names) & $\rightarrow$ n \\ \hline
+%     Pc & pronouns (reciprocative) & $\rightarrow$ p \\
+%     Pd & pronouns (demonstrative) & $\rightarrow$ p \\
+%     Pi & pronouns (interrogative) & $\rightarrow$ p \\
+%     Pk & pronouns (reflexive) & $\rightarrow$ p \\
+%     Pp & pronouns (personal) & $\rightarrow$ p \\
+%     Pr & pronouns (relative) & $\rightarrow$ p \\
+%     Ps & pronouns (possessive) & $\rightarrow$ p \\
+%     Px & pronouns (quantitative, i.e.\ some, all, none, same, other) & $\rightarrow$ x \\ \hline
+%     R- & prepositions & $\rightarrow$ r \\ \hline
+%     S- & article & $\rightarrow$ l \\ \hline
+%     V- & verb & $\rightarrow$ v \\ \hline
+%     \hline
+%   \end{tabular}
+%   \caption{The PROIEL biliteral lemmatic abbreviation system.} \label{table:proiellemmata}
+% \end{table}
+
+
 \begin{table}
   \begin{tabular}{|l|l|}
     \hline
-    \textbf{The Perseus system} & \textbf{The PROIEL system} \\ \thickhline
-    \begin{minipage}{2.5in}
-      \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-      \item adv: adverbial;
-      \item apos: apposing element;
-      \item atr: attributive;
-      \item atv/atvv: complement;
-      \item auxc: conjunction;
-      \item auxg: bracketing punctuation;
-      \item auxk: terminal punctuation;
-      \item auxp: preposition;
-      \item auxv: auxiliary verb;
-      \item auxx: commas;
-      \item auxy: sentence adverbials;
-      \item auxz: emphasizing particles;
-      \item coord: coordinator;
-      \item exd: ellipsis;
-      \item obj: object;
-      \item ocomp object complement;
-      \item pnom: predicate nominal;
-      \item pred: predicate;
-      \item sbj: subject.
-      \end{itemize}
-    \end{minipage} &
-    \begin{minipage}{2.5in}
-      \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-      \item adnom: adnominal;
-      \item adv: adverbial;
-      \item ag: agens;
-      \item apos: apposition;
-      \item arg: argument (object or oblique);
-      \item atr: attribute;
-      \item aux: auxiliary;
-      \item comp: complement;
-      \item expl: expletive;
-      \item narg: adnominal argument;
-      \item nonsub: non-subject (object, oblique or adverbial);
-      \item obj: object;
-      \item obl: oblique;
-      \item parpred: parenthetical predication;
-      \item part: partitive;
-      \item per: peripheral (oblique or adverbial);
-      \item pid: Predicate identity;
-      \item pred: predicate;
-      \item rel: apposition or attribute;
-      \item sub: subject;
-      \item voc: vocative;
-      \item xadv: open adverbial complement;
-      \item xobj: open objective complement;
-      \item xsub: external subject.
-      \end{itemize}
-    \end{minipage} \\ \hline
+    \textbf{tag} & \textbf{value} \\ \thickhline
+    adnom & adnominal \\
+    adv & adverbial \\
+    ag & agens \\
+    apos & apposition \\
+    arg & argument (object or oblique) \\
+    atr & attribute \\
+    aux & auxiliary \\
+    comp & complement \\
+    expl & expletive \\
+    narg & adnominal argument \\
+    nonsub & non-subject (object, oblique or adverbial) \\
+    obj & object \\
+    obl & oblique \\
+    parpred & parenthetical predication \\
+    part & partitive \\
+    per & peripheral (oblique or adverbial) \\
+    pid & Predicate identity \\
+    pred & predicate \\
+    rel & apposition or attribute \\
+    sub & subject \\
+    voc & vocative \\
+    xadv & open adverbial complement \\
+    xobj & open objective complement \\
+    xsub & external subject \\
   \end{tabular}
-  \caption{The Perseus and PROIEL syntactic annotation systems.} \label{table:proielmorph}
+  \caption{The PROIEL treebank annotation system.} \label{table:proiellemmata}
 \end{table}
+% \begin{table}
+%   \begin{tabular}{|l|l|}
+%     \hline
+%     \textbf{The Perseus system} & \textbf{The PROIEL system} \\ \thickhline
+%     \begin{minipage}{2.5in}
+%       \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%       \item adv: adverbial;
+%       \item apos: apposing element;
+%       \item atr: attributive;
+%       \item atv/atvv: complement;
+%       \item auxc: conjunction;
+%       \item auxg: bracketing punctuation;
+%       \item auxk: terminal punctuation;
+%       \item auxp: preposition;
+%       \item auxv: auxiliary verb;
+%       \item auxx: commas;
+%       \item auxy: sentence adverbials;
+%       \item auxz: emphasizing particles;
+%       \item coord: coordinator;
+%       \item exd: ellipsis;
+%       \item obj: object;
+%       \item ocomp: object complement;
+%       \item pnom: predicate nominal;
+%       \item pred: predicate;
+%       \item sbj: subject.
+%       \end{itemize}
+%     \end{minipage} &
+%     \begin{minipage}{2.5in}
+%       \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%       \item adnom: adnominal;
+%       \item adv: adverbial;
+%       \item ag: agens;
+%       \item apos: apposition;
+%       \item arg: argument (object or oblique);
+%       \item atr: attribute;
+%       \item aux: auxiliary;
+%       \item comp: complement;
+%       \item expl: expletive;
+%       \item narg: adnominal argument;
+%       \item nonsub: non-subject (object, oblique or adverbial);
+%       \item obj: object;
+%       \item obl: oblique;
+%       \item parpred: parenthetical predication;
+%       \item part: partitive;
+%       \item per: peripheral (oblique or adverbial);
+%       \item pid: Predicate identity;
+%       \item pred: predicate;
+%       \item rel: apposition or attribute;
+%       \item sub: subject;
+%       \item voc: vocative;
+%       \item xadv: open adverbial complement;
+%       \item xobj: open objective complement;
+%       \item xsub: external subject.
+%       \end{itemize}
+%     \end{minipage} \\ \hline
+%   \end{tabular}
+%   \caption{The Perseus and PROIEL syntactic annotation systems.} \label{table:proielmorph}
+% \end{table}
 
-This approach has its downside: we now have to train distinct networks
-for each network. The upside, though, is that each of these networks
-is much, much smaller than a single network mapping all possible
-parses and will be easier to train; an example of the
+
+The one-hot vector approach has its downside: we now have to train
+distinct networks for each network. The upside, though, is that each
+of these networks is much, much smaller than a single network mapping
+all possible parses and will be easier to train; an example of the
 divide-and-conquer technique. We could possibly be confronted with
 impossible parses, such as an 'imperfect optative', but this is highly
 unlikely due to the total absence of examples for this form.
 
-The task of preprocessing the corpus, which is discussed
-\textit{infra}, is also simplified due to this approach: the two main
-corpora from which the training material is gathered use similar but
-slightly different annotation schemes. The PROIEL system is a bit more
-complex, but essentially gives the same information as the Perseus
-system. Tables 1 and 2 offer a detailed overview of both systems;
-table 3 contains conversion guidelines. For simplicity's sake, we pick
-the Perseus system, since this limits the amount of networks we'd have
-to train to nine. Instead of having to convert from one type of
-annotation to another, we can simply split the annotations into their
-constituent parts, store them in different files and resolve any
-annotational differences afterwards with minimal headaches.
+The process of syntactic annotation only requires one network, but is
+a bit more complex due to an increased amount of tags.  We see in
+table 3 that twenty-four different features are possible. We use a
+similar method to convert annotations.
 
-The process of dependency annotation only requires one network, but is
-a bit more complex. The source corpora for the training data once
-again use similar annotation schemes but with different emphases. We
-enumerate the tags for the Perseus and the PROIEL annotation system,
-respectively.
+We assign numbers corresponding to vector components to all possible
+features and store them in different hash tables. These are then used
+to convert back from the normal notation to one-hot vector
+notation. Section \ref{sec:supcorp} contains a JSON dump of these hash
+tables.
 
-We see in table 4 that they respectively use nineteen and twenty-four
-different features. The Perseus system is less detailed than the
-PROIEL system, but by virtue of this fact also less complex. A
-possible approach is to map overlaps in both systems and find the
-simplest possible tag set which can be derived from that. We can
-immediately make a one-hot vector from this, since all annotated words
-are equipped with a single syntactic tag. 
+% The task of preprocessing the corpus, which is discussed
+% \textit{infra}, is also simplified due to this approach: the two main
+% corpora from which the training material is gathered use similar but
+% slightly different annotation schemes. The PROIEL system is a bit more
+% complex, but essentially gives the same information as the Perseus
+% system. Tables 1 and 2 offer a detailed overview of both systems;
+% table 3 contains conversion guidelines. For simplicity's sake, we pick
+% the Perseus system, since this limits the amount of networks we'd have
+% to train to nine. Instead of having to convert from one type of
+% annotation to another, we can simply split the annotations into their
+% constituent parts, store them in different files and resolve any
+% annotational differences afterwards with minimal headaches.
 
-Another approach is provided in \cite{conf/lrec/LeeH10}, who attempt
-to port the Perseus treebank to the PROIEL format. The approach has
-its downside: the authors try to convert every detail of the Perseus
-treebank format to the PROIEL format and achieve an accuracy rate
-which still necessitates human postprocessing. We will consider it
-feasible to switch to their system once a full-fledged conversion from
-one scheme to the other has been carried through to completion. Until
-then, we apply a simpler system with reduced information
-density. Since we do not have to cope with head-dependency relations,
-we use the simpler approach to reduce computational overhead in our
-experimental setup.
+
+
+
+% The source corpora for the training data once
+% again use similar annotation schemes but with different emphases. We
+% enumerate the tags for the Perseus and the PROIEL annotation system,
+% respectively.
+
+% The Perseus system is less detailed than the PROIEL system, but by
+% virtue of this fact also less complex. A possible approach is to map
+% overlaps in both systems and find the simplest possible tag set which
+% can be derived from that. We can immediately make a one-hot vector
+% from this, since all annotated words are equipped with a single
+% syntactic tag.
+
+% Another approach is provided in \cite{conf/lrec/LeeH10}, who attempt
+% to port the Perseus treebank to the PROIEL format. The approach has
+% its downside: the authors try to convert every detail of the Perseus
+% treebank format to the PROIEL format and achieve an accuracy rate
+% which still necessitates human postprocessing. We will consider it
+% feasible to switch to their system once a full-fledged conversion from
+% one scheme to the other has been carried through to completion. Until
+% then, we apply a simpler system with reduced information
+% density. Since we do not have to cope with head-dependency relations,
+% we use the simpler approach to reduce computational overhead in our
+% experimental setup.

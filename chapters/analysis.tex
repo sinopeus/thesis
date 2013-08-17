@@ -27,7 +27,7 @@ to cover the tasks of \textbf{morphological analysis} and
 \subsubsection{Definition}
 The first problem largely corresponds with what is called
 \textbf{part-of-speech tagging} in the natural language processing
-jargon. For any token in the sentence, given its context, we want to
+jargon. For any token in the sentence, given its context, we want the
 model to produce a morphological analysis, which produces not only the
 part-of-speech \textit{stricto sensu}, but all concomitant information
 as well: voice, tense, mood, case, gender, number, person, \ldots
@@ -83,12 +83,12 @@ more than a millennium; many different discourse registers are
 represented, although literary texts are not included.
 
 Linguistically speaking, this is a less than desirable state of
-affairs. By virtue of the characteristics mentioned in the previous
-paragraph, the corpus will contains thousands of unorthodox or
-corrupted word forms. This heightens the complexity of the task at
-hand, and we cannot but lower our standards for accuracy if we wish to
-proceed in an automated way. Nevertheless, we aim to provide
-limited inferences for this type of token.
+affairs. By virtue of its diverse and fragmentary nature, the corpus
+will contain thousands of unorthodox or corrupted word forms. This
+heightens the complexity of the task at hand, and we cannot but lower
+our standards for accuracy if we wish to proceed in an automated
+way. Nevertheless, we aim to provide limited inferences for this type
+of token.
 
 \subsubsection{Benchmark}
 We can perform only very limited testing for this task, since there is
@@ -162,7 +162,15 @@ The project seems to be lacking manpower and has lost steam since its
 inception, as the last update dates from 2012, more than a year ago at
 the time of this writing.
 
-The PROIEL project \citep{proiel}
+Another interesting treebank is that hosted by the PROIEL
+\citep{proiel} project, which aims to offer morphologically and
+syntactically annotated multilingual corpora for comparative
+purposes. The project, contrary to the Perseus treebank, seems to be
+alive and well at the time of this writing. This corpus contains data
+which can be of much help: large swathes of Herodotus, the New
+Testament, and the writings of the Byzantine historian George
+Sphrantzes are fully annotated, both morphologically and
+syntactically.
 
 An early prototype of this thesis attempted to use similar supervised
 methods to annotate the corpus of the papyri. Despite high
@@ -200,7 +208,7 @@ applied to a diverse array of NLP tasks for English. Accuracy rates
 for POS tagging reached up to 97.20\%, while for chunking, scores of
 up to 93.63\% were achieved; state-of-the-art results were also
 achieved for named entity recognition and semantic role labeling,
-which we will not considere here. This is an impressive performance:
+which we will not consider here. This is an impressive performance:
 most of the architecture is actually shared among all tasks and the
 majority of the parameters of the system are inferred through
 unsupervised methods.
@@ -236,8 +244,9 @@ Greek literature to linearly create lexica and grammars, all of it
 could be harnessed at once in a quantitatively precise and easily
 visualisable way.
 
-\url{http://www.digitalhumanities.org/dhq/vol/003/1/000033/000033.html}
-\cite{bamman2008building,bammandhq2009}
+Though this is not the place for an extended discourse on the
+methodology behind setting up such a system, we refer to
+\cite{bamman2008building,bammandhq2009} for an overview.
 
 \subsection{Historical and variational linguistics} % (fold)
 \label{sec:histlinguistics}

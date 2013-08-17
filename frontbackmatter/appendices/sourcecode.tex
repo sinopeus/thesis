@@ -9,36 +9,58 @@ sorts of errors. More extensive documentation can be found in the
 README file located in the main project directory. The source may
 equally be found on GitHub at \url{https://github.com/sinopeus/thrax}.
 
-\section{Training}
+\section{Unsupervised training}
 \subsection{Trainer}
 \label{sec:trainer}
-\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/train.py}
-\subsection{Training state}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/unsupervised-training.py}
+\subsection{Unsupervised language model}
+\label{sec:langmodel}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/unsupervised/model.py}
+\subsection{Network parameters}
+\label{sec:nnetworkparams}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/unsupervised/parameters.py}
+\subsection{Network graph}
+\label{sec:modelcost}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/unsupervised/graph.py}
+
+\section{Supervised training}
+\subsection{Trainer}
+\label{sec:trainer}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/supervised-training.py}
+\subsection{Supervised language model}
+\label{sec:langmodel}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/supervised/nn.py}
+\subsection{Network parameters}
+\label{sec:nnetworkparams}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/supervised/parameters.py}
+\subsection{Network graph}
+\label{sec:modelcost}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/supervised/graph.py}
+
+\section{Tagging}
+\subsection{Tagger}
+\label{sec:trainer}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/tagger.py}
+\subsection{Tagging network}
+\label{sec:langmodel}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/tagging/nn.py}
+\subsection{Viterbi trellis}
+\label{sec:modelcost}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/tagging/viterbi.py}
+\subsection{Network graph}
+\label{sec:modelcost}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/tagging/graph.py}
+
+\section{Data structures \& stream generators}
+\subsection{Training state keepers}
 \label{sec:trainstate}
 \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/state.py}
 \subsection{Training example stream}
 \label{sec:trainexamplestream}
 \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/examples.py}
-\section{Data structures}
+\subsection{Model validator}
+\label{sec:trainexamplestream}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/validate.py}
 \subsection{Dictionary \& corpus}
 \label{sec:dict}
 \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/lexicon.py}
-\subsection{Language model}
-\label{sec:langmodel}
-\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/model/model.py}
-\subsection{Language model parameters}
-\label{sec:nnetworkparams}
-\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/model/parameters.py}
-% \subsection{Neural networks}
-% \label{sec:nnetwork}
-% \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/nn/nn.py}
-% \subsection{Neural network parameters}
-% \label{sec:nnetworkparams}
-% \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/nn/parameters.py}
-\section{Numerical subroutines}
-\subsection{Network graph}
-\label{sec:modelcost}
-\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/model/graph.py}
-% \subsection{Neural network cost function}
-% \label{sec:nncost}
-% \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/nn/graph.py}

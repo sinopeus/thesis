@@ -18,7 +18,7 @@ resurgence of scholarship on the topic;\footnote{Vide
 an excellent overview of pre-1970s research may be found in
 \cite{mandilaras1973} and \cite{gignac1976,gignac1981}.
 
-During this period, E. Mayser begon work on the earliest compendious
+During this period, E. Mayser began work on the earliest compendious
 grammar of the papyri; it limits itself to the Ptolemaic era but
 explores it at length and in great detail.  The work \citep{mayser} consists of a
 part on phonology and morphology, made up of three slimmer volumes,
@@ -61,7 +61,7 @@ subject; though he attempted at a work on the scale of the
 \textit{Grammatik}, he found the resources sorely lacking, as the
 existing editions of papyrus texts could not form the basis for a
 systematic grammatical study. The other was L. Palmer,
-who had embarked on similar project and had already set out a
+who had embarked on a similar project and had already set out a
 methodology \citep{palmer1934}; the war interrupted his efforts,
 and he published what he had already completed, a treatise on the
 suffixes in word formation \citep{palmer1945}.
@@ -81,19 +81,19 @@ absent, a gap only partly filled by Mandilaras' \textit{The verb in
   the Greek non-literary papyri}.
 
 Finally, there is the aforementioned \textit{The Language of the
-  Papyri} \citep{lpapyri}, which does not aim to be a work on the same
-scale as the aforementioned. It is a collection of articles on various
-topics, the whole of which is meant to illuminate new avenues for
-future research. A particularly relevant chapter for this thesis is
-the last one by Porter and O'Donnell \citep{porter2010}, who set out
-to create a linguistic corpus for a selection of papyri; their tagging
-approach, however, is manual, and their target corpus limited. The
-authors also are the creators of \url{http://www.opentext.org/}, a
-project aiming for the development of annotated Greek corpora and
-tools to analyse them; sadly, no progress seems to have been made
-since 2005.
+Papyri} \citep{lpapyri}, which does not aim to be a work on the same
+scale as previous works in the field. It is a collection of articles
+on various topics, the whole of which is meant to illuminate new
+avenues for future research. A particularly relevant chapter for this
+thesis is the last one by Porter and O'Donnell \citep{porter2010}, who
+set out to create a linguistic corpus for a selection of papyri; their
+tagging approach, however, is manual, and their target corpus
+limited. The authors also are the creators of
+\url{http://www.opentext.org/}, a project aiming for the development
+of annotated Greek corpora and tools to analyse them; sadly, no
+progress seems to have been made since 2005.
 
-\subsection[Corpus lingustics]{Corpus linguistics\footnote{The
+\subsection[Corpus linguistics]{Corpus linguistics\footnote{The
 following section is based \emph{passim} on \citet{okeeffe2010}.}}
 A corpus or text corpus is a large, structured collection of texts
 designed for the statistical testing of linguistic hypotheses. The
@@ -309,13 +309,11 @@ sentences. It contains data for Herodotus and the New Testament.
 While there is, of course, no room in this thesis for an extended
 course in mathematics or computer science, it is necessary to have
 some background in order to understand the techniques used for the
-design and implementation of the architecture. What follows is an
-brief overview of important concepts and techniques from mathematics,
-artificial intelligence and natural language processing applied in
-this thesis. For the less mathematically inclined reader, formalism
-has been reduced to a minimum; instead, for each concept and
-technique, only a layman's explanation is given. For further
-formalism, see \hyperref[chap:conceptstechniques]{appendix A}.
+design and implementation of the architecture. While most of this
+background is basic first-year university mathematics, the average
+classicist will not be fully grounded in it. That does not make this
+chapter the place for it. We therefore refer the curious reader to
+\hyperref[chap:conceptstechniques]{appendix A}.
 
 \section{Related work}
 \label{sec:relatedwork}
@@ -342,16 +340,17 @@ potential of the concept.
 
 Most of the paper is dedicated to giving examples of how the program
 would analyse a given word. The method for generating parses is
-rule-based. The system is equipped with a set of morphological roots.
-The algorithm, when given a word, removes suffixes until it finds a
-match in this set of roots. If none are found, it follows the same
-procedure, but strips suffixes instead of prefixes. The system
-proposed possesses several weaknesses: accents are completely ignored
-(most likely due to relatively limited technical resources at the time
-\footnote{A rather quaint detail is that computing time had to be
-rented; the author mentions having to use one dollar's worth of
-computing time to analyse the Apology of Socrates}), and the rule-based
-system relies heavily on the author's knowledge of Greek.
+rule-based. The system is equipped with a set of morphological
+roots. The algorithm, when given a word, removes suffixes until it
+finds a match in this set of roots. If no matching roots are found,
+the same procedure is repeated with the algorithm now stripping
+prefixes from each word. The system proposed possesses several
+weaknesses: accents are completely ignored (most likely due to
+relatively limited technical resources at the time \footnote{A rather
+quaint detail is that computing time had to be rented; the author
+mentions having to use one dollar's worth of computing time to analyse
+Plato's \textit{Apology of Socrates}}), and the rule-based system relies heavily on
+the author's knowledge of Greek.
 
 A critical assessment of the methodology and results of this paper is
 not possible: no concrete measure of the system's accuracy is
@@ -382,7 +381,7 @@ user input.
 
 An important issue is that of parse ambiguity. The morphological
 complexity of Greek ensures that over 50\% of words present in the
-parse table have multiple parses \cite{dik2008}. Disambiguation is
+parse table have multiple parses \citep{dik2008}. Disambiguation is
 therefore key for the next development stage of morphological analysis
 tools for ancient Greek.
 
@@ -401,31 +400,31 @@ contrast to the traditional rule-driven approach used by earlier
 parsers such as \cite{packard1973computer} or
 \cite{crane1991generating}.
 
-By applying affix transformations to word forms in order to analyse
-their relation to other forms, a nearest-neighbour metric is
-established on the basis of the number of these transformations needed
-to generate another extant word form. An annotated corpus is fed to
-the training architecture supported by a large amount of unlabelled data to
+Affix transformations similar to the ones described in
+\cite{packard1973computer} are applied to word forms in order to analyse their
+relation to other forms. A nearest-neighbour metric is established on
+the basis of the number of these transformations needed to generate
+another extant word form. As training data, an annotated corpus is fed 
+architecture, supported by a large amount of unlabelled data to
 facilitate the prediction of verbal stems.
 
 An accuracy of 98.2\% is achieved for words present in the training
 set, with the remaining forms necessitating contextual
 disambiguation. For words not present in the training set, an average
-accuracy of 85.7\% is achieved with most of the loss in accuracy due
-to words with most inaccuracies due to what the author terms `novel
-roots', which are stems which are not directly derivable from a word
-form and are analysed with a practical 50\% accuracy (though this was
-improved to 65\% by loosening the standards by which accuracy was
-measured).
+accuracy of 85.7\% is achieved with most of the loss in accuracy with
+most errors due to what the author terms `novel roots', which are
+stems which are not directly derivable from a word form and are
+analysed with a practical 50\% accuracy (though this was improved to
+65\% by loosening the standards by which accuracy was measured).
 
 The use of machine learning techniques in this paper is laudable and
 certainly not badly executed, but the general methodology and in
 particular the choice of training corpora is problematic. An annotated
 version of the first five books Septuagint is used to establish these
 metrics. This corpus consists of 470K words and can be reduced to a
-set of about 37K unique words. Yet it is unnecessary to restrict
-training to such a corpus if one does not look at n-grams but only at
-stand-alone word forms. 
+set of about 37K unique words. It is unnecessary to restrict training
+to a corpus of sentences if one does not look at n-grams, but only at
+stand-alone word forms.
 
 The question, then, is: why not use the output of Morpheus, the system
 designed by Gregory Crane and honed over the years, as training
@@ -449,12 +448,13 @@ with syntactically parsing ancient Greek. Training data was taken
 exclusively from the Perseus ancient Greek dependency treebank and
 partitioned into different sets to observe the influence of
 differences in author and genre on the results. These were split up
-into training and validation sets. and used to train MaltParser
-\citep{nivre2006maltparser}. Initial performance on the Homeric texts
-is disappointing due to the scarcity of resources for training the
-parser. 44.1\% tokens were given a fully correct labeling, including
-relations and their head word, 60.3\% were assigned a head
-word correctly, and 49.2\% were assigned a label correctly.
+into two datasets for training and validation, respectively. They were
+then used to train MaltParser \citep{nivre2006maltparser}. Initial
+performance on the Homeric texts is disappointing due to the scarcity
+of resources for training the parser. 44.1\% tokens were given a fully
+correct labeling, including relations and their head word, 60.3\% were
+assigned a head word correctly, and 49.2\% were assigned a label
+correctly.
 
 Adjusting the hyperparameters and features of the model manually
 yielded a considerable boost in performance, with accuracy rates
