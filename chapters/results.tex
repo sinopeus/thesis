@@ -1,0 +1,80 @@
+%************************************************
+\chapter{Results}
+\label{chp:results}
+%\minitoc\mtcskip
+%************************************************
+
+\section{Experimental setup}
+\label{sec:computationtime}
+
+\subsection{Training material}
+\label{sec:trainingmaterial}
+For the unsupervised learning phase, we need a maximally large
+corpus. We chose the TLG CD-ROM E, which contains about 9.3M words, and
+the Perseus texts, which contain about 7.7M words. Since both corpora
+share material, duplicate sentences were scrapped. The final corpus
+contains about 16.9M words.
+
+This corpus was split sentence-wise into a training corpus, from which
+representations are learned, and a validation corpus, to check the
+accuracy of the generated representations. The file is split 90-10.
+
+The supervised learning phase makes use of the PROIEL annotated texts
+of Herodotus and the New Testament for both morphology and
+syntax. This contains approx. 195K words. Again, a validation set is
+withheld, in a slightly lower proportion than in the unsupervised
+phase due to the restricted size of the corpus.
+
+\subsection{Execution}
+\label{sec:execution}
+
+Corpus preprocessing was done on the author's own computer. We then
+conducted training on an Amazon EC2 compute-optimized instance. The
+unsupervised algorithm was left to generate embeddings for *FILL IN
+TIME* hours.  This was equivalent to *FILL IN EPOCHS* training
+epochs. The supervised algorithm was left to iterate over the
+annotated corpus, finishing in *FILL IN HOURS*. Logs of the training
+process was generated and can be found in appendix
+\vref{chp:traininglog}. We then tagged the correctly aligned corpus
+using the generated model, which took *FILL IN HOURS*.
+
+\subsection{Output format}
+\label{sec:output}
+
+The resulting language model was then serialised for immediate reuse;
+a dump of the model parameters was also created in HDF5 format. The
+tagged corpus was converted from plain text to the CoNLL markup scheme
+and to TEI-compliant XML.
+
+\section{Performance}
+\label{sec:performance}
+
+\subsection{Unsupervised model}
+\label{sec:unsupacc}
+
+To quickly get a general picture of the quality of the embeddings, we
+pick ten words throughout the lookup table and take their ten nearest
+neighbors in the vector space according to the Euclidean metric. *TABLE REFERENCE*
+
+We then validate the model by computing rankings for each word using a
+simple heuristic: we generate text windows from the validation corpus,
+to which we let the model assign a score. For each window, we generate
+a score for each possible corrupted version of the window (i.e. we
+replace the central word index by all other word indexes
+iteratively). The ranking of the word corresponds to the amount of
+corrupt windows which receive a higher score than the original
+window. We then compute the mean and standard deviation of the
+logarithms of these rankings. *TABLE REFERENCE*
+
+\subsection{Supervised model}
+\label{sec:supacc}
+For the supervised model, we use a more straightforward approach: we
+strip the validation corpus of annotation and tag it using the
+model. We then compare the original annotation with the newly
+generated annotation and note the accuracy percentage. *TABLE REFERENCE*
+
+\subsection{Goal corpus}
+\label{sec:supacc}
+For the goal corpus, we may only evalute the accuracy of the
+embeddings. We use the same method as for the validation set for model
+training. *TABLE REFERENCE*
