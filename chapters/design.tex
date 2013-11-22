@@ -13,14 +13,13 @@ particular observation type. The larger the set, the better, as each
 observation makes the model a better reflection of linguistic reality.
 
 We choose a two-phase training method and exclusively follow the
-natural language processing architecture based on deep neural
-networks\footnote{Details on this type of network may be found in
-\vref{sec:deeplearning}.} described in \cite{collobert-2011}; all
-theories and techniques described are their work and ideas, except for
-the specific adaptations made to accommodate the system to ancient
-Greek. We give a summary overview of the architecture as described in
-the paper; subsequent sections provide more detail and specific
-modifications necessary to process ancient Greek.
+natural language processing architecture based on deep neural networks
+described in \cite{collobert-2011}; all theories and techniques
+described are their work and ideas, except for the specific
+adaptations made to accommodate the system to ancient Greek. We give a
+summary overview of the architecture as described in the paper;
+subsequent sections provide more detail and specific modifications
+necessary to process ancient Greek.
 
 The first phase uses a large unlabelled corpus to create a simple
 probabilistic model using as little linguistic knowledge as possible:
@@ -199,7 +198,7 @@ for the corresponding tag for the central word in the input window.
 
 An optional layer, used for supervised training and tagging (see
 \textit{infra}). This layer applies the softmax operation
-\cite{bridle1990probabilistic} to the output vector of the previous
+\citep{bridle1990probabilistic} to the output vector of the previous
 layer to obtain an output which converts the scores such that they sum
 to one, just as the probabilities in a sample space do.
 
@@ -292,27 +291,38 @@ transitioning to the next epoch.
 
 The supervised training phase involves the creation of task-specific
 networks which are initialised with the embeddings created during the
-unsupervised phase; these form a shared first part of all networks. A
-given network is then tailored to have an adapted output as necessary
-for the task of interest. 
+unsupervised phase; these form a shared first part of all networks.
 
-During training, we also construct a transition table for all
-tasks. This ensures that we can apply classical NLP algorithms which
-rely on hidden Markov models to our chosen architecture when we
-proceed to tag text. Accordingly, we choose a new cost function which
-takes this transition table into account.
-
-Training then proceeds in the classical fashion by gradient descent on
-this function.
 
 The output of a network of this type is a vector; each specific
 feature is encoded in on component of this vector by setting this
 component to one and all others to zero. This is called a one-hot
-vector. All tasks are jointly trained, that is to say, the networks
-share parameters, are trained simultaneously and are allowed to modify
-shared parameters. Individual (non-shared) network parameters are
-modified only during training for a specific task. This technique
-allows us to generalise the training benefit from each example.
+vector (\textit{cfr. infra}). We convert each output component to a
+probability by passing it through the softmax layer, which normalises
+all output scores such that they sum to 1.
+
+As our cost function, we choose the sum of log-likelihoods for the
+entire training corpus \citep[2505--6]{collobert-2011}:
+
+\begin{equation}
+  \theta \mapsto \sum\limits_{(x,y) \in T} log p(y|x,\theta)
+\end{equation}
+
+where $x$ is a window, $y$ is the tag for the central word, and $T$ is
+our training corpus. This is known as the \textit{cross-entropy}
+criterion \citep{rubinstein2004cross}. Where we tried to minimise the
+cost function with respect to its parameters in the unsupervised
+phase, we will now try maximise the new cost function such that the
+probability output for windows similar as the ones provided during
+supervised training is as high as possible.
+
+All tasks are jointly trained, that is to say, the networks share
+parameters in the form of embeddings and the hidden layer, are trained
+simultaneously by alternating training between them and are allowed to
+modify these shared parameters. The individual (non-shared) network
+parameters, those belonging to the output layers, are modified only
+during training for a specific task. This technique allows us to
+generalise the training benefit from each example.
 
 \section{Adapting the architecture for ancient Greek}
 \label{sec:adaptation}
@@ -489,6 +499,8 @@ supervised phase.
     xadv & open adverbial complement \\
     xobj & open objective complement \\
     xsub & external subject \\
+     \hline
+     \hline
   \end{tabular}
   \caption{The PROIEL treebank annotation system.} \label{table:proiellemmata}
 \end{table}

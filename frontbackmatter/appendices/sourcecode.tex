@@ -5,9 +5,9 @@ used to create the language model in this appendix. A plain-text copy
 is bundled with this document in compact disc format for archival
 purposes. Running the model creator without correctly setting up the
 directory structure and configuration files will simply yield all
-sorts of errors. More extensive documentation can be found in the
-README file located in the main project directory. The source may
-equally be found on GitHub at \url{https://github.com/sinopeus/thrax}.
+sorts of errors, so please conserve the directory structure found on
+the CD if you wish to run it yourself. The source may equally be found
+on GitHub at \url{https://github.com/sinopeus/thrax}.
 
 \section{Unsupervised training}
 \subsection{Trainer}
@@ -41,12 +41,10 @@ equally be found on GitHub at \url{https://github.com/sinopeus/thrax}.
 \subsection{Tagger}
 \label{sec:trainer}
 \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/tagger.py}
+\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/tagging/tagger.py}
 \subsection{Tagging network}
 \label{sec:langmodel}
 \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/tagging/nn.py}
-\subsection{Viterbi trellis}
-\label{sec:modelcost}
-\lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/tagging/viterbi.py}
 \subsection{Network graph}
 \label{sec:modelcost}
 \lstinputlisting[language=Python]{/Users/xavier/projects/thrax/bin/tagging/graph.py}

@@ -112,12 +112,25 @@ Using this formula, we can directly derive \textbf{Bayes' theorem} as follows:
 
 \subsection{Calculus and linear algebra}
 \label{sec:calculus}
-\begin{itemize}
-\item Derivatives and computing extrema
-\item Jacobian matrices
-\item Numerical methods
-\item Vector spaces
-\end{itemize}
+
+\subsubsection{Derivates and extrema}
+The derivative of a function is a measure of its rate of change. For a
+function in one variable, we can visualise the derivative as a
+function which for each point gives the slope of the tangent line to
+the original function. Derivatives can be used to find the extrema of
+a function, that is to say, the 'low' and 'high' points, with the help
+of the fact that the tangent line at these extrema has slope zero. By
+'following' the direction indicated by the derivative, we can find
+such extrema.
+
+Derivatives are defined for functions with any number of variables,
+and so are extrema. The derivative of a multivariable function is
+called a gradient; this is a vector with each component containing the
+partial derivative of the function with respect to a single of its
+variables. We can find extrema for multivariable function by applying
+the same method as we do for functions in one variable, by 'following'
+the gradient. This is called gradient descent or ascent, depending on
+whether we want to find a minimum or a maximum for a function.
 
 \subsection{Statistics}
 \label{sec:statistics}
@@ -233,16 +246,6 @@ If we use this function, we are performing \textbf{linear
 
 \subsubsection{Logistic regression and the chain rule}
 \subsubsection{Clustering}
-
-
-\subsection{Formal language theory}
-\label{sec:formalgrammars}
-\begin{itemize}
-\item Languages and strings
-\item Regular languages
-\item Context-free grammar and languages
-\item The Chomsky hierarchy
-\end{itemize}
 
 \section{Natural language processing}
 \label{sec:nlp}
@@ -400,9 +403,15 @@ due to the fact that nothing is really known about the hidden layers
 if we only look at the output layer, a new approach is necessary. This
 is called backpropagation, a shorthand term for backward error
 propagation.
-\begin{itemize}
-\item backpropagation
-\end{itemize}
+
+Backpropagation relies on knowing all the network weights; from these,
+given an error at the output layer, we can determine what part of the
+error is due to which neuron in the hidden layer. We use this
+knowledge to establish update rates for neurons in the preceding
+layer. For each successive layer, working backwards from the output
+layer, we can apply the same process and eventually make good
+parameter adjustments.
+
 
 \subsection{Deep learning}
 \label{sec:deeplearning}
@@ -443,26 +452,6 @@ of variations.
 
 % \section{Principles of statistical natural language processing} 
 % \label{sub:principles-nlp}
-
-% The crux of the proposed method is the use of the aforementioned TreeTagger,
-% developed by Helmut Schmid, which can lemmatize and tag at the same time,
-% followed by another iteration using the Stanford Parser to analyse sentence
-% dependencies. TreeTagger can be trained for any language, and its efficiency
-% for highly inflected languages such as ancient Greek is due to its combination
-% of two tagging methods, namely n-gram tagging and binary decision tree tagging,
-% the combination of which makes TreeTagger the fastest part-of-speech tagger
-% around. The Stanford Parser is the state of the art in sentence parsing.
-
-% The following section, therefore, is intended to provide some theoretical
-% background on statistical natural language processing. I have based myself upon
-% Manning and Schütze's \textit{Foundations of Statistical Natural Language
-% Processing} \citep{manning1999}, the current standard reference work, as well
-% as \citet{koshy2004} and \citet{hopcroft2001} for concepts relating to automata
-% theory, as well as on \citet{bod2004} for the paragraphs on statistics.
-% Furthermore, to illuminate some aspects of TreeTagger's workings, I have also
-% integrated Schmid's articles on tagging methodology as he applied it in
-% TreeTagger [\citeyear{schmid1994} and \citeyear{schmid1995}]. 
-
 % \subsection{Context-free grammar and pushdown automata} % (fold)
 % \label{sub:formallang}
 

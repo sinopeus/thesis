@@ -51,7 +51,8 @@ the following libraries:
 \begin{itemize}
 \item NumPy: 1.8.0, \url{https://github.com/numpy/numpy};
 \item SciPy: 0.13.0, \url{https://github.com/scipy/scipy};
-\item Theano: 0.6rc3, \url{https://github.com/Theano/Theano}.
+\item Theano: 0.6rc3, \url{https://github.com/Theano/Theano};
+\item h5py: 2.2.0b1, \url{https://github.com/h5py/h5py/tree/master/h5py}.
 \end{itemize}
 
 Each of these libraries has its own dependencies, which, evidently,
@@ -78,7 +79,9 @@ $0$ and $10^{-2}$. A lookup table operations is now a two-step process
 on two discrete data structures. This allows us to store the word
 sequences more compactly for processing. If necessary, we can meld
 both structures into one (if we wish to redistribute the embeddings
-and the dictionary together in a serialised format, for example).
+and the dictionary together in a serialised format, for
+example). During tagging, we reverse this dictionary to allow us to
+lookup the word corresponding to a given lookup table index.
 
 \subsection{Batch processing}
 \label{sec:batch}
@@ -86,15 +89,14 @@ Examples are not processed individually by the system, but in
 batches. First, a batch size is chosen. Then, a number of text windows
 corresponding to this batch size is read from the training
 corpus. Each individual window is passed through the lookup table,
-which returns matrices such as the one in \ref{eq:ltmatrix}. These
-matrices are then rotated horizontally and stacked. We thus obtain a
-rank-three tensor $T$ whose entries we denote as $T_{ijk}$, with $i$
-corresponding to the example number within the batch, $j$
-corresponding to a text window position, and $k$ corresponding to an
-embedding component. Using this method, we can feed many examples in
-parallel to the program. This is particularly handy if we wish to
-exploit the capacities of GPUs, which are explicitly designed for
-massively parallel linear algebra operations.
+which returns matrices such as the one in \ref{eq:ltmatrix}. We
+linearise these matrices into vectors by concatenating their columns.
+
+Batch processing is advantageous when we want to train according to a
+cost function which contains a large set of parameters, such we do; by
+using batches, the gradient of the cost function is taken with respect
+to several examples to ensure that parameter adjustments necessary for
+each the training examples balance each other out.
 
 \subsection{Matrix-vector representation}
 \label{sec:matrixvectorreps}
@@ -174,7 +176,7 @@ forgo the arduous manual computation of the neural network layer
 gradients and automate the process, and simultaneously benefit from
 increased precision and efficiency.
 
-\subsubsection{Compiling to C and CUDA}
+\subsubsection{Compiling to C}
 \label{sec:graph}
 Another important optimisation performed by Theano is situated 'closer
 to the metal', so to speak. Python is a high-level programming
@@ -195,27 +197,6 @@ compiled and stored for the rest of the execution of the
 program. This offers a tremendous speed increase for certain types of
 computation.
 
-Standard C programs run on the computer's central processing unit, but
-the library can accelerate the computation even more by making use of
-the capacities of the discrete graphical processing units which are
-present in some computers. These are designed to execute very simple
-instructions in a massively parallel fashion and can be programmed
-using low-level languages by using application programming interfaces
-(APIs) developed specifically for that purpose. 
-
-This is termed general programming for graphical processing units, or
-GPGPU; two widely used APIs exist, CUDA, which is a closed standard
-developed by Nvidia for their own devices and OpenCL,an open standard
-which was developed by a consortium of companies\footnote{Chief among
-these is Apple Inc., which owns the trademark, as well as companies
-such as AMD, IBM, Qualcomm, Intel and Nvidia.} and is not restricted
-to GPUs specifically. Theano is capable of writing C programs that
-interface with CUDA; compiling functions to pure C can speed the
-execution time up by by one to two orders of magnitude, as mentioned
-above; but optimising certain parts of the computation by interfacing
-with CUDA can lead to speed increases of another order or two of
-magnitude!
-
 \section{The full process}
 \label{sec:process}
 \subsection{Preparing the training corpora}
@@ -227,6 +208,55 @@ phase. The \texttt{prep\_scripts} directory in the repository and the
 bundled CD provides Python scripts for performing all necessary steps
 efficiently; the \texttt{README} file shows how to use these.
 
+
+\subsection{Encoding tags}
+\label{sec:tagencoding}
+
+To encode the morphological annotation system, we use two data
+structures: a task dictionary, which assigns integer indexes to each
+task, and a list of dictionaries, each of which assign numerical
+indexes to each specific tag, corresponding to the component of the
+one-hot vector we want to activate.
+
+\begin{figure}
+\begin{verbatim}
+[
+  { "POS": 0, "PERS": 1, "NUMB": 2, "GEND": 3, "CASE": 4, "TENS": 5, 
+    "MOOD": 6, "VOIC": 7, "DEGR": 8, "INFL": 9, "SYNT": 10 },
+
+  [
+    { "A-": 0, "C-": 1, "Df": 2, "Dq": 3, "Du": 4, "F-": 5, "G-": 6, 
+      "I-": 7, "Ma": 8, "Mo": 9, "Nb": 10, "Ne": 11, "Pc": 12, 
+      "Pd": 13, "Pi": 14, "Pk": 15, "Pp": 16, "Pr": 17, "Ps": 18, 
+      "Px": 19, "R-": 20, "S-": 21, "V-": 22 },
+
+    { "-": 0, "1": 1, "2": 2, "3": 3 },
+
+    { "-": 0, "s": 1, "d": 2, "p": 3 },
+
+    { "-": 0, "m": 1, "f": 2, "n": 3, "o": 4, "p": 5, "q": 6 },
+
+    { "-": 0, "n": 1, "g": 2, "d": 3, "a": 4, "v": 5 },
+
+    { "-": 0, "a": 1, "f": 2, "i": 3, "l": 4, "p": 5, "r": 6, "t": 7 },
+
+    { "-": 0, "g": 1, "p": 2, "i": 3, "m": 4, "n": 5, "o": 6, "s": 7 },
+
+    { "-": 0, "a": 1, "e": 2, "m": 3, "p": 4 },
+
+    { "-": 0, "c": 1, "p": 2, "s": 3 },
+
+    { "i": 0, "n": 1 },
+
+    { "adnom": 0, "adv": 1, "ag": 2, "apos": 3, "arg": 4, "atr": 5, "aux": 6, 
+      "comp": 7, "expl": 8, "narg": 9, "nonsub": 10, "obj": 11, "obl": 12, 
+      "parpred": 13, "part": 14, "per": 15, "pid": 16, "pred": 17, "rel": 18, 
+      "sub": 19, "voc": 20, "xadv": 21, "xobj": 22, "xsub": 23 }
+]
+]
+\end{verbatim}
+\caption{JSON encoding for PROIEL annotation.}
+\end{figure}
 \subsubsection{General method}
 \label{sec:supcorp}
 Firstly, we convert all corpora to plain text. The TLG is made
@@ -271,16 +301,7 @@ initialisation of the program.
 
 \subsection{Training the model}
 \label{sec:createmodel}
-
-For the training hyperparameters, we chose to set embedding sizes at
-50. The text window size was set at 11 due to the prevalence of
-long-range dependencies in ancient Greek. The learning rates for the
-neural network parameters and the embeddings were set at $1.1 \cdot
-10^{-8}$ and $3.4 \cdot 10^{-11}$, respectively. The input layer size
-was set equal to the window size; the output layer size was set to 1;
-the hidden layer size was set to 100.
-
-The algorithm was iterated over increasing dictionary sizes: we
+The algorithm is iterated over increasing dictionary sizes: we
 started with 4.000 words and subsequently doubled the dictionary size
 at each iteration. At each iteration, we validate our model; we stop
 at the point of diminishing returns to avoid computational overhead,

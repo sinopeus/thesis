@@ -242,11 +242,9 @@ of grammatical knowledge. Instead of focusing mainly upon a few choice
 authors or laboriously trudging through the huge wealth of ancient
 Greek literature to linearly create lexica and grammars, all of it
 could be harnessed at once in a quantitatively precise and easily
-visualisable way.
-
-Though this is not the place for an extended discourse on the
-methodology behind setting up such a system, we refer to
-\cite{bamman2008building,bammandhq2009} for an overview.
+visualisable way. Though this is not the place for an extended
+discourse on the methodology behind setting up such a system, we refer
+to \cite{bamman2008building,bammandhq2009} for an overview.
 
 \subsection{Historical and variational linguistics} % (fold)
 \label{sec:histlinguistics}
@@ -283,3 +281,32 @@ papyrologists, the need for a very in-depth knowledge of the corpus of
 papyri can be greatly reduced by calling upon data from other parts of
 the corpus to present a series of statistically possible solutions for
 textual issues.
+
+\section{Named entity recognition}
+\label{sec:ner}
+
+Named entity recognition is a subdiscipline in natural language
+processing which is concerned with the automatic extraction and
+localisation of all kinds of names from texts. It has been used
+extensively in literary texts with a view to discern the importance of
+certain characters throughout the text. The KU Leuven's long-standing
+Prosopographia Ptolemaica project, which aims to be a repository of
+all inhabitants of Egypt between 300 and 30 B.C., could easily benefit
+from these techniques. 
+
+The abundant manual labour that has gone into the project could be fed
+as training data to and then supplemented by a named entity
+recognition engine that could also categorise personal names by any
+criteria and establish contextual relations between them. To take a
+very rudimentary example, the name 'Alexander' could be retrieved in
+all texts and a cluster of related names generated, so that related
+individuals may be placed in a web of relations; or one could ask, by
+combining the already present linguistic annotation, to display all
+adjectives which accompany the name 'Alexander'.
+
+It could even go further than this and also include other particular
+names, such as places, distances, monetary units, weights, and so
+on. Historians could create a comprehensive overview of, for instance,
+the inflation of Egyptian currency, or map out trade connections using
+a search for all mentions of currency, weight and places which are in
+proximity to each other.

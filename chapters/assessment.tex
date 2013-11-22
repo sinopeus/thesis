@@ -1,11 +1,46 @@
 %************************************************
-\chapter{Assessment}
+\chapter{Assessment \& conclusion}
 \label{chp:assessment}
 %\minitoc\mtcskip
 %************************************************
 
-\section{Hypothesis}
-Have we reached our goals?
+\section{Evaluation \& Hypothesis}
+
+\subsection{Unsupervised model}
+\subsection[Unsupervised model]{Unsupervised model\footnote{We did not have time to compute word rankings. We did pick a few words to test the rankings, but they were not good (generally in the upper part of the spectrum for rankings).}}
+For unsupervised training, we attained reasonable results as shown in the
+figures in the previous section. For the first few curricula, scoring
+accuracy during training steadily increased, but then decreased during
+the last curriculum, using the full vocabulary. This is due to the
+fact that this last curriculum contained 300K more words than the
+penultimate one, all of which needed to be trained. We also integrated
+sentence padding during this last curriculum, which increases the
+amount of words to be processed by a large margin.
+
+The progress of training might seem discouraging, but it is good to
+keep in mind that the average score of a correct window is a good deal
+higher than that of a corrupted window, and that in general the model
+evolves positively until the addition of the last curriculum, which is
+of relatively little importance at this stage because of the rarity of
+the words it adds.
+
+We only computed select word rankings and were confronted with the
+fact that most of them were not good. We propose that the trainer
+needs much more time.
+
+\subsection{Supervised model}
+The supervised model is most certainly the weakest part of our
+architecture. For the sake of simplicity, we did not implement any
+safeguards for our morphological analyses, and now pay for it: the
+system assigns tags without too much regard for the rules of Greek
+grammar. For instance, for the first sentence of our test corpus, not
+a single tag is correct. Nouns are assigned tenses, moods, etc ... It
+is evident that we have not even approached the accuracy rates of
+\cite{mambrini2012} and \cite{dik2008,dik2009}. We believe this is in
+part also due to the relatively small training corpus for the
+supervised phase.
+
+
 % What are the major patterns in the observations? (Refer to spatial and temporal variations.)
 % What are the relationships, trends and generalizations among the results?
 % What are the exceptions to these patterns or generalizations?
@@ -14,19 +49,18 @@ Have we reached our goals?
 % Interpret results in terms of background laid out in the introduction - what is the relationship of the present results to the original question?
 % What is the implication of the present results for other unanswered questions in earth sciences, ecology, environmental policy, etc....?
 % Multiple hypotheses: There are usually several possible explanations for results. Be careful to consider all of these rather than simply pushing your favorite one. If you can eliminate all but one, that is great, but often that is not possible with the data in hand. In that case you should give even treatment to the remaining possibilities, and try to indicate ways in which future work may lead to their discrimination.
-\section{Strengths \& weaknesses}
-We use the same training data for the supervised phase as is used in
-\cite{dik2008,dik2008}. 
 
-We use none of the data used in \cite{mambrini2012}.
-\section{Contribution}
-% What are the things we now know or understand that we didn't know or understand before the present work?
-% Include the evidence or line of reasoning supporting each interpretation.
-% What is the significance of the present results: why should we care? 
-\begin{itemize}
-\item method
-\item corpus
-\end{itemize}
+
+\section{Concluding remarks}
+\label{sec:conclusion}
+We have given a brief but complete \textit{status quaestionis} of the
+scholarship on NLP for ancient Greek, something which we did not find
+anywhere else. We consider that we have a made a modest methodological
+contribution by attempting to use techniques which as of yet have not
+been applied to ancient Greek, even though the results are
+disappointing. Furthermore, the unsupervised technique shows promise
+if given more time to train. We offer some perspectives on how our
+work should be improved and continued.
 
 \section{Further work}
 \label{sec:further_work}
@@ -55,13 +89,13 @@ favour of open-sourcing the TLG, we still think a strong case can be
 presented for this.
 
 The supervised component of our model can also be improved by running
-more epochs (although this is not as beneficial as it is for the
-unsupervised model), but especially by increasing the size of the
-training corpus. We opted to only use the PROIEL treebank and not the
-Perseus treebank to minimise headaches related to the conversion of
-one annotation standard to another. Especially the syntactic
-annotation standards used by both, while sharing some common concepts,
-are very different in implementation. 
+more epochs (which we did not have time for), but especially by
+increasing the size of the training corpus. We opted to only use the
+PROIEL treebank and not the Perseus treebank to minimise headaches
+related to the conversion of one annotation standard to
+another. Especially the syntactic annotation standards used by both,
+while sharing some common concepts, are very different in
+implementation.
 
 This could be fixed by developing an effective and accurate system for
 this type of conversion; this has been attempted in
@@ -69,7 +103,8 @@ this type of conversion; this has been attempted in
 the low 80\%s for both Latin and Greek) is too low to allow extended
 use. In any case, it is our opinion that developing a more unified
 system for ancient Greek treebanks is a \textit{desideratum} before
-the scale of current treebanks is expanded.
+the scale of current treebanks is expanded, lest we end up with two
+competing standards with none of both to lead us into the fray.
 
 \subsubsection{Linguistic foreknowledge}
 We chose our training method because of its simplicity; but it is a
@@ -101,13 +136,40 @@ for instance, has no voice, tense or mood, and developing such
 sequential tagging method would prevent us from spending valuable
 computation time on these 'no-brainers'.
 
-\subsubsection{Integration with other resources}
+\subsubsection{Probabilistic parameters}
+Our model as it stands is actually very simple, a card which we have
+unsuccessfully tried to play out against the complexity of Greek. We
+therefore propose to add extra parameters to the model. More
+specifically, we would like to add supplemental parameters for
+probabilistic inference on two levels: the level of morphological
+parsing and the level of sentence structure. As it stands, we compute
+probabilities of tags being correct for individual word windows, but
+the main weakness in this approach is that we do not check either the
+consistency of morphological parses or the likelihood of a given tag
+sequence.
+
+This could be remedied by developing transition tables for each
+distinct problem and applying these during tagging. During training,
+counts of tag transitions would be kept inside these tables and
+involved in training the parameters. This is an approach also proposed
+by \cite{collobert-2011} which we have not implemented due to a lack
+of time. In this way, we could ensure that our tags are not as
+nonsensical as they have in our experiment.
+
+\subsubsection{Expansion and integration}
 A key point for the further development of a large-scale
 infrastructure for ancient Greek annotated corpora is the integration
 of diverse resources. We find an example of this in the recent
 merger of several papyrological resources on the web into
 \texttt{papyri.info}. The recently announced Open Philology Project
 \citep{crane2013} is another good example of this kind of enterprise.
+
+We propose the development of a full NLP stack for corpus
+annotation. We envision this as a library similar to the Python
+Natural Language Toolkit \citep{nltkhome}, which will offer a diverse
+range of tools tailored for ancient Greek: tokenizers, POS taggers,
+chunkers, parsers, training tools, concordance creators ... This tool
+could then be integrated with other digital classics resources.
 
 \subsubsection{Expanding the range of tasks}
 \label{sec:expand}
@@ -151,41 +213,8 @@ progress is blocked by a lack of annotated language data.
 % a search for all mentions of currency, weight and places which are in
 % proximity to each other.
 
-\subsection{Refining the corpus}
-\label{sec:refiningcorpus}
 
-\subsubsection{Collaborative editing}
-\label{sec:collaborative}
-% The IDP project is heading into crowdsourcing territory at full steam,
-% and excluding our own work from this movement would be inserting a
-% shrill note into this symphony. All data is placed on GitHub at
-% \url{https://github.com/sinopeus/tjufy}, freely accessible and
-% editable for all.
 
-% This opens promising avenues of inquiry that do not have a direct
-% relation to this thesis. For instance, it can in the future be
-% integrated into SoSOL and absorbed into the larger codebase for the
-% IDP project if it does not create too much overhead for the current
-% developers (the technical back end of the IDP seems to be labyrinthine
-% and adding new layers of complexity might be off-putting). It could
-% even grow into a separate project which itself could be linked to
-% \texttt{papyri.info} as the HGV, APIS and Trismegistos currently are,
-% by a common system of indexation.
-
-% Making the code publically available to all also has the advantage of
-% the public eye inspecting the texts; using solely automatic analysis
-% is bound to deliver an inaccurate result, however small that
-% inaccuracy may be, as creating a NLP engine perfectly capable of
-% understanding language would be the equivalent of creating a perfect
-% artificial intelligence. Therefore, considering the size of the
-% corpus, one must rely upon the intelligence of the community. In the
-% same way open source software backed by large communities is often of
-% excellent quality due to public inspection, the potential for a
-% crowdsourced corpus is immense.
-
-\subsubsection{Integration with other resources}
-\label{sec:linking}
-\begin{itemize}
-\item \cite{bammanpbml2008,bammantlt8,bammancrane2011}
-\item Open Philology Project: integration of papyri, automated approach
-\end{itemize}
+% What are the things we now know or understand that we didn't know or understand before the present work?
+% Include the evidence or line of reasoning supporting each interpretation.
+% What is the significance of the present results: why should we care? 
